@@ -1,71 +1,86 @@
-# LowMine Ultra Low
+# LowMine Equilibrado
 
-LowMine is an attributed Minecraft Bedrock resource-pack adaptation for low-end devices. **v0.3.2 fixes the v0.3.0 import failure** and keeps a single Ultra Low profile; the PvP subpack is removed.
+**LowMine Equilibrado** é uma adaptação de pacote de recursos do Minecraft Bedrock, pensada para PCs modestos. A versão **0.4.0** mantém um único perfil, remove o PvP e procura equilibrar aparência, transparência da interface e quantidade de efeitos.
 
-> **Test candidate, not a measured FPS release.** The package passed static validation. Import and performance still need to be tested inside Minecraft Bedrock.
+> **Importante:** um pacote de recursos não consegue corrigir a geração de chunks do motor do Minecraft. O LowMine reduz alguns custos visuais; as configurações de distância do próprio jogo continuam sendo fundamentais.
 
-## v0.3.2 — import fix and harder low profile
+## O que mudou na versão 0.4.0
 
-- Corrected manifest v3 header and module version fields to SemVer strings (`"0.3.2"`). v0.3.0 used arrays, which caused the import screen to show unknown name, zero UUID and version 0.0.0.
-- Removed experimental custom pack settings instead of relying on them for particle reduction.
-- Hard-disabled all 188 particle definitions included by LowMine: 177 `max_particles` fields set to 0 and 11 `num_particles` fields set to `"0"`.
-- Kept XP-orb drawing disabled but preserved the game's XP collection behavior.
-- Kept the single flattened Lite profile, with no PvP subpack.
-- Kept translucent inventory/crafting/chest/desktop/pocket UI overrides and hotbar/touch texture edits.
-- Preserved the LowMine UUID identity so v0.3.2 is an update to the same pack rather than a second pack.
+- Mantém um único perfil, sem subpacote PvP.
+- Mantém 177 limites de partículas do perfil Lite em zero e reduz outras 11 contagens para valores baixos, preservando alguns efeitos importantes.
+- Cria oito texturas 16×16 simplificadas para grama curta, samambaia, grama alta e versões secas.
+- Deixa inventário, crafting, baús e painéis mais transparentes, preservando melhor os contornos e os estados de seleção.
+- Ajusta a neblina visual para começar em 64 e terminar em 96 blocos.
+- Mantém os UUIDs do LowMine e atualiza a versão do manifesto para `0.4.0`.
 
-## Static audit
+As texturas novas substituem **a imagem** da vegetação. Elas não removem nem alteram a geometria nativa dos blocos.
 
-| Check | Result |
+## Auditoria do pacote
+
+| Verificação | Resultado |
 |---|---:|
-| Manifest format | 3 |
-| Header/module versions | SemVer string 0.3.2 |
-| Archive entries | 925 |
-| JSON files | 318 valid, 0 invalid |
-| Particle definitions | 188 disabled |
-| Biomes | 94 |
-| Fog definitions | 104 |
-| PNG files | 566 |
-| Total PNG pixel area | 610,722 |
-| Settings/subpacks | None |
-| PvP content | Removed |
+| Arquivos no pacote | 933 |
+| Arquivos JSON | 318 válidos |
+| Imagens PNG | 574 |
+| Definições de partículas do pacote | 188 |
+| Limites `max_particles` mantidos em zero | 177 |
+| Biomas verificados | 94 |
+| Definições de neblina | 104 |
+| Texturas novas de vegetação | 8 |
+| Perfil PvP | Removido |
 
-The PNG pixel area is a texture-footprint proxy, not a VRAM or FPS measurement. Microsoft notes that loaded textures are typically held uncompressed and that each texture handle carries overhead; atlas textures are an exception. Microsoft recommends add-ons stay below 800 texture handles and minimizing unnecessary files/texture area. The number of PNG files is not identical to the number of GPU texture handles. See [Microsoft's performance and resource-use guidance](https://learn.microsoft.com/en-us/minecraft/creator/documents/practices/improvingperformanceandresourceusage?view=minecraft-bedrock-stable).
+Tamanho compactado: **658.214 bytes**. SHA-256: `898a63dc7b221d8e0a2ab489f3f41b965ddc3a2cf6c05658beb8d25940a6f91a`.
 
-## Import
+A validação estática confirma estrutura, JSON, manifesto, texturas, referências de neblina e telas de interface. Ela não executa o Minecraft e não mede FPS.
 
-1. Use the file `LowMine-Ultra-Low-v0.3.2-FIXED.mcpack`.
-2. Open it with Minecraft Bedrock.
-3. Confirm the import screen shows **LowMine Ultra Low v0.3.2**, not unknown name/version.
-4. Activate the single **LowMine Ultra Low** resource pack.
-5. Check inventory, crafting, small/large chest, Ender Chest, shulker, barrel, hotbar and touch controls.
-6. Enter a world and check fog, clouds, potion visuals, particles, XP collection, HUD and chat.
+## Configuração recomendada para PC fraco
 
-The pack has no settings menu by design; its included emitters are statically disabled. Effects not defined by this pack may still appear.
+Comece com:
+- **Distância de renderização:** 6 chunks.
+- **Distância de simulação:** 4 chunks.
+- **Gráficos:** Simples, se essa opção existir.
+- **Vibrant Visuals / Visuais vibrantes:** desativado.
+- **Iluminação suave, nuvens e folhas sofisticadas:** desativadas ou no mínimo, se disponíveis.
+- **Limite de FPS:** 30 se o jogo não conseguir manter 60 de forma estável; use 60 somente se conseguir sustentá-los.
 
-Use [the runtime test report](docs/TEST_REPORT_TEMPLATE.md) and [the v0.3.2 technical audit](docs/BASELINE_AUDIT.md). If Minecraft rejects it, send the exact import message and the Bedrock version.
+Caso ainda ocorram travamentos ao carregar terreno novo, experimente 4 chunks de renderização. Veja [Configuração recomendada e diagnóstico de chunks](docs/CONFIGURACAO-CPU-FRACA.md).
 
-## Build and validate
+A Microsoft explica que a distância de renderização determina quantos chunks o cliente desenha e que a distância de simulação também processa entidades, plantas, líquidos e atualizações do mundo. A distância de simulação tem custo adicional porque afeta a lógica do jogo e o trabalho do cliente. Consulte [Render Distance e Simulation Distance](https://learn.microsoft.com/en-us/minecraft/creator/documents/simulationrenderdistanceguide?view=minecraft-bedrock-stable).
 
-Requires Python 3.10+ and Pillow:
+## Instalar e testar
+
+1. Baixe `LowMine-Equilibrado-v0.4.0-TEST.mcpack`.
+2. Abra o arquivo com o Minecraft Bedrock.
+3. Confirme que o nome e a versão aparecem corretamente.
+4. Ative o único pacote **LowMine Equilibrado**.
+5. Teste inventário, crafting, baús, hotbar, grama, samambaias e carregamento de terreno novo.
+6. Compare com o jogo sem LowMine usando o mesmo mundo, posição, distância de renderização e distância de simulação.
+
+Use o [modelo de relatório de teste](docs/TEST_REPORT_TEMPLATE.md) para anotar erros e resultados.
+
+## Compilar e validar
+
+Requisitos: Python 3.10+ e Pillow.
 
 ```bash
 python -m pip install Pillow
-python tools/build_ultra_low.py "LowMine-Performance-v0.2.0.mcpack" "LowMine-Ultra-Low-v0.3.2-FIXED.mcpack"
-python tools/validate_pack.py "LowMine-Ultra-Low-v0.3.2-FIXED.mcpack"
+python tools/gerar_pacote.py "LowMine-Ultra-Low-v0.3.2-FIXED.mcpack" "LowMine-Equilibrado-v0.4.0-TEST.mcpack"
+python tools/validar_pacote.py "LowMine-Equilibrado-v0.4.0-TEST.mcpack"
 ```
 
-The v0.2.0 adapted source package is the input to the builder and is not committed in this repository. The builder uses stable ZIP timestamps, so identical inputs produce byte-identical outputs.
+O pacote v0.3.2 é usado como base do build e não está armazenado como binário neste repositório.
 
-## Actual engine limitations
+## Limites técnicos
 
-Fog is visual only; it does not stop RenderDragon from processing geometry. Block Culling only targets covered faces of custom block geometry, not a universal behind-camera or underground culler. A resource pack cannot inject Rust into the Bedrock client or replace RenderDragon. See [rendering limits and verified possibilities](docs/RENDERING_LIMITS.md).
+O nevoeiro altera a aparência da distância, mas não faz o RenderDragon ignorar chunks. O Block Culling trabalha com faces encobertas de geometrias personalizadas; não é um sistema universal para esconder tudo atrás da câmera ou abaixo do solo. Um `.mcpack` também não pode injetar Rust no renderizador do Bedrock.
 
-## Attribution and license
+As possibilidades reais e as referências de desenvolvimento estão em [Limites do renderizador e otimizações possíveis](docs/LIMITES-DO-RENDERIZADOR.md).
 
-Original work: **Boosted FPS (Optimized Performance) v2.4.1**, by **XiaoCraft**.
+## Créditos e licença
 
-- Original project: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance
-- License: **Creative Commons Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0)** — https://creativecommons.org/licenses/by-nc/3.0/
+O pacote original é **Boosted FPS (Optimized Performance) v2.4.1**, criado por **XiaoCraft**.
 
-This is an adaptation, not a new original pack or an endorsed project. Keep the original author credit and modification notice. The original non-commercial license terms apply; see [ATTRIBUTION.txt](ATTRIBUTION.txt).
+- Projeto original: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance
+- Licença original: **Creative Commons Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0)** — https://creativecommons.org/licenses/by-nc/3.0/
+
+O LowMine é uma adaptação, não um projeto original ou endossado por XiaoCraft. Os créditos e as condições não comerciais da licença original devem ser mantidos. Consulte [ATTRIBUTION.txt](ATTRIBUTION.txt).
