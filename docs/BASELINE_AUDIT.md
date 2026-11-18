@@ -10,17 +10,17 @@ This is a static archive audit. It does not launch Minecraft, emulate RenderDrag
 
 | Item | v0.2.0 | v0.3.0 |
 |---|---:|---:|
-| Archive entries | 1,136 | 924 |
-| JSON files | 487 | 317 |
+| Archive entries | 1,136 | 925 |
+| JSON files | 487 | 318 |
 | PNG files | 605 | 566 |
 | Language files | 29 | 29 |
 | Active configurable controls | 9 | 8 |
 | Profiles | Lite + PvP | One flattened Ultra Low profile |
-| Archive size | 1,206,757 bytes | 662,876 bytes |
+| Archive size | 1,206,757 bytes | 664,342 bytes |
 
 The v0.3.0 archive has no `subpacks/` directory and no PvP profile files. The previous Lite subpack contained 288 files; 109 of these replaced same-path base files when flattened. The PvP subpack contained 106 files and was removed.
 
-The compressed archive is 543,881 bytes (45.07%) smaller than v0.2.0. This is a packaging/file-content comparison, not a runtime memory or FPS measurement.
+The compressed archive is 542,415 bytes (44.95%) smaller than v0.2.0. This is a packaging/file-content comparison, not a runtime memory or FPS measurement.
 
 ## PNG texture-footprint estimate
 
@@ -35,8 +35,9 @@ Selected images changed:
 - Both pack icons: 400×400 to 256×256.
 - Title image: 2048×302 to 1024×151.
 - Emote wheel images: reduced to 128×119 or 96×96.
-- Cloud texture: replaced with a transparent 1×1 PNG.
-- Inventory slots, hotbar panels and touch controls: alpha reduced.
+- Cloud texture: replaced with a transparent 1×1 PNG. This does not remove cloud geometry from the engine.
+- Inventory slot fills, hotbar panels and mobile touch-control PNG alpha reduced.
+- Shared `dialog_background_opaque.png` and `dialog_background_opaque_overlap_bottom.png` alpha reduced to 28% of their source alpha, retaining their border shapes. Because these are shared vanilla UI textures, other classic dialogs using them may also become translucent.
 
 Block/item textures were not blindly downscaled. Most source textures were already small (many 16×16 or similarly small sprites); preserving their pixel detail avoids unnecessary blur and keeps the current art style.
 
@@ -61,14 +62,15 @@ This makes distant terrain visually disappear sooner. It is **not** a camera-dir
 
 ## Inventory/chest UI and hotbar
 
-New files:
-- `ui/inventory_screen.json`
-- `ui/chest_screen.json`
-- `ui/data_driven_container_screen.json`
+New or overridden files:
+- `ui/inventory_screen.json` — desktop/classic inventory and crafting.
+- `ui/inventory_screen_pocket.json` — separate pocket/touch inventory screen.
+- `ui/chest_screen.json` — small/large chest, Ender Chest, shulker and barrel panels.
+- `ui/data_driven_container_screen.json` — data-driven container screens.
 
-All three are registered in `ui/_ui_defs.json`. Inventory/crafting screens and desktop chest/container screens override the vanilla backdrop alpha to 0.08 while retaining the screen inheritance and pocket-screen branches from the current Mojang sample structure.
+All four are registered in `ui/_ui_defs.json`. Inventory/crafting screens and desktop chest/container screens override the vanilla backdrop alpha to 0.08 while retaining screen inheritance and pocket-screen branches. The pocket inventory screen's separate backdrop alpha is also set to 0.08.
 
-Hotbar slot backgrounds, inventory slot fills and mobile touch-control PNG alpha are also reduced. The underlying click regions, slot geometry, item icons and screen layout are not intentionally resized.
+The shared opaque dialog texture alpha is reduced so the actual inventory/chest panels are less opaque, not just the space around the panels. This is a shared vanilla asset, so it can affect other classic UI dialogs. Slot/hotbar/touch textures are faded while selected and pressed states retain more opacity.
 
 These overrides use the classic JSON UI route. Some Bedrock builds or Ore UI modes may ignore or behave differently with resource-pack JSON UI files. Only in-game testing can verify whether the user's exact Bedrock version applies them.
 
@@ -76,12 +78,12 @@ These overrides use the classic JSON UI route. Some Bedrock builds or Ore UI mod
 
 The final v0.3.0 package passed:
 - ZIP integrity and unique-path checks.
-- 924 archive entries, with no unsafe relative paths.
-- 317/317 JSON files parsed.
+- 925 archive entries, with no unsafe relative paths.
+- 318/318 JSON files parsed.
 - Eight active setting IDs match all pack-setting query references.
 - All 29 language files include every manifest setting label.
 - 94 biome entries and 104 fog definitions; no unresolved custom fog IDs.
-- Inventory, chest and data-driven UI overrides are registered and contain the expected alpha/desktop/pocket branches.
+- Inventory, pocket inventory, chest and data-driven UI overrides are registered and contain expected alpha/desktop/pocket branches.
 - No PvP folder or subpack declarations remain.
 - Two builds with identical source inputs produced byte-identical output.
 
@@ -90,14 +92,14 @@ Tools: `tools/build_ultra_low.py` and `tools/validate_pack.py`.
 ## v0.3.0 artifact identity
 
 - File: `LowMine-Ultra-Low-v0.3.0-TEST.mcpack`
-- Size: 662,876 bytes.
-- SHA-256: `143c508d67ae25046d7ff782cde36190cacabd0d74f4443071afaea4240003c6`
+- Size: 664,342 bytes.
+- SHA-256: `3689a23fc55104dbc86aa85f1604fc8e00ef870aed3d69011c5a190680f25a8d`
 
 ## Known limitations and next tests
 
 1. Import v0.3.0 into the exact Minecraft Bedrock build in use.
 2. Confirm the pack and eight settings appear.
-3. Test inventory/crafting, all container screens, hotbar and touch controls.
+3. Test desktop and pocket inventory/crafting, all container screens, hotbar and touch controls.
 4. Inspect fog and cloud appearance in several dimensions and biomes.
 5. Check world load, gameplay feedback, multiplayer, and content-log messages.
 6. Compare vanilla and LowMine in the same world/scene, device, resolution, render distance and simulation distance; record FPS and frame-time stability.
