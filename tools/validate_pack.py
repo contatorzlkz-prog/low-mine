@@ -1,243 +1,171 @@
 #!/usr/bin/env python3
-"""Static validator for LowMine Bedrock resource-pack archives.
+"""Static validator for LowMine Ultra Low .mcpack files.
 
-Checks ZIP integrity, manifest identifiers, JSON syntax, pack-setting wiring,
-translations, subpack folders, fog references and key PNG assets. It cannot run
-Minecraft or measure actual performance.
+Checks archive integrity, manifest identity/version, settings, translations,
+fog references, registered UI overrides and key assets. It does not launch
+Minecraft, prove UI compatibility or measure FPS.
 """
 from __future__ import annotations
-
-import argparse
-import collections
-import json
-import re
-import struct
-import sys
-import uuid
-import zipfile
+import argparse, collections, json, os, re, struct, sys, uuid, zipfile
 from pathlib import PurePosixPath
 
-SETTING_CALL = re.compile(
-    r"query\.(?:get_pack_setting|is_pack_setting_enabled)\s*\(\s*['\"]([^'\"]+)['\"]"
-)
+QUERY = re.compile(r"query\.(?:get_pack_setting|is_pack_setting_enabled)\s*\(\s*['\"]([^'\"]+)['\"]")
 
-
-def png_size(data: bytes) -> tuple[int, int] | None:
+def png_size(data):
     if len(data) < 24 or data[:8] != b"\x89PNG\r\n\x1a\n":
         return None
     return struct.unpack(">II", data[16:24])
 
-
-def validate(path: str) -> tuple[list[str], list[str], dict[str, object]]:
-    errors: list[str] = []
-    warnings: list[str] = []
-    report: dict[str, object] = {}
-
+def validate(filename):
+    errors, report = [], {}
     try:
-        archive = zipfile.ZipFile(path)
+        z = zipfile.ZipFile(filename)
     except (OSError, zipfile.BadZipFile) as exc:
-        return [f"Cannot open ZIP: {exc}"], warnings, report
-
-    with archive:
-        corrupt = archive.testzip()
-        if corrupt:
-            errors.append(f"ZIP integrity failure: {corrupt}")
-
-        names = [i.filename for i in archive.infolist() if not i.is_dir()]
-        name_set = set(names)
-        duplicates = [n for n, count in collections.Counter(names).items() if count > 1]
-        unsafe = [n for n in names if PurePosixPath(n).is_absolute()
-                  or ".." in PurePosixPath(n).parts or "\\" in n]
-        if duplicates:
-            errors.append(f"Duplicate paths: {duplicates[:10]}")
-        if unsafe:
-            errors.append(f"Unsafe paths: {unsafe[:10]}")
-
-        report["archive_entries"] = len(names)
-        report["extension_counts"] = dict(collections.Counter(
-            PurePosixPath(n).suffix.lower() or "[no extension]" for n in names
-        ))
-
-        if "manifest.json" not in name_set:
-            return errors + ["manifest.json missing at archive root"], warnings, report
-
+        return [f"Cannot open archive: {exc}"], report
+    with z:
+        if z.testzip():
+            errors.append("ZIP CRC check failed")
+        names = [i.filename for i in z.infolist() if not i.is_dir()]
+        unique = set(names)
+        if len(names) != len(unique):
+            errors.append("Duplicate archive paths")
+        if any(PurePosixPath(n).is_absolute() or ".." in PurePosixPath(n).parts or "\\" in n for n in names):
+            errors.append("Unsafe archive path")
+        report["files"] = len(names)
+        if "manifest.json" not in unique:
+            return errors + ["manifest.json missing at root"], report
+        parsed, bad_json = {}, []
+        for name in names:
+            if name.lower().endswith(".json"):
+                try:
+                    parsed[name] = json.loads(z.read(name).decode("utf-8-sig"))
+                except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+                    bad_json.append(f"{name}: {exc}")
+        errors.extend("Invalid JSON " + x for x in bad_json)
+        report["json_files"] = len(parsed)
+        report["invalid_json"] = len(bad_json)
+        m = parsed.get("manifest.json", {})
+        h = m.get("header", {})
+        report["pack_name"] = h.get("name")
+        report["version"] = h.get("version")
+        if m.get("format_version") != 3 or h.get("version") != [0, 3, 0]:
+            errors.append("Expected manifest format 3 and version [0, 3, 0]")
+        if m.get("subpacks") or any(n.startswith("subpacks/") or "pvp_fps" in n.lower() for n in names):
+            errors.append("PvP/subpack content must not exist in Ultra Low")
+        if "pbr" in m.get("capabilities", []):
+            errors.append("PBR capability present without PBR assets")
+        meta = m.get("metadata", {})
+        if "XiaoCraft" not in " ".join(meta.get("authors", [])) or "CC BY-NC 3.0" not in str(meta.get("license", "")):
+            errors.append("Original author/license attribution missing")
+        ids = [h.get("uuid")] + [x.get("uuid") for x in m.get("modules", [])]
         try:
-            manifest = json.loads(archive.read("manifest.json").decode("utf-8-sig"))
-        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-            return errors + [f"Invalid manifest.json: {exc}"], warnings, report
-
-        header = manifest.get("header", {})
-        modules = manifest.get("modules", [])
-        report["manifest_format"] = manifest.get("format_version")
-        report["pack_name"] = header.get("name")
-        report["pack_version"] = header.get("version")
-        report["min_engine_version"] = header.get("min_engine_version")
-
-        if manifest.get("format_version") != 3:
-            errors.append("Expected manifest format_version 3")
-        if header.get("version") != "0.2.0":
-            warnings.append(f"Expected header version 0.2.0, found {header.get('version')!r}")
-        metadata = manifest.get("metadata", {})
-        if not metadata.get("authors"):
-            errors.append("metadata.authors missing")
-        if "CC BY-NC 3.0" not in str(metadata.get("license", "")):
-            errors.append("metadata.license must identify CC BY-NC 3.0")
-
-        uuids: list[str] = []
-        for label, value in [
-            ("header.uuid", header.get("uuid")),
-            *[(f"modules[{i}].uuid", m.get("uuid")) for i, m in enumerate(modules)],
-        ]:
-            if not value:
-                errors.append(f"{label} missing")
-                continue
-            try:
+            for value in ids:
                 uuid.UUID(str(value))
-                uuids.append(str(value))
-            except ValueError:
-                errors.append(f"Invalid {label}: {value}")
-        if len(uuids) != len(set(uuids)):
+        except (ValueError, TypeError, AttributeError):
+            errors.append("Invalid/missing UUID")
+        if len(ids) != len(set(ids)):
             errors.append("Manifest UUIDs are not unique")
 
-        for subpack in manifest.get("subpacks", []):
-            folder = str(subpack.get("folder_name", "")).strip("/")
-            archive_folder = f"subpacks/{folder}/" if folder else ""
-            if not folder or not any(n.startswith(archive_folder) for n in names):
-                errors.append(f"Subpack folder missing: {archive_folder!r}")
-
-        settings = [s for s in manifest.get("settings", [])
-                    if s.get("type") in {"toggle", "slider"}]
+        settings = [s for s in m.get("settings", []) if s.get("type") in ("slider", "toggle")]
         setting_ids = [s.get("name") for s in settings]
-        if len(setting_ids) != len(set(setting_ids)):
-            errors.append("Duplicate setting identifiers")
-        report["configurable_controls"] = len(settings)
-        report["settings"] = {s.get("name"): s.get("default") for s in settings}
-        if len(settings) != 9:
-            warnings.append(f"Expected 9 controls, found {len(settings)}")
+        if len(settings) != 8 or len(setting_ids) != len(set(setting_ids)):
+            errors.append(f"Expected 8 unique settings, found {len(settings)}")
+        report["active_settings"] = {s.get("name"): s.get("default") for s in settings}
 
-        json_names = [n for n in names if n.lower().endswith(".json")]
-        parsed: dict[str, object] = {}
-        bad_json: list[str] = []
-        for name in json_names:
-            try:
-                parsed[name] = json.loads(archive.read(name).decode("utf-8-sig"))
-            except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-                bad_json.append(f"{name}: {exc}")
-        report["json_checked"] = len(json_names)
-        report["invalid_json"] = len(bad_json)
-        errors.extend(bad_json)
-
-        setting_refs: collections.Counter[str] = collections.Counter()
-        old_ids: list[str] = []
+        refs = collections.Counter()
         for name in names:
-            if PurePosixPath(name).suffix.lower() not in {".json", ".lang", ".ui", ".material"}:
-                continue
-            try:
-                content = archive.read(name).decode("utf-8-sig")
-            except UnicodeDecodeError:
-                continue
-            setting_refs.update(SETTING_CALL.findall(content))
-            if "bfps:" in content or "xiao:fog_" in content:
-                old_ids.append(name)
-        for ref in setting_refs:
-            if ref not in setting_ids:
-                errors.append(f"Undefined setting queried: {ref}")
-        for key in setting_ids:
-            if not setting_refs[key]:
-                errors.append(f"Declared setting is never queried: {key}")
-        if old_ids:
-            errors.append(f"Old internal namespace remains: {old_ids[:10]}")
-        report["setting_query_references"] = dict(setting_refs)
+            if PurePosixPath(name).suffix.lower() in (".json", ".lang", ".ui", ".material"):
+                txt = z.read(name).decode("utf-8-sig", errors="replace")
+                refs.update(QUERY.findall(txt))
+                if "bfps:" in txt or "xiao:fog_" in txt:
+                    errors.append(f"Old internal namespace remains: {name}")
+        if set(refs) != set(setting_ids):
+            errors.append(f"Settings/query mismatch: missing {set(setting_ids)-set(refs)}, extra {set(refs)-set(setting_ids)}")
+        report["setting_queries"] = dict(refs)
 
         langs = [n for n in names if n.endswith(".lang")]
-        missing_labels: dict[str, list[str]] = {}
-        for setting in manifest.get("settings", []):
-            key = setting.get("text")
+        missing = {}
+        for item in m.get("settings", []):
+            key = item.get("text")
             if not isinstance(key, str):
                 continue
-            absent = []
-            for filename in langs:
-                text = archive.read(filename).decode("utf-8-sig", errors="replace")
-                if not re.search(rf"^{re.escape(key)}=", text, re.MULTILINE):
-                    absent.append(filename)
-            if absent:
-                missing_labels[key] = absent
+            for name in langs:
+                content = z.read(name).decode("utf-8-sig", errors="replace")
+                if not re.search(rf"^{re.escape(key)}=", content, re.M):
+                    missing.setdefault(key, []).append(name)
+        if missing:
+            errors.append(f"Missing setting translations: {missing}")
         report["language_files"] = len(langs)
-        report["missing_setting_labels"] = missing_labels
-        if missing_labels:
-            errors.append("Setting labels are missing from language files")
 
-        fog_report = {}
-        for biome_file, fog_dir in [
-            ("biomes_client.json", "fogs/"),
-            ("subpacks/fps/biomes_client.json", "subpacks/fps/fogs/"),
-        ]:
-            data = parsed.get(biome_file)
-            if not isinstance(data, dict):
-                errors.append(f"Biome file missing or invalid: {biome_file}")
+        biome = parsed.get("biomes_client.json", {}).get("biomes", {})
+        fog_refs = {v.get("fog_identifier") for v in biome.values() if isinstance(v, dict) and v.get("fog_identifier")}
+        fog_ids = set()
+        for name, data in parsed.items():
+            if name.startswith("fogs/") and name.endswith(".json"):
+                fog_ids.add(data.get("minecraft:fog_settings", {}).get("description", {}).get("identifier"))
+        missing_fog = sorted(x for x in fog_refs if x.startswith("lowmine:") and x not in fog_ids)
+        if missing_fog:
+            errors.append(f"Missing custom fog definitions: {missing_fog}")
+        report["biomes"] = len(biome)
+        report["fog_definitions"] = len(fog_ids)
+
+        registered = parsed.get("ui/_ui_defs.json", {}).get("ui_defs", [])
+        required_ui = ["ui/inventory_screen.json", "ui/chest_screen.json", "ui/data_driven_container_screen.json"]
+        for name in required_ui:
+            if name not in registered or name not in parsed:
+                errors.append(f"UI override missing or not registered: {name}")
+        inv = parsed.get("ui/inventory_screen.json", {})
+        for key in ("inventory_screen@crafting.inventory_screen_base", "crafting_screen@crafting.inventory_screen_base"):
+            if inv.get(key, {}).get("$screen_background_alpha") != 0.08:
+                errors.append(f"Inventory alpha override missing: {key}")
+        chest = parsed.get("ui/chest_screen.json", {})
+        for key in ("small_chest_screen@common.inventory_screen_common", "large_chest_screen@common.inventory_screen_common",
+                    "ender_chest_screen@common.inventory_screen_common", "shulker_box_screen@chest.small_chest_screen",
+                    "barrel_screen@chest.small_chest_screen"):
+            variables = chest.get(key, {}).get("variables", [])
+            if len(variables) < 2 or variables[0].get("$screen_background_alpha") != 0.08 or variables[1].get("requires") != "$pocket_screen":
+                errors.append(f"Chest UI override incomplete: {key}")
+        dd = parsed.get("ui/data_driven_container_screen.json", {}).get("screen@common.inventory_screen_common", {}).get("variables", [])
+        if len(dd) < 2 or dd[0].get("$screen_background_alpha") != 0.08:
+            errors.append("Data-driven container UI override incomplete")
+        report["registered_ui_overrides"] = [x for x in required_ui if x in registered]
+
+        pngs = [n for n in names if n.lower().endswith(".png")]
+        pixels, dimensions = 0, {}
+        for name in pngs:
+            size = png_size(z.read(name))
+            if not size:
+                errors.append(f"Invalid PNG header: {name}")
                 continue
-            biomes = data.get("biomes", {})
-            refs = {v.get("fog_identifier") for v in biomes.values()
-                    if isinstance(v, dict) and v.get("fog_identifier")}
-            defined: set[str] = set()
-            for filename in names:
-                if filename.startswith(fog_dir) and filename.endswith(".json"):
-                    fog_doc = parsed.get(filename)
-                    if isinstance(fog_doc, dict):
-                        fog = fog_doc.get("minecraft:fog_settings", {})
-                        ident = fog.get("description", {}).get("identifier") if isinstance(fog, dict) else None
-                        if ident:
-                            defined.add(ident)
-            missing = sorted(v for v in refs if v.startswith("lowmine:") and v not in defined)
-            if missing:
-                errors.append(f"Unresolved custom fog IDs in {biome_file}: {missing[:10]}")
-            fog_report[biome_file] = {
-                "biomes": len(biomes),
-                "fog_references": len(refs),
-                "definitions": len(defined),
-                "missing_custom_ids": missing,
-            }
-        report["fog_audit"] = fog_report
-
-        required = ["ATTRIBUTION.txt", "pack_icon.png",
-                    "textures/ui/pack_icon.png", "textures/ui/title.png"]
-        for name in required:
-            if name not in name_set:
-                errors.append(f"Required file missing: {name}")
-        image_sizes = {}
-        for name in required[1:]:
-            if name in name_set:
-                size = png_size(archive.read(name))
-                if not size:
-                    errors.append(f"Invalid PNG: {name}")
-                else:
-                    image_sizes[name] = size
-        report["png_dimensions"] = image_sizes
-
-        if "ATTRIBUTION.txt" in name_set:
-            notice = archive.read("ATTRIBUTION.txt").decode("utf-8", errors="replace")
+            pixels += size[0] * size[1]
+            if name in ("pack_icon.png", "textures/ui/pack_icon.png", "textures/ui/title.png", "textures/environment/clouds.png"):
+                dimensions[name] = size
+        report["png_files"] = len(pngs)
+        report["png_pixels"] = pixels
+        report["rgba_texel_estimate_mb"] = round(pixels * 4 / 1_000_000, 3)
+        report["key_png_dimensions"] = dimensions
+        if "ATTRIBUTION.txt" not in unique:
+            errors.append("ATTRIBUTION.txt missing")
+        else:
+            notice = z.read("ATTRIBUTION.txt").decode("utf-8", errors="replace")
             if "XiaoCraft" not in notice or "CC BY-NC 3.0" not in notice:
-                errors.append("Attribution notice must include XiaoCraft and CC BY-NC 3.0")
+                errors.append("Attribution notice incomplete")
+        report["archive_bytes"] = os.path.getsize(filename)
+    return errors, report
 
-    return errors, warnings, report
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("pack", help="Path to .mcpack")
-    args = parser.parse_args()
-    errors, warnings, report = validate(args.pack)
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("pack", help="Path to .mcpack")
+    args = ap.parse_args()
+    errors, report = validate(args.pack)
     print(json.dumps(report, indent=2, ensure_ascii=False))
-    for item in warnings:
-        print(f"WARNING: {item}", file=sys.stderr)
     if errors:
         print("\nVALIDATION FAILED:", file=sys.stderr)
         for item in errors:
-            print(f"- {item}", file=sys.stderr)
+            print("- " + item, file=sys.stderr)
         return 1
-    print("\nStatic validation passed; this does not test Minecraft runtime compatibility or FPS.")
+    print("\nStatic validation passed. Runtime behavior and FPS still need in-game tests.")
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
