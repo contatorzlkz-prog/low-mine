@@ -1,21 +1,11 @@
-LowMine Equilibrado v0.4.0 — créditos e licença
+LowMine Equilibrado 8x v0.5.0 — créditos e licenças
 
-Este pacote é uma adaptação de:
-  Boosted FPS (Optimized Performance) v2.4.1
-  Autor original: XiaoCraft
-  Projeto original: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance
+Este arquivo aponta para os créditos completos incluídos no pacote.
+Consulte CREDITOS.md no repositório ou CREDITOS.txt dentro do .mcpack.
 
-Alterações feitas pelo projeto LowMine na versão 0.4.0:
-  - Mantido um único perfil; o subpacote PvP continua removido.
-  - Mantidos 177 limites de partículas em zero e reduzidas 11 contagens para valores baixos.
-  - Criadas oito texturas 16x16 simplificadas para grama curta, samambaia, grama alta e versões secas.
-  - Ajustada a transparência do inventário, crafting, baús e hotbar.
-  - Ajustada a neblina visual para 64–96 blocos; isso não é culling do motor.
-  - Mantidos os UUIDs e atualizado o manifesto v3.
+A identidade, as texturas 8×8, o ícone e a interface foram criados para o projeto LowMine.
+O pacote também inclui definições de partículas, água e sombras adaptadas do FPS Optimizer v2.9.2, de XiaoCraft, sob CC BY-NC 3.0. As alterações e condições não comerciais estão indicadas no arquivo de créditos.
 
-Esta é uma adaptação, não uma substituição da obra original. Não há promessa de aumento de FPS sem medição no jogo.
+PotatoCraft 8x v1.4, Embeddium Optimizer v1.6 e Vanilla × Optimizer v2.4.2 foram apenas estudados como referências. Nenhum arquivo desses três pacotes foi copiado para o LowMine.
 
-A obra original está licenciada sob Creative Commons Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0):
-  https://creativecommons.org/licenses/by-nc/3.0/
-
-O autor e o projeto originais são creditados acima. Esta adaptação não é endossada nem afiliada a XiaoCraft. A licença original proíbe uso principalmente destinado a vantagem comercial ou compensação monetária privada. Mantenha os créditos e respeite os termos completos da licença.
+LowMine é uma composição independente, sem afiliação ou endosso da Mojang/Microsoft, XiaoCraft, LeviiCraft ou dos autores dos pacotes de referência.
