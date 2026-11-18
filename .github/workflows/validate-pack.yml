@@ -1,19 +1,21 @@
-name: Validar pacotes Bedrock
+name: Validar e compilar LowMine 8x
 
 on:
   push:
     paths:
-      - "**.mcpack"
-      - "releases/**"
-      - "tools/gerar_pacote.py"
-      - "tools/validar_pacote.py"
+      - "tools/**"
+      - "recursos/**"
+      - "README.md"
+      - "CREDITOS.md"
+      - "docs/**"
       - ".github/workflows/validate-pack.yml"
   pull_request:
     paths:
-      - "**.mcpack"
-      - "releases/**"
-      - "tools/gerar_pacote.py"
-      - "tools/validar_pacote.py"
+      - "tools/**"
+      - "recursos/**"
+      - "README.md"
+      - "CREDITOS.md"
+      - "docs/**"
       - ".github/workflows/validate-pack.yml"
   workflow_dispatch:
 
@@ -32,22 +34,24 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Instalar ferramenta de imagens
+      - name: Instalar Pillow
         run: python -m pip install --disable-pip-version-check Pillow
 
-      - name: Verificar sintaxe dos scripts
+      - name: Verificar sintaxe das ferramentas
         run: python -m py_compile tools/gerar_pacote.py tools/validar_pacote.py
 
-      - name: Validar pacotes publicados na pasta releases
-        shell: bash
-        run: |
-          mapfile -d '' pacotes < <(find releases -type f -iname '*.mcpack' -print0)
-          if (( ${#pacotes[@]} == 0 )); then
-            echo "::notice::Nenhum arquivo .mcpack foi anexado à pasta releases."
-            exit 0
-          fi
+      - name: Construir pacote e prévia de texturas
+        run: python tools/gerar_pacote.py
 
-          for pacote in "${pacotes[@]}"; do
-            echo "Validando: $pacote"
-            python tools/validar_pacote.py "$pacote"
-          done
+      - name: Validar o pacote gerado
+        run: python tools/validar_pacote.py build/LowMine-Equilibrado-8x-v0.5.0.mcpack
+
+      - name: Publicar artefatos para teste
+        uses: actions/upload-artifact@v4
+        with:
+          name: LowMine-Equilibrado-8x-v0.5.0
+          path: |
+            build/LowMine-Equilibrado-8x-v0.5.0.mcpack
+            build/LowMine-Texturas-8x8-v0.5.0.png
+          if-no-files-found: error
+          retention-days: 14
