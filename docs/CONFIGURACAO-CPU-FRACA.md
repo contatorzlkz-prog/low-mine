@@ -1,69 +1,62 @@
-# Configuração recomendada para CPU fraca
+# Configuração para CPU fraca e diagnóstico de travamentos
 
-Este guia separa travamentos ao carregar terreno de quedas de FPS durante o jogo. **Um pacote de recursos não controla o carregamento nem a geração de chunks.** Essas etapas pertencem ao motor do Minecraft.
+Este guia separa geração de terreno, renderização e simulação. Um Resource Pack não controla o carregador de chunks nem muda as opções internas do mundo.
 
-## Ponto inicial equilibrado
+## Ponto de partida
 
-| Opção | Valor inicial | Ajuste |
-|---|---:|---|
-| Distância de renderização | **6 chunks** | Se ainda travar ao explorar terreno novo, teste 4. Só aumente para 8 depois de ficar estável. |
-| Distância de simulação | **4 chunks** | Mantenha em 4 em um PC fraco. |
-| Gráficos | Simples | Use o modo mais leve disponível na sua versão. |
-| Visuais Vibrantes | Desativado | Caso essa opção exista. |
-| Folhas/iluminação sofisticadas | Desativadas ou no mínimo | Caso essas opções existam. |
-| Nuvens e efeitos de céu | Desativados | Reduza efeitos cosméticos. |
-| Limite de FPS | 30 estáveis | Use 60 apenas se o computador conseguir manter 60 sem oscilações grandes. |
+Para um PC modesto, comece com:
 
-A distância de renderização determina quantos chunks o cliente desenha. A distância de simulação determina onde entidades, crescimento de plantas, líquidos e outras atualizações do mundo continuam ativas. A simulação também custa CPU; diminuir apenas o nevoeiro não diminui essa carga. Consulte a [documentação da Microsoft sobre distância de renderização, simulação e ticking areas](https://learn.microsoft.com/en-us/minecraft/creator/documents/simulationrenderdistanceguide?view=minecraft-bedrock-stable).
+| Opção | Valor inicial |
+|---|---:|
+| Distância de renderização | 4 chunks |
+| Distância de simulação | 4 chunks |
+| Gráficos | Simples |
+| Visuais Vibrantes | Desativados |
+| Folhas/iluminação sofisticadas | Desativadas |
+| Nuvens e efeitos de céu | Desativados |
+| Limite de FPS | 30 estáveis |
 
-## Identifique qual travamento acontece
+Se 4 chunks ficar estável e o jogo continuar fluido, experimente 6 chunks de renderização, mantendo simulação em 4. Não aumente renderização e simulação ao mesmo tempo.
 
-### 1. Só trava ao entrar em terreno nunca visitado
+A distância de renderização define quantos chunks o cliente desenha; a distância de simulação define onde entidades, plantas, líquidos e outras mecânicas atualizam. Consulte a documentação da Microsoft sobre Render Distance, Simulation Distance e Ticking Areas:
+https://learn.microsoft.com/en-us/minecraft/creator/documents/simulationrenderdistanceguide?view=minecraft-bedrock-stable
 
-O jogo está gerando e preparando terreno novo, lendo e gravando dados do mundo. Um resource pack não pré-gera chunks nem acelera diretamente o gerador.
+## Descubra onde trava
 
-Teste renderização em 4 chunks. Avance mais devagar e espere o terreno aparecer antes de continuar explorando. Mantenha o mundo em SSD, deixe espaço livre no disco e feche tarefas pesadas em segundo plano.
+### Travada ao entrar em terreno nunca visitado
 
-### 2. O FPS cai quando olha para florestas ou áreas cheias de plantas
+Pode ser geração de terreno, leitura/gravação do mundo e preparação de chunks. Um resource pack não substitui o gerador. Teste renderização em 4 chunks e avance mais devagar, deixando o terreno carregar. Mantenha espaço livre no SSD e feche tarefas pesadas em segundo plano.
 
-Isso aponta mais para desenho de cena, transparência, geometria visível ou muitos elementos na tela. O LowMine v0.4.0 simplifica oito texturas de grama e samambaias, mas não remove os planos/ modelos de geometria dos blocos vanilla. Portanto, o ganho de FPS não é garantido.
+### FPS cai ao olhar para florestas
 
-### 3. Trava perto de mobs, fazendas, aldeias ou redstone
+Pode ser custo gráfico de geometria, transparência, sombras ou cena muito densa. O LowMine simplifica as imagens de vegetação e reduz alguns efeitos, mas não remove os planos/vértices dos modelos vanilla.
 
-Pode ser custo de simulação, comportamento de entidades, pathfinding, líquidos e atualizações de blocos. Reduza a distância de simulação e evite excesso de entidades e mecanismos ativos.
+### Congela perto de mobs, aldeias, fazendas ou redstone
 
-Em mundos com cheats, consulte as áreas de ticking com:
+Pode ser custo de simulação, pathfinding, entidades, líquidos e atualizações de bloco. Mantenha a simulação em 4 e teste uma área com menos entidades.
 
-```mcfunction
-/tickingarea list all-dimensions
-```
+A Microsoft observa que entidades podem continuar executando comportamentos mesmo fora da visão ou atrás de blocos quando estão em chunks carregados. Reduzir quantidade de entidades e trabalho de IA pode ser mais importante que trocar a textura. Consulte:
+https://learn.microsoft.com/en-us/minecraft/creator/documents/practices/improvingperformanceandresourceusage?view=minecraft-bedrock-stable
 
-Remova apenas áreas que você reconhece como desnecessárias; não remova uma área usada por uma fazenda ou sistema que precisa continuar ativo.
+### Travamento também em um lugar já carregado
 
-A Microsoft recomenda limitar entidades e comportamentos desnecessários, porque entidades podem continuar executando comportamentos mesmo quando estão fora da visão do jogador. Consulte [Improving performance and resource usage](https://learn.microsoft.com/en-us/minecraft/creator/documents/practices/improvingperformanceandresourceusage?view=minecraft-bedrock-stable).
+Investigue memória/RAM, disco, pacotes adicionais, entidades e possíveis problemas do mundo. Faça uma cópia de segurança antes de testar alterações.
 
-### 4. Continua travando em uma área que já foi carregada
+## Como testar sem confundir resultados
 
-Investigue memória, disco, outros pacotes ativos, entidades e possíveis problemas no mundo. Faça uma cópia de segurança antes de testar sem outros add-ons.
+1. Faça uma cópia do mundo.
+2. Anote versão exata do Bedrock, resolução e configurações.
+3. Teste sem LowMine com renderização 4 e simulação 4.
+4. Repita com LowMine exatamente no mesmo ponto.
+5. Teste uma área já carregada e depois terreno novo.
+6. Registre se trava ao gerar terreno, ao olhar para vegetação ou perto de entidades.
+7. Compare FPS médio e frame time, não apenas um número instantâneo.
 
-## Teste controlado
+## O que o LowMine faz e não faz
 
-1. Faça uma cópia de segurança do mundo.
-2. Anote a versão exata do Bedrock, o dispositivo e as configurações.
-3. Teste sem LowMine com renderização 6 e simulação 4.
-4. Repita com LowMine, na mesma posição e com as mesmas opções.
-5. Teste primeiro uma área já visitada e depois um trecho novo.
-6. Anote se a travada acontece ao gerar terreno, ao olhar para vegetação ou perto de mobs/fazendas.
-
-Não compare FPS de mundos, posições ou distâncias diferentes como se fosse um teste controlado.
-
-## O que o LowMine não consegue fazer
-
-- Definir a distância de renderização ou simulação.
-- Pré-gerar ou manter chunks em cache.
-- Impedir o jogo de gerar terreno novo.
-- Transformar neblina em culling real.
-- Mandar o RenderDragon ignorar tudo atrás da câmera ou abaixo do solo.
-- Injetar Rust no cliente Bedrock.
-
-A neblina 64–96 do LowMine é visual; a redução de texturas afeta imagens específicas, não a geração de chunks.
+O LowMine reduz o tamanho de 38 texturas de bloco para 8×8, controla 14 emissores incluídos, simplifica alguns recursos visuais e oferece interface própria. Ele não:
+- Gera chunks antecipadamente.
+- Controla render distance ou simulation distance.
+- Altera cache/streaming do jogo.
+- Faz culling universal atrás da câmera.
+- Injeta código Rust no cliente Bedrock.
