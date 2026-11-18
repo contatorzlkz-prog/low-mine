@@ -35,18 +35,18 @@ O limite é aplicado somente aos emissores que o LowMine inclui e substitui. Ele
 
 | Verificação | Resultado |
 |---|---:|
-| Entradas no MCpack | 68 |
-| JSON válidos | 20 de 20 |
+| Entradas no MCpack | 69 |
+| JSON válidos | 21 de 21 |
 | PNG | 46 |
 | Texturas de bloco 8×8 | 38 |
 | Definições de partículas | 14 |
-| Arquivos de interface | 3 |
+| Telas de interface registradas | 3 (+ arquivo de registro) |
 | Scripts executados pelo jogo | 0 |
-| Tamanho compactado | 32.055 bytes |
+| Tamanho compactado | 32.218 bytes |
 
-SHA-256: 5a14c35a02c737127297763233e6707589a324ec4bc70b46b670484037e19825
+SHA-256: 841b70ccb54acbc235e61334c7ad448bee95b1ec0cc53887b67449a21bbb240b
 
-A auditoria estática não inicia o Minecraft nem mede FPS. A quantidade de PNGs não equivale à quantidade de texture handles, pois parte das texturas de blocos é agrupada em atlas pelo próprio jogo.
+O manifesto não ativa capacidades PBR extras. O arquivo ui/_ui_defs.json registra as três telas personalizadas para o Bedrock. A auditoria estática não inicia o Minecraft nem mede FPS. A quantidade de PNGs não equivale à quantidade de texture handles, pois parte das texturas de blocos é agrupada em atlas pelo próprio jogo.
 
 ## Instalação e primeiro teste
 
