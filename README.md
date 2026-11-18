@@ -1,5 +1,11 @@
 # LowMine Equilibrado 8x
 
+<p align="center">
+  <a href="https://github.com/contatorzlkz-prog/low-mine/releases/download/lowmine-v0.5.0/LowMine-Equilibrado-8x-v0.5.0.mcpack">
+    <img src="https://img.shields.io/badge/⬇%20BAIXAR%20LOWMINE-.MCPACK-2ea44f?style=for-the-badge" alt="Baixar LowMine Equilibrado 8x">
+  </a>
+</p>
+
 **LowMine Equilibrado 8x v0.5.0** é um pacote de recursos do Minecraft Bedrock com identidade visual e arte próprias, texturas 8×8, interface translúcida e efeitos configuráveis. O projeto combina conteúdo original LowMine com um conjunto limitado de recursos adaptados sob licença, descritos em CREDITOS.md e no arquivo CREDITOS.txt dentro do pacote.
 
 > **Desempenho precisa ser medido no jogo.** A validação confirma a estrutura do pacote, não um ganho de FPS. Texturas menores podem reduzir a memória ocupada pelas imagens substituídas; elas não corrigem geração de chunks nem simulação do motor.

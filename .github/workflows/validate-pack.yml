@@ -20,7 +20,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   validar:
@@ -55,3 +55,17 @@ jobs:
             build/LowMine-Texturas-8x8-v0.5.0.png
           if-no-files-found: error
           retention-days: 14
+
+      - name: Criar ou atualizar Release com download permanente
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: lowmine-v0.5.0
+          name: LowMine Equilibrado 8x v0.5.0
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: |
+            build/LowMine-Equilibrado-8x-v0.5.0.mcpack
+            build/LowMine-Texturas-8x8-v0.5.0.png
