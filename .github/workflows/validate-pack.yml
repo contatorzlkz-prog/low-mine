@@ -7,12 +7,15 @@ on:
       - "releases/**"
       - "tools/validate_pack.py"
       - "tools/build_pack.py"
+      - "tools/build_ultra_low.py"
       - ".github/workflows/validate-pack.yml"
   pull_request:
     paths:
       - "**.mcpack"
       - "releases/**"
       - "tools/validate_pack.py"
+      - "tools/build_pack.py"
+      - "tools/build_ultra_low.py"
       - ".github/workflows/validate-pack.yml"
   workflow_dispatch:
 
@@ -32,7 +35,7 @@ jobs:
           python-version: "3.12"
 
       - name: Check Python tooling syntax
-        run: python -m py_compile tools/build_pack.py tools/validate_pack.py
+        run: python -m py_compile tools/build_pack.py tools/build_ultra_low.py tools/validate_pack.py
 
       - name: Validate packaged resource packs
         shell: bash
