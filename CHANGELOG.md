@@ -1,20 +1,17 @@
 # Histórico de versões
 
 ## 0.5.0 — LowMine Equilibrado 8x
-- Criada identidade visual própria e ícone LowMine.
-- Criadas 38 texturas originais de blocos em 8×8, incluindo vegetação e folhas.
-- Criadas novas texturas de painel e elementos de interface, com fundo translúcido e seleção legível.
-- Adaptadas 14 definições de partículas do FPS Optimizer v2.9.2, com namespace lowmine:, quantidade padrão de 50% e limite de rajada 6.
-- Adaptados o arquivo de água (cáusticas e ondas desligadas) e sombras blocadas (texel_size 16) do mesmo projeto, com créditos.
-- Nenhum arquivo foi copiado do PotatoCraft, Embeddium Optimizer ou Vanilla × Optimizer; foram usados apenas como referências técnicas.
-- Um único perfil; sem PvP.
-- Nenhum script de jogo, Behavior Pack ou loop incluído.
-- Validação estática: 72 entradas, 21 JSON válidos, 50 PNG, 38 texturas de bloco 8×8.
-- Sem alegação de FPS antes do teste no jogo.
+- Criada identidade visual LowMine e ícone próprios.
+- Criadas 38 texturas originais de blocos em 8×8.
+- Criados elementos de interface translúcidos e overrides de inventário, crafting e baús.
+- Adaptadas 14 definições de partículas do FPS Optimizer v2.9.2, com namespace LowMine e controles do pacote.
+- Configuração inicial de partículas em 50%, limite por emissão 6 e efeitos ambientais densos desligados por padrão.
+- Adaptadas as definições de água sem cáusticas/ondas e sombras blocadas do mesmo pacote.
+- Não foram copiados arquivos do PotatoCraft, Embeddium Optimizer ou Vanilla × Optimizer.
+- Mantido um perfil único, sem PvP.
+- Nenhum script ou loop executado pelo jogo.
+- Validação estática: 68 entradas, 20 JSON, 46 PNG e 38 texturas 8×8.
+- Sem promessa de FPS antes da medição dentro do Minecraft.
 
 ## 0.4.0 — perfil equilibrado
-- Base para o redesign LowMine 8x.
-
-## 0.3.2 — correção de importação
-- Corrigidos os tipos SemVer do manifesto v3.
-- Removidas as configurações experimentais do pacote anterior.
+- Versão intermediária usada como ponto de partida para o redesign 8x.
