@@ -1,18 +1,23 @@
 # Changelog
 
+## 0.3.0 — Single Ultra Low profile test candidate
+- Removed the PvP subpack and promoted the former Lite profile to the pack root.
+- Removed the unused geyser control; the Lite geyser emitters were already hard-disabled.
+- Set particle amount to 0% and all seven remaining toggles off by default.
+- Added inventory/crafting, chest and data-driven container JSON UI overrides with a desktop backdrop alpha of 0.08.
+- Registered the new UI files in `ui/_ui_defs.json`.
+- Reduced alpha on hotbar/slot and touch-control textures.
+- Resized pack icons, title artwork and emote-wheel images; replaced the cloud texture with a transparent 1×1 PNG.
+- Tightened the air fog range to 32–48 in 104 fog definitions (visual-only; no engine culling).
+- Removed the unused PBR capability.
+- Static validation: 317/317 JSON files valid; 8 active setting IDs resolve; all 29 language files contain required labels; 94 biome entries and 104 fog definitions checked; no missing custom fog IDs.
+- No Minecraft runtime or FPS improvement is claimed until tested.
+
 ## 0.2.0 — Rebrand and audited test candidate
-- Replaced visible Boosted FPS branding with LowMine Performance.
-- Added the LowMine icon and new title image.
-- Reduced the title image from 4096×604 to 2048×302.
-- Assigned stable project-owned manifest/module UUIDs.
-- Renamed custom setting and fog namespaces from the source prefix to `lowmine:`.
-- Added nine documented controls with a 50% particle slider default and conservative visual-toggle defaults.
-- Added Portuguese (Brazil) settings text and fallback labels in all 29 language files.
-- Preserved both profile structures, base/Lite fog layouts, UI overrides and PBR capability.
-- Added an attribution notice, reproducible builder, and static validation.
-- Static validation: 487/487 JSON files parsed; no missing custom fog references or manifest setting labels.
-- No runtime compatibility or FPS improvement is claimed before in-game testing.
+- Rebranded the pack as LowMine Performance.
+- Established LowMine UUIDs and the `lowmine:` namespace.
+- Added nine configurable controls and Brazilian Portuguese text.
+- Added pack builder, validator and audit documentation.
 
 ## 0.1.0 — Initial repository baseline
-- Created the LowMine repository structure and documentation.
-- Recorded the supplied source pack inventory and original license.
+- Created the LowMine repository and recorded the original attribution/license.
