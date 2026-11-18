@@ -29,7 +29,7 @@ As texturas novas substituem **a imagem** da vegetação. Elas não removem nem 
 | Texturas novas de vegetação | 8 |
 | Perfil PvP | Removido |
 
-Tamanho compactado: **658.214 bytes**. SHA-256: `898a63dc7b221d8e0a2ab489f3f41b965ddc3a2cf6c05658beb8d25940a6f91a`.
+Tamanho compactado: **658.214 bytes**. SHA-256: `98cdb09e379a4ce92159c7599fdd6b6967e4cf7c370e19953fe437ee5c6e15c7`.
 
 A validação estática confirma estrutura, JSON, manifesto, texturas, referências de neblina e telas de interface. Ela não executa o Minecraft e não mede FPS.
 
