@@ -109,6 +109,32 @@ def validate(filename):
         report["biomes"] = len(biome)
         report["fog_definitions"] = len(fog_ids)
 
+        particle_files = [n for n in parsed if n.startswith("particles/") and n.endswith(".json")]
+        particle_counts = {"max_particles_zero": 0, "slider_gated_emitters": 0}
+        nonzero_particle_caps = []
+        def scan_particle(node):
+            if isinstance(node, dict):
+                if "max_particles" in node:
+                    if node["max_particles"] == 0:
+                        particle_counts["max_particles_zero"] += 1
+                    else:
+                        nonzero_particle_caps.append(node["max_particles"])
+                if isinstance(node.get("num_particles"), str) and "lowmine:particle_amount" in node["num_particles"]:
+                    particle_counts["slider_gated_emitters"] += 1
+                for value in node.values():
+                    scan_particle(value)
+            elif isinstance(node, list):
+                for value in node:
+                    scan_particle(value)
+        for name in particle_files:
+            scan_particle(parsed[name])
+        report["particle_audit"] = {"definitions": len(particle_files), **particle_counts,
+                                    "nonzero_max_particles": nonzero_particle_caps}
+        if nonzero_particle_caps:
+            errors.append(f"Particle definitions contain nonzero max_particles: {nonzero_particle_caps[:10]}")
+        if particle_counts["max_particles_zero"] + particle_counts["slider_gated_emitters"] < len(particle_files):
+            errors.append("Some pack particle definitions are not disabled or slider-gated")
+
         registered = parsed.get("ui/_ui_defs.json", {}).get("ui_defs", [])
         required_ui = ["ui/inventory_screen.json", "ui/inventory_screen_pocket.json", "ui/chest_screen.json", "ui/data_driven_container_screen.json"]
         for name in required_ui:
