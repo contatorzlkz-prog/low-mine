@@ -35,8 +35,8 @@ def extrair_seguro(zip_origem,raiz):
 def pixel(im,x,y,cor):
  if 0<=x<im.width and 0<=y<im.height: im.putpixel((x,y),cor)
 
-def grama_curta():
- im=Image.new("RGBA",(16,16),(0,0,0,0)); p=VERDE
+def grama_curta(seca=False):
+ im=Image.new("RGBA",(16,16),(0,0,0,0)); p=SECO if seca else VERDE
  trilhas=[
   [(7,15,"escuro"),(7,14,"medio"),(7,13,"medio"),(6,12,"claro"),(6,11,"claro"),(5,10,"ponta"),(5,9,"ponta"),(4,8,"claro"),(4,7,"ponta")],
   [(8,15,"escuro"),(8,14,"medio"),(8,13,"medio"),(8,12,"claro"),(9,11,"claro"),(9,10,"ponta"),(10,9,"ponta"),(10,8,"claro"),(11,7,"ponta")],
@@ -86,7 +86,7 @@ def criar_texturas(raiz):
   "textures/blocks/double_plant_grass_bottom.png":grama_alta(False),
   "textures/blocks/double_plant_fern_top.png":samambaia(True),
   "textures/blocks/double_plant_fern_bottom.png":samambaia(False),
-  "textures/blocks/short_dry_grass.png":grama_curta(),
+  "textures/blocks/short_dry_grass.png":grama_curta(seca=True),
   "textures/blocks/tall_dry_grass.png":grama_alta(True,seco=True)
  }
  for nome,im in arquivos.items():
