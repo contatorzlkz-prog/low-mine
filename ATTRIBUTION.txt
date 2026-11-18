@@ -1,0 +1,22 @@
+LowMine Performance — attribution and license
+
+This package is an adaptation of:
+  Boosted FPS (Optimized Performance) v2.4.1
+  Original author: XiaoCraft
+  Original project: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance
+
+Changes made in the LowMine baseline:
+  - Renamed the pack presentation to LowMine Performance.
+  - Created new manifest and module UUIDs so the adaptation has its own identity.
+  - Renamed the two displayed subpacks and updated localized pack labels.
+  - Added this attribution notice.
+  - Repacked the archive using ZIP deflate compression.
+
+No performance tuning or FPS improvement is claimed in this baseline. Runtime testing and optimization are still pending.
+
+The original work is listed under the Creative Commons Attribution-NonCommercial 3.0 Unported license (CC BY-NC 3.0):
+  https://creativecommons.org/licenses/by-nc/3.0/
+
+The original author and project are credited above. Changes are identified. This adaptation is not endorsed by or affiliated with XiaoCraft.
+
+The original license prohibits use primarily intended for commercial advantage or private monetary compensation. Keep the original license terms and notices with redistributed copies.
