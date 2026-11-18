@@ -4,6 +4,7 @@
 - Removed the PvP subpack and promoted the former Lite profile to the pack root.
 - Removed the unused geyser control; the Lite geyser emitters were already hard-disabled.
 - Set particle amount to 0% and all seven remaining toggles off by default.
+- Audited all 188 included particle definitions: 177 have zero max particles and 11 are gated by the 0% default slider.
 - Added desktop and pocket inventory/crafting UI overrides, plus chest and data-driven container overrides.
 - Registered all four UI files in `ui/_ui_defs.json`.
 - Reduced opacity of shared dialog panel textures, inventory slots, hotbar and touch controls. Selected/pressed states retain more opacity.
