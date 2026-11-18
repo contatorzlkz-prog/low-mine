@@ -1,63 +1,65 @@
 # Bedrock rendering: what LowMine can and cannot change
 
-This document separates resource-pack adjustments from client-engine behavior.
+This document separates resource-pack changes from client-engine behavior.
+
+## Developer guidance that directly applies to LowMine
+
+Microsoft's current performance guide says:
+- Textures are generally loaded into memory uncompressed when a world loads.
+- A 1024×1024 texture can use 16 times the memory of a 256×256 texture.
+- Reduce wasted texture space and avoid loading unnecessary textures.
+- Texture handles carry overhead. Block textures may be packed into atlases, so PNG file count is not equal to GPU texture handle count.
+- Too many resource files add overhead; Microsoft recommends staying below 800 texture handles for add-ons.
+- Complex/high-volume particles can hurt performance, and lower-end devices should be tested early.
+
+Source: [Improving performance and resource usage](https://learn.microsoft.com/en-us/minecraft/creator/documents/practices/improvingperformanceandresourceusage?view=minecraft-bedrock-stable)
+
+The official [Texture Budgets](https://learn.microsoft.com/en-us/minecraft/creator/documents/texturebudgets?view=minecraft-bedrock-stable) guide estimates uncompressed texture memory from total texels × 4 bytes and lists separate budgets for add-ons, resource packs and worlds. These are budget estimates, not direct FPS measurements.
+
+LowMine follows the measurable parts of this advice: it reduces selected high-resolution UI images and sets every included LowMine particle emitter to zero. Most block/item sprites were not blindly blurred or resized; item readability matters, and their pixel cost is not automatically the main bottleneck.
 
 ## What a resource pack can affect
 
-A Bedrock resource pack can replace visual assets and resource definitions that the game exposes:
-- Particle definitions and custom particle amounts, where the pack owns or overrides those definitions.
+A Bedrock resource pack can replace visual assets and resource definitions exposed by the game:
+- Particle definitions included in or overridden by the pack.
 - Texture dimensions, texture choices, UI images and alpha/transparency.
-- Resource-pack fog definitions, which change what the player sees at a distance.
-- Some model and render-controller definitions for assets included in the pack.
+- Resource-pack fog definitions.
+- Some custom model and render-controller definitions.
 
-These changes may reduce asset memory use or the number of visual effects generated. Their actual FPS impact depends on the device, scene and game version and must be measured.
-
-Microsoft's performance guidance recommends controlling texture sizes, minimizing unnecessary texture assets and keeping particle systems simple. Texture resolution affects memory requirements; it does not automatically prove lower CPU/GPU time in every scene:
-https://learn.microsoft.com/en-us/minecraft/creator/documents/practices/improvingperformanceandresourceusage?view=minecraft-bedrock-stable
+These changes can reduce the amount of pack-owned visual data or effects. Real FPS impact depends on scene/device/game version and must be measured.
 
 ## What fog does not do
 
-Resource-pack fog is a visual distance effect. It blends distant scene content into fog colors. A fog range of 32–48 blocks can make the visible world look much shorter, but it does not provide a general instruction to stop the engine from processing everything beyond that visual range.
+Fog changes visual distance blending. A fog range of 32–48 blocks makes terrain disappear sooner, but does not instruct RenderDragon to stop processing geometry beyond the fog.
 
-Fog is not a camera-facing culling mask:
-- It does not selectively hide only objects behind the player.
-- It does not guarantee blocks under the terrain stop being processed.
-- It does not replace chunk loading or the game's visibility pipeline.
+It does not:
+- Hide only objects behind the camera.
+- Guarantee that underground or occluded blocks stop being processed.
+- Replace chunk loading, frustum culling or occlusion culling.
 
-LowMine's current short fog is intentionally a visual setting. It is not advertised as a CPU/GPU culling implementation.
+## Block Culling
 
-## What Block Culling means in Bedrock
+Bedrock's Block Culling targets faces of custom block geometry that are covered by adjacent blocks. It is not a global switch for all vanilla terrain, entities or everything behind the player.
 
-Bedrock's Block Culling feature concerns faces of custom block geometry that are covered by adjacent blocks. It can remove hidden faces from those custom models. It is not a universal switch for frustum culling, occlusion culling, all vanilla terrain, entities or arbitrary content behind the camera.
-
-Reference: https://wiki.bedrock.dev/blocks/block-culling
+Reference: [Bedrock Wiki — Block Culling](https://wiki.bedrock.dev/blocks/block-culling).
 
 ## RenderDragon and Rust
 
-RenderDragon is the rendering engine used by modern Minecraft Bedrock clients. A `.mcpack` is a resource package; it is not a native engine plug-in or executable patch. Resource-pack files cannot inject Rust code into the client renderer or replace RenderDragon.
+RenderDragon is the Bedrock client renderer. A `.mcpack` is a resource package, not a native client plug-in. It cannot inject Rust into the game's renderer or replace RenderDragon.
 
-Rust could be used for separate tooling (for example, a pack inspector, asset optimizer or benchmark log analyzer) or compatible server-side software. It cannot be used through a normal Bedrock resource pack to take over client rendering.
+Rust can be useful for separate LowMine tools: package inspection, image/atlas analysis, build automation, duplicate-file detection and benchmark-log analysis. It does not turn into client-side culling through a resource pack.
 
-## Actual engine controls available to players
+## Safe engine-side settings
 
-The game's own video settings control render distance and simulation distance. Lowering render distance is the supported way to ask the client to draw fewer distant chunks; a resource pack cannot reliably override that engine setting. Simulation distance changes how far gameplay simulation is active and is distinct from a resource pack texture or fog.
+Use the game's own video settings to lower render distance; that is the supported way to request fewer distant chunks. Simulation distance is separate and controls gameplay simulation, not texture dimensions or fog.
 
-## UI reference files
+## LowMine's optimization method
 
-The desktop and pocket inventory screens are separate in the current Mojang Bedrock sample pack. The sample also registers UI files through `ui/_ui_defs.json`:
-- [Desktop inventory screen](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/ui/inventory_screen.json)
-- [Pocket/touch inventory screen](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/ui/inventory_screen_pocket.json)
-- [Chest screens](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/ui/chest_screen.json)
-- [UI definition registry](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/ui/_ui_defs.json)
+1. Keep every included particle definition cheap or disabled if it is not needed.
+2. Reduce oversized textures and unnecessary unique texture files.
+3. Remove duplicate subpack files and unused overrides.
+4. Keep inventory/hotbar controls readable and clickable after alpha changes.
+5. Benchmark vanilla against LowMine in the same world, camera position, device, resolution, render distance and simulation distance.
+6. Compare average FPS and frame-time stability; do not claim a gain from ZIP size or a texture-pixel estimate alone.
 
-LowMine follows this split for its test override. This is still version-sensitive JSON UI customization, not a universal guarantee across all Bedrock UI modes.
-
-## LowMine's safe optimization scope
-
-1. Keep particle emitters conservative and disable pack-owned visual effects the player does not need.
-2. Reduce excessive texture dimensions while preserving item/block readability.
-3. Remove duplicate subpack assets and unnecessary overrides.
-4. Reduce UI texture opacity/complexity without removing input regions or selection feedback.
-5. Measure vanilla versus LowMine in the same world, scene and settings, using average FPS and frame-time stability.
-
-The current v0.3.0 test candidate is a resource-pack optimization only. Runtime import, UI behavior and any performance effect still require testing in Minecraft.
+The v0.3.2 candidate passed static checks only. Import, UI behavior and performance still require in-game verification.
