@@ -1,22 +1,24 @@
-LowMine Performance — attribution and license
+LowMine Performance v0.2.0 — attribution and license
 
 This package is an adaptation of:
   Boosted FPS (Optimized Performance) v2.4.1
   Original author: XiaoCraft
   Original project: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance
 
-Changes made in the LowMine baseline:
-  - Renamed the pack presentation to LowMine Performance.
-  - Created new manifest and module UUIDs so the adaptation has its own identity.
-  - Renamed the two displayed subpacks and updated localized pack labels.
-  - Added this attribution notice.
-  - Repacked the archive using ZIP deflate compression.
+Changes made by the LowMine Project in v0.2.0:
+  - Rebranded the pack, profiles, icons, title image and localized settings.
+  - Assigned new stable manifest and module UUIDs.
+  - Renamed custom setting and custom fog identifiers to the LowMine namespace.
+  - Added nine configurable controls with revised default values.
+  - Reduced the title image from 4096x604 to 2048x302.
+  - Added Brazilian Portuguese settings text and English fallback labels.
+  - Added a reproducible build process and static validation.
 
-No performance tuning or FPS improvement is claimed in this baseline. Runtime testing and optimization are still pending.
+This is an adaptation, not an original replacement for the source work. No measured FPS improvement is claimed. Runtime testing is still required.
 
 The original work is listed under the Creative Commons Attribution-NonCommercial 3.0 Unported license (CC BY-NC 3.0):
   https://creativecommons.org/licenses/by-nc/3.0/
 
-The original author and project are credited above. Changes are identified. This adaptation is not endorsed by or affiliated with XiaoCraft.
+The original author and project are credited above, and the changes are identified. This adaptation is not endorsed by or affiliated with XiaoCraft.
 
-The original license prohibits use primarily intended for commercial advantage or private monetary compensation. Keep the original license terms and notices with redistributed copies.
+The license prohibits use primarily intended for commercial advantage or private monetary compensation. Keep the attribution and license information with redistributed copies, and respect the full license terms.
