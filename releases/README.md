@@ -7,7 +7,7 @@ Place distributable Bedrock packages in this directory before publishing GitHub 
 Expected filename: `LowMine-Performance-v0.2.0.mcpack`
 
 SHA-256:
-`48eb7015b9829810d9d9d56e842ef209914502ffe61e80df0a629d2c9c29bfe6`
+`59af4cfb14f639e736f08d5d8d9a1e6557e31896c6d17ee6bdc7654c9aa8a035`
 
 The package was generated and passed static validation, including ZIP integrity, 487 JSON parses, manifest/settings references, all 29 language files and base/Lite fog references. It has not yet been imported or performance-tested in Minecraft. The binary is supplied separately for the user's test and has not been committed here yet.
 
