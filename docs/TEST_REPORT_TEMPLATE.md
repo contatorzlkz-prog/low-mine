@@ -1,56 +1,54 @@
-# Relatório de teste — LowMine Equilibrado v0.4.0
-
-Preencha depois de importar o pacote. Prints da tela de importação, inventário e erros do Content Log ajudam a identificar problemas.
+# Relatório de teste — LowMine Equilibrado 8x v0.5.0
 
 ## Ambiente
 - Versão exata do Minecraft Bedrock:
 - Dispositivo e sistema:
+- Processador:
+- RAM:
 - Resolução:
-- Modo de entrada (teclado/mouse, controle ou toque):
+- Modo gráfico:
 - Distância de renderização:
 - Distância de simulação:
-- Modo gráfico:
 - Outros pacotes ativos:
 
-## Importação
+## Importação e configurações
 - [ ] Importou sem erro.
-- [ ] O nome aparece como LowMine Equilibrado v0.4.0.
-- [ ] UUID e versão aparecem corretamente.
-- [ ] Só existe um perfil LowMine.
-- [ ] O mundo abre sem travar.
+- [ ] Nome e versão aparecem como LowMine Equilibrado 8x v0.5.0.
+- [ ] UUID aparece corretamente.
+- [ ] Sliders de partículas e limite de rajada aparecem.
+- [ ] Os toggles têm os padrões descritos no README.
 
-Mensagem exata da importação / Content Log:
+Mensagem de erro / Content Log:
 
 ## Interface
 - [ ] Inventário está transparente o suficiente.
 - [ ] Crafting funciona.
-- [ ] Baú pequeno e grande abrem normalmente.
+- [ ] Baú pequeno e grande funcionam.
 - [ ] Ender Chest, shulker e barril funcionam.
-- [ ] Slots, contorno de seleção e itens continuam legíveis.
-- [ ] Hotbar continua visível.
-- [ ] Controles de toque continuam visíveis e clicáveis, se aplicável.
+- [ ] Slots, itens e contorno de seleção continuam legíveis.
+- [ ] Inventário pocket/toque está utilizável, se aplicável.
 
-Prints / observações:
+Prints:
 
-## Vegetação e mundo
-- [ ] Grama curta aparece corretamente.
-- [ ] Samambaia aparece corretamente.
-- [ ] Grama alta e samambaia alta aparecem corretamente.
-- [ ] Biomas continuam reconhecíveis.
-- [ ] Neblina não corta a visão de forma incômoda.
-- [ ] Água, Nether e End continuam aceitáveis.
-- [ ] Não há texturas rosas/pretas ou blocos invisíveis.
+## Texturas e efeitos
+- [ ] Grama e samambaias aparecem corretamente.
+- [ ] Folhas mantêm aparência aceitável nos biomas.
+- [ ] Tábuas, terra, pedra, areia e cascalho estão corretos.
+- [ ] Água e sombras aparecem corretamente no modo compatível.
+- [ ] Poções, flechas e magia continuam com feedback visual.
+- [ ] Nenhuma textura ausente/rosa/preta.
 
-Prints / observações:
+Prints:
 
 ## Travamentos e desempenho
-- A travada ocorre ao entrar em terreno nunca visitado?
-- A travada ocorre também em terreno já carregado?
-- O FPS cai ao olhar para florestas ou áreas com muitos blocos?
-- O FPS cai perto de mobs, fazendas ou redstone?
+- A travada acontece ao entrar em terreno nunca visitado?
+- Também acontece em terreno já carregado?
+- FPS cai olhando para florestas?
+- FPS cai perto de mobs/fazendas/redstone?
 - FPS médio sem LowMine:
 - FPS médio com LowMine:
-- O frame time fica mais estável?
-- Há erro no Content Log? Cole a mensagem exata.
+- Frame time sem LowMine:
+- Frame time com LowMine:
+- Erros do Content Log:
 
-Compare sempre o mesmo mundo, posição, resolução e distâncias.
+Use o mesmo mundo, posição, resolução e distâncias ao comparar.
