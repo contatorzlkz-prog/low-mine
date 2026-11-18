@@ -59,7 +59,7 @@ jobs:
         with:
           tag_name: lowmine-v0.6.1
           name: LowMine Equilibrado 8x v0.6.1
-          target_commitish: \${{ github.sha }}
+          target_commitish: main
           prerelease: true
           generate_release_notes: true
           fail_on_unmatched_files: true
