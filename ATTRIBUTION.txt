@@ -1,21 +1,21 @@
-LowMine Ultra Low v0.3.2 — attribution and license
+LowMine Equilibrado v0.4.0 — créditos e licença
 
-This package is an adaptation of:
+Este pacote é uma adaptação de:
   Boosted FPS (Optimized Performance) v2.4.1
-  Original author: XiaoCraft
-  Original project: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance
+  Autor original: XiaoCraft
+  Projeto original: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance
 
-Changes made by the LowMine Project in v0.3.2:
-  - Removed the PvP subpack and kept the former Lite profile as the only profile.
-  - Corrected manifest v3 version fields to SemVer strings after the v0.3.0 import failure.
-  - Removed experimental custom pack settings and their Molang queries.
-  - Set all included particle emitter maximums and spawn counts to zero.
-  - Disabled XP-orb drawing without changing the game's XP collection behavior.
-  - Kept translucent desktop/pocket inventory and chest UI, hotbar/touch edits and short visual fog.
+Alterações feitas pelo projeto LowMine na versão 0.4.0:
+  - Mantido um único perfil; o subpacote PvP continua removido.
+  - Mantidos 177 limites de partículas em zero e reduzidas 11 contagens para valores baixos.
+  - Criadas oito texturas 16x16 simplificadas para grama curta, samambaia, grama alta e versões secas.
+  - Ajustada a transparência do inventário, crafting, baús e hotbar.
+  - Ajustada a neblina visual para 64–96 blocos; isso não é culling do motor.
+  - Mantidos os UUIDs e atualizado o manifesto v3.
 
-This is an adaptation, not an original replacement for the source work. No measured FPS improvement is claimed. Runtime testing is required.
+Esta é uma adaptação, não uma substituição da obra original. Não há promessa de aumento de FPS sem medição no jogo.
 
-The original work is listed under the Creative Commons Attribution-NonCommercial 3.0 Unported license (CC BY-NC 3.0):
+A obra original está licenciada sob Creative Commons Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0):
   https://creativecommons.org/licenses/by-nc/3.0/
 
-The original author and project are credited above. This adaptation is not endorsed by or affiliated with XiaoCraft. The license prohibits use primarily intended for commercial advantage or private monetary compensation. Keep attribution and license notices with redistributed copies.
+O autor e o projeto originais são creditados acima. Esta adaptação não é endossada nem afiliada a XiaoCraft. A licença original proíbe uso principalmente destinado a vantagem comercial ou compensação monetária privada. Mantenha os créditos e respeite os termos completos da licença.
