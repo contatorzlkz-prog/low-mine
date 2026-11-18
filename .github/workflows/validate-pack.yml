@@ -6,6 +6,7 @@ on:
       - "**.mcpack"
       - "releases/**"
       - "tools/validate_pack.py"
+      - "tools/build_pack.py"
       - ".github/workflows/validate-pack.yml"
   pull_request:
     paths:
@@ -29,6 +30,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Check Python tooling syntax
+        run: python -m py_compile tools/build_pack.py tools/validate_pack.py
 
       - name: Validate packaged resource packs
         shell: bash
