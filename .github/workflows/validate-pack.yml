@@ -5,6 +5,7 @@ on:
     paths:
       - "tools/**"
       - "recursos/**"
+      - "assets/**"
       - "README.md"
       - "CREDITOS.md"
       - "docs/**"
@@ -13,6 +14,7 @@ on:
     paths:
       - "tools/**"
       - "recursos/**"
+      - "assets/**"
       - "README.md"
       - "CREDITOS.md"
       - "docs/**"
@@ -35,32 +37,36 @@ jobs:
       - name: Instalar Pillow
         run: python -m pip install --disable-pip-version-check Pillow
       - name: Verificar sintaxe das ferramentas
-        run: python -m py_compile tools/gerar_pacote.py tools/validar_pacote.py tools/redesenhar_v060.py tools/validar_pacote_v060.py
+        run: python -m py_compile tools/gerar_pacote.py tools/validar_pacote.py tools/redesenhar_v060.py tools/validar_pacote_v060.py tools/redesenhar_v061.py tools/validar_pacote_v061.py
       - name: Construir pacote-base
         run: python tools/gerar_pacote.py
       - name: Aplicar redesign LowMine v0.6.0
         run: python tools/redesenhar_v060.py
-      - name: Validar pacote redesenhado
+      - name: Validar pacote-base v0.6.0
         run: python tools/validar_pacote_v060.py build/LowMine-Equilibrado-8x-v0.6.0.mcpack
+      - name: Refinar troncos e armaduras v0.6.1
+        run: python tools/redesenhar_v061.py
+      - name: Validar pacote v0.6.1
+        run: python tools/validar_pacote_v061.py build/LowMine-Equilibrado-8x-v0.6.1.mcpack
       - name: Publicar artefatos para teste
         uses: actions/upload-artifact@v4
         with:
-          name: LowMine-Equilibrado-8x-v0.6.0
+          name: LowMine-Equilibrado-8x-v0.6.1
           path: |
-            build/LowMine-Equilibrado-8x-v0.6.0.mcpack
-            build/LowMine-Texturas-8x8-v0.6.0.png
+            build/LowMine-Equilibrado-8x-v0.6.1.mcpack
+            build/LowMine-Preview-v0.6.1.png
           if-no-files-found: error
           retention-days: 14
-      - name: Criar ou atualizar Release com download permanente
+      - name: Criar Release com download permanente
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: lowmine-v0.6.0
-          name: LowMine Equilibrado 8x v0.6.0
-          target_commitish: ${{ github.sha }}
+          tag_name: lowmine-v0.6.1
+          name: LowMine Equilibrado 8x v0.6.1
+          target_commitish: \${{ github.sha }}
           prerelease: true
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: |
-            build/LowMine-Equilibrado-8x-v0.6.0.mcpack
-            build/LowMine-Texturas-8x8-v0.6.0.png
+            build/LowMine-Equilibrado-8x-v0.6.1.mcpack
+            build/LowMine-Preview-v0.6.1.png
