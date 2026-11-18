@@ -1,18 +1,19 @@
 # Pacotes de teste e lançamentos
 
-## 0.4.0 — LowMine Equilibrado
+## 0.5.0 — LowMine Equilibrado 8x
 
-Arquivo de teste: `LowMine-Equilibrado-v0.4.0-TEST.mcpack`
+Arquivo: LowMine-Equilibrado-8x-v0.5.0.mcpack
 
-- Tamanho: 658.214 bytes.
-- SHA-256: `98cdb09e379a4ce92159c7599fdd6b6967e4cf7c370e19953fe437ee5c6e15c7`.
+- Tamanho: 32.451 bytes.
+- SHA-256: 68635f505fc9267b480019177e6ec2a3f1095bc9b67baa4551c6672add6ec16b.
+- 72 entradas, 21 JSON válidos, 50 PNG e 38 texturas de bloco em 8×8.
 
-O pacote passou na validação estática: 933 entradas, 318 JSON válidos, 188 definições de partículas, 94 biomas, 104 arquivos de neblina, quatro telas de UI registradas e oito texturas de vegetação 16×16.
+A compilação e a validação estão automatizadas pelo GitHub Actions. O .mcpack é publicado como artefato de teste da execução; ele ainda precisa ser importado e testado no Minecraft antes de ser considerado uma versão estável.
 
-A importação e o desempenho ainda precisam ser testados dentro do Minecraft. O binário é fornecido separadamente para teste e ainda não está anexado ao repositório.
+O arquivo binário não está commitado no repositório. Baixe o artefato da execução mais recente do workflow Validar e compilar LowMine 8x.
 
-Antes de publicar um lançamento:
-1. Envie o .mcpack para esta pasta por uma interface do GitHub que aceite arquivos binários.
-2. Confira se o SHA-256 corresponde ao valor acima.
-3. Teste importação, interface, vegetação e carregamento de chunks.
-4. Atualize este arquivo com os resultados reais do jogo.
+Antes de uma versão estável:
+1. Confirmar a importação na versão de Bedrock usada.
+2. Testar interface, vegetação, água, sombras e configurações de partículas.
+3. Comparar FPS e frame time em cenas iguais.
+4. Atualizar o changelog com os resultados reais.
