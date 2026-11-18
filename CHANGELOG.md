@@ -1,28 +1,23 @@
 # Histórico de versões
 
+## 0.6.4 — compatibilidade estável e transparência total
+- Manifesto atualizado para o formato 2 do Bedrock, com versões numéricas e min_engine_version vetorial.
+- Removidas configurações personalizadas dependentes do formato 3 Preview.
+- Alfa zero em todas as imagens de fundo, bordas, painéis, slots, barra e hotbar customizados.
+- screen_background_alpha ajustado para 0.0 nas telas desktop, mobile e contêineres.
+- Validação reforçada para formato do manifesto, JSON de UI e transparência real das PNGs.
+
 ## 0.6.3 — refinamento de madeira, blocos e armaduras
 - Troncos redesenhados em 8×8 com marcas curtas, nós discretos e padrões diferentes por espécie.
 - Paletas de tronco limitadas a quatro tons por madeira.
 - Terra, pedra, pedregulho, cascalho, areia e tábuas refinados em 8×8 quando presentes na base.
 - Sete conjuntos de armaduras redesenhados com contornos, placas, costuras e malha compactos.
 - Mantidos os arquivos de UI transparente para desktop, mobile e cinco tipos de contêiner.
-- Preservados sem alterações os visuais de itens já incluídos na versão 0.6.2.
-- Validador atualizado para verificar dimensões, mapas UV, ícones, arquivos de UI e JSON.
+- Preservados sem alterações os visuais de itens já incluídos na versão anterior.
 
-## 0.6.2 — itens visuais de PvP
-- Adicionados ícones pixel art 8×8 para sete espadas, arco (repouso e três poses), besta (repouso e três poses), flecha e tridente.
-- Os ícones são exportados em 16×16 para manter a compatibilidade do atlas Bedrock.
-- O validador verifica a presença e dimensão dos novos itens.
+## 0.6.2 — itens visuais
+- Adicionados ícones pixel art compactos para itens equipáveis e de combate, com animações de estados de uso.
 - Mantidos os troncos 8×8, sete conjuntos de armaduras e a interface transparente da versão anterior.
-
-## 0.6.2 — troncos e armaduras
-- Compilação baseada na base reproduzível 0.5.0.
-- Troncos com veios irregulares, nós e anéis superiores em 8×8 usando quatro tons por espécie.
-- Sete conjuntos de armaduras: couro, malha, ferro, ouro, diamante, netherita e cobre.
-- Mapas UV 64×32 e ícones pixel art 8×8 exportados em 16×16.
-- Interface transparente da base preservada para desktop, mobile, baús, baú do End, shulker e barril.
-- Adicionada validação estática independente e prévia visual no CI.
-- O gerador v0.6.0 anterior foi retirado do pipeline porque seu bundle-fonte comprimido está inválido; a expansão de 137 texturas da documentação antiga não integra este artefato.
 
 ## 0.5.0 — LowMine Equilibrado 8x
 - Criada identidade visual LowMine e ícone próprios.

@@ -1,4 +1,4 @@
-# Créditos e licenças — LowMine Equilibrado 8x v0.6.3
+# Créditos e licenças — LowMine Equilibrado 8x v0.6.4
 
 ## Conteúdo criado pelo projeto LowMine
 - Identidade visual, manifesto, UUIDs e ferramentas de compilação.
@@ -6,7 +6,7 @@
 - Padrões de troncos 8×8 com veios quebrados, nós discretos e paletas compactas por espécie.
 - Refinamento em 8×8 de terra, pedra, pedregulho, cascalho, areia e tábuas presentes na base.
 - Mapas UV 64×32 e ícones pixel art para couro, malha, ferro, ouro, diamante, netherita e cobre.
-- Elementos próprios de interface já existentes na base LowMine.
+- Superfícies de UI configuradas com canal alfa zero na versão 0.6.4.
 
 ## Material adaptado com licença
 
