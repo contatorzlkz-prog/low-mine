@@ -2,34 +2,34 @@
 
 ## Concluído — v0.5.0
 - [x] Criar identidade própria LowMine Equilibrado 8x.
-- [x] Desenhar 38 texturas de bloco originais em 8×8, com paletas consistentes.
-- [x] Criar ícone, painéis e elementos de UI LowMine.
-- [x] Adaptar 14 definições de partículas do FPS Optimizer com namespace próprio e limite por rajada.
-- [x] Adaptar água sem cáusticas/ondas e sombras blocadas, com créditos/licença.
-- [x] Manter apenas um perfil, sem PvP.
-- [x] Criar validador de manifesto, JSON, UI, partículas, licença e texturas.
-- [x] Manter o pacote sem scripts/loops executados pelo jogo.
-- [x] Documentar referências e direitos dos quatro pacotes estudados.
+- [x] Criar 38 texturas de bloco originais em 8×8.
+- [x] Criar ícone e elementos próprios de interface.
+- [x] Tornar inventário, crafting e baús mais transparentes, preservando legibilidade.
+- [x] Adaptar 14 emissores de partículas com controles configuráveis.
+- [x] Adaptar água sem cáusticas/ondas e sombras blocadas, mantendo créditos.
+- [x] Manter um único perfil, sem PvP.
+- [x] Remover scripts/loops do pacote de recursos.
+- [x] Auditar as licenças dos quatro pacotes enviados.
 
-## Próxima etapa — teste no Minecraft
+## Próxima etapa — teste dentro do Minecraft
 - [ ] Importar o v0.5.0 na versão exata do Bedrock usada.
-- [ ] Conferir nome, versão, UUID e opções do pacote.
-- [ ] Testar inventário, crafting, baús e inventário pocket em desktop/toque.
-- [ ] Conferir a água e as sombras em dispositivos/modos compatíveis.
-- [ ] Verificar se partículas mantêm leitura sem criar picos em poções e combates.
-- [ ] Conferir folhas, grama, samambaias e blocos 8×8 em vários biomas.
-- [ ] Registrar erros do Content Log, travamentos e prints.
-- [ ] Medir FPS e estabilidade de frame time em cenas equivalentes, com e sem LowMine.
+- [ ] Conferir nome, versão, UUID e configurações.
+- [ ] Testar inventário, crafting, baús e interface pocket.
+- [ ] Conferir água e sombras no modo gráfico compatível.
+- [ ] Verificar vegetação e blocos 8×8 em biomas diferentes.
+- [ ] Verificar se os efeitos de partículas continuam legíveis.
+- [ ] Registrar erros do Content Log e capturas de tela.
+- [ ] Medir FPS e frame time com e sem LowMine na mesma cena.
 
 ## Otimização guiada por medições
-- [ ] Distinguir geração de terreno novo, renderização de cena e simulação de entidades.
-- [ ] Medir a carga de texturas com ferramenta de inspeção apropriada quando disponível.
-- [ ] Verificar se o limite de rajada precisa ser 4, 6 ou 8 usando testes reais.
-- [ ] Ajustar transparência somente após conferir legibilidade/seleção.
+- [ ] Separar geração de terreno novo, renderização e simulação de entidades.
+- [ ] Medir a memória das texturas com ferramenta apropriada.
+- [ ] Testar limites de partículas 4, 6 e 8 em situações equivalentes.
+- [ ] Ajustar transparência somente após testar todos os contêineres.
 - [ ] Fazer uma mudança por versão e manter builds anteriores para regressão.
 
 ## Fora do escopo de um Resource Pack
-- Alterar o gerador de chunks ou cache do Minecraft.
-- Forçar frustum/occlusion culling do RenderDragon.
-- Mudar render distance ou simulation distance.
-- Rodar Rust dentro do cliente Bedrock.
+- Alterar o gerador ou cache de chunks.
+- Forçar frustum/occlusion culling no RenderDragon.
+- Mudar a distância de renderização ou simulação.
+- Executar Rust dentro do cliente Bedrock.
