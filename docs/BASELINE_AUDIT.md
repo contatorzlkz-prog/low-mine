@@ -5,8 +5,8 @@ Esta auditoria verifica estrutura do ZIP, manifesto, JSON, partículas, interfac
 
 ## Identidade
 - Arquivo: LowMine-Equilibrado-8x-v0.5.0.mcpack
-- Tamanho compactado: 32.055 bytes
-- SHA-256: 5a14c35a02c737127297763233e6707589a324ec4bc70b46b670484037e19825
+- Tamanho compactado: 32.218 bytes
+- SHA-256: 841b70ccb54acbc235e61334c7ad448bee95b1ec0cc53887b67449a21bbb240b
 - Manifesto: formato 3
 - Versão: string SemVer 0.5.0
 - UUID do cabeçalho: 21ca0070-fc45-5c56-8812-4b1cda3172a8
@@ -18,15 +18,15 @@ Esta auditoria verifica estrutura do ZIP, manifesto, JSON, partículas, interfac
 
 | Tipo | Quantidade |
 |---|---:|
-| Entradas no ZIP | 68 |
-| JSON | 20 |
+| Entradas no ZIP | 69 |
+| JSON | 21 |
 | PNG | 46 |
 | Texturas de bloco 8×8 | 38 |
 | Definições de partículas | 14 |
 | Arquivos de interface | 3 |
 | Scripts de jogo | 0 |
 
-O ZIP passou pelo teste CRC. Todos os 20 arquivos JSON foram lidos sem erro. Todas as 38 texturas de bloco medem 8×8 pixels.
+O ZIP passou pelo teste CRC. Todos os 21 arquivos JSON foram lidos sem erro. Todas as 38 texturas de bloco medem 8×8 pixels.
 
 ## Texturas LowMine
 As 38 imagens de bloco foram desenhadas para o LowMine com uma paleta de cores coerente. Incluem grama, samambaias, folhas de diferentes árvores, terra, pedra, pedregulho, cascalho, areia, tábuas e tronco.
@@ -55,6 +55,8 @@ O suporte depende da versão e do modo gráfico. Essas configurações são prin
 
 ## Interface
 - Telas: inventário desktop, inventário pocket e baús.
+- As três telas estão registradas em ui/_ui_defs.json.
+- O manifesto não ativa capacidades PBR extras.
 - Alpha de fundo configurado: 0,10.
 - Texturas próprias para painéis, slots e barra de itens.
 - Contorno de seleção preservado.
