@@ -1,0 +1,45 @@
+name: Validate Bedrock packs
+
+on:
+  push:
+    paths:
+      - "**.mcpack"
+      - "releases/**"
+      - "tools/validate_pack.py"
+      - ".github/workflows/validate-pack.yml"
+  pull_request:
+    paths:
+      - "**.mcpack"
+      - "releases/**"
+      - "tools/validate_pack.py"
+      - ".github/workflows/validate-pack.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate packaged resource packs
+        shell: bash
+        run: |
+          mapfile -d '' packs < <(find releases -type f -iname '*.mcpack' -print0)
+          if (( ${#packs[@]} == 0 )); then
+            echo "::notice::No .mcpack artifacts have been added to releases/ yet."
+            exit 0
+          fi
+
+          for pack in "${packs[@]}"; do
+            echo "Validating: $pack"
+            python tools/validate_pack.py "$pack"
+          done
