@@ -1,81 +1,95 @@
-# LowMine technical audit — v0.3.2
+# Auditoria técnica — LowMine Equilibrado v0.4.0
 
-## Import failure root cause
+## Escopo
 
-The v0.3.0 test package used JSON arrays such as `[0, 3, 0]` for the manifest `header.version` and module `version` fields. Bedrock manifest format version 3 requires SemVer strings such as `"0.3.2"`. That mismatch explains the import screen's unknown name, zero UUID and version 0.0.0. v0.3.2 uses strings for header and module versions and is checked by the validator.
+A auditoria verifica apenas os arquivos do .mcpack: manifesto, JSON, imagens, telas, partículas e referências de biomas/neblina. Ela não inicia o Minecraft, não mede FPS e não confirma o comportamento das telas em uma versão específica do Bedrock.
 
-The v0.3.2 manifest also removes experimental custom pack settings. All included LowMine particle emitters are disabled directly in their definitions instead of depending on custom settings-query support.
+## Identidade do pacote
 
-## Package identity
+- Arquivo: `LowMine-Equilibrado-v0.4.0-TEST.mcpack`
+- Tamanho: 658.214 bytes.
+- SHA-256: `898a63dc7b221d8e0a2ab489f3f41b965ddc3a2cf6c05658beb8d25940a6f91a`
+- Manifesto: formato 3.
+- Versão do cabeçalho e do módulo: string SemVer `"0.4.0"`.
+- UUIDs: mantidos da identidade LowMine.
+- Um único perfil; sem `subpacks`, PvP ou configurações experimentais no manifesto.
+- Créditos de XiaoCraft e licença CC BY-NC 3.0 preservados.
 
-- File: `LowMine-Ultra-Low-v0.3.2-FIXED.mcpack`
-- Size: 655,459 bytes.
-- SHA-256: `89bd88e7351943abede9ea0f8a49fe1cc3ff224b7a005302cd60622b471905b2`
-- Manifest format: 3.
-- Header version: string `"0.3.2"`.
-- Module version: string `"0.3.2"`.
-- UUIDs: valid, unique and retained from the LowMine identity.
-- No custom `settings`, `subpacks` or PvP files.
+## Inventário de arquivos
 
-## Static archive audit
-
-| Item | Count/result |
+| Tipo | Quantidade |
 |---|---:|
-| ZIP entries | 925 |
-| JSON files | 318 |
-| Invalid JSON | 0 |
-| PNG files | 566 |
-| Total PNG pixel area | 610,722 |
-| Biome entries | 94 |
-| Fog JSON files | 104 |
-| Particle JSON definitions | 188 |
-| `max_particles` fields set to 0 | 177 |
-| `num_particles` fields set to `"0"` | 11 |
-| Desktop/pocket/chest UI files registered | 4 |
-| Custom fog IDs unresolved | 0 |
+| Entradas no ZIP | 933 |
+| JSON | 318 |
+| PNG | 574 |
+| Arquivos de idioma | 29 |
+| Definições de partículas | 188 |
+| Texturas novas de vegetação | 8 |
 
-All 188 particle definitions shipped with LowMine are statically disabled. This does not disable built-in effects that are not provided by this pack and does not imply a measured FPS gain.
+Todos os 318 arquivos JSON foram lidos sem erro. O ZIP passou no teste de integridade e não contém caminhos duplicados ou inseguros.
 
-## UI changes
+## Partículas
 
-The package retains the desktop inventory/crafting, pocket inventory, chest (small/large/Ender/shulker/barrel) and data-driven container UI overrides. These are registered via `ui/_ui_defs.json` and use current Mojang sample screen names/parents and a desktop backdrop alpha of 0.08.
+- 177 campos `max_particles` continuam em zero, como já acontecia no subpacote Lite da base.
+- 11 campos `num_particles` foram reduzidos para quantidades baixas:
+  - Flechas, caldeirão, evocador, bruxa e efeitos de poções: 1.
+  - Poção persistente: 2.
+  - Poção arremessável: 4 (antes a definição usava 30).
+  - Gás de gêiser e partículas de enxofre: 0.
 
-Shared dialog-panel PNG alpha is reduced. This can affect other classic UI dialogs that use the same shared textures. UI JSON overrides are version-sensitive and must be tested in the exact Bedrock build.
+Esses valores limitam as definições substituídas pelo pacote. Efeitos nativos que não são substituídos pelo LowMine ainda podem aparecer. A auditoria conta definições, não partículas em execução nem economia real de CPU.
 
-## Texture footprint and performance interpretation
+## Texturas de vegetação
 
-- The v0.2.0 PNG pixel area was 2,254,921; v0.3.2 is 610,722, a 72.92% reduction in summed pixel area.
-- A rough RGBA estimate is pixels × 4 bytes: about 9.02 MB vs 2.44 MB.
-- This is not actual GPU VRAM: Bedrock can atlas, transcode, load or retain textures differently.
-- 566 PNG files is not the same as 566 GPU texture handles; block textures can be combined into atlases.
-- The compressed package is much smaller than the source archive, but archive size is not runtime FPS.
+Foram criadas oito substituições 16×16:
+- `tallgrass.png` e `fern.png`.
+- `double_plant_grass_top.png` e `double_plant_grass_bottom.png`.
+- `double_plant_fern_top.png` e `double_plant_fern_bottom.png`.
+- `short_dry_grass.png` e `tall_dry_grass.png`.
 
-Microsoft's current guidance says loaded textures are typically uncompressed in memory, texture handles have per-texture overhead, block textures can be atlas exceptions, too many files add overhead, and add-ons should target fewer than 800 texture handles. It also recommends keeping texture dimensions/usage lean and simplifying costly particle systems:
-https://learn.microsoft.com/en-us/minecraft/creator/documents/practices/improvingperformanceandresourceusage?view=minecraft-bedrock-stable
+Os nomes e caminhos seguem os identificadores de texturas usados pelo mapeamento vanilla de Bedrock. As imagens têm fundo transparente e menos pixels opacos. A geometria dos blocos vanilla não foi alterada; portanto, isso reduz a densidade visual da textura, não o número de faces/planos do modelo.
 
-The official texture-budget reference explains the texel × 4 estimate and platform performance tiers:
-https://learn.microsoft.com/en-us/minecraft/creator/documents/texturebudgets?view=minecraft-bedrock-stable
+## Interface
 
-## Renderer limitations
+- Inventário e crafting (desktop): `$screen_background_alpha = 0.05`.
+- Inventário pocket/toque: `$screen_background_alpha = 0.05`.
+- Baús pequenos/grandes, Ender Chest, shulker e barril: `$screen_background_alpha = 0.05` no ramo desktop.
+- Contêineres data-driven: mesmo valor.
+- Textura de fundo externo e painéis: alpha máximo 38/255.
+- Fundo dos slots: alpha máximo 50/255.
+- Barra de itens e fundos de hotbar: ajustados para transparência maior; contornos/estados de seleção são mantidos.
 
-Fog is visual and does not itself guarantee engine culling. Bedrock's Block Culling feature targets covered faces of custom block geometry, not universal vanilla terrain/behind-camera culling. A .mcpack cannot inject Rust into the client or replace RenderDragon.
+A UI JSON do Bedrock é sensível à versão e ao modo de interface. A validação confirma a estrutura dos arquivos, não o funcionamento no jogo.
 
-See [RENDERING_LIMITS.md](RENDERING_LIMITS.md).
+## Biomas e neblina
 
-## Static validation result
+- 94 entradas em `biomes_client.json`.
+- 104 definições de neblina.
+- Nenhuma referência personalizada `lowmine:` sem definição.
+- Campos de neblina do ar ajustados para início em 64 e término em 96 blocos, onde esses campos existem.
 
-The local v0.3.2 validator passed:
-- ZIP CRC/integrity check.
-- Unique, safe archive paths.
-- Manifest format 3 and correct string versions.
-- Valid/unique manifest UUIDs and XiaoCraft/CC BY-NC metadata.
-- No experimental settings and no PvP content.
-- 318/318 JSON files parsed.
-- 188 particle definitions all statically disabled.
-- No experimental pack-setting Molang queries remaining.
-- XP orb render disabled; no orb billboard animation script.
-- 94 biomes and 104 fog files; all LowMine fog identifiers resolve.
-- All four custom UI files are registered and have expected screen structure.
-- Translucent dialog textures and required assets exist.
+A neblina é visual. Ela não manda o RenderDragon deixar de processar chunks, não oculta apenas o que está atrás da câmera e não substitui o controle de distância de renderização.
 
-Static validation does not launch Bedrock. The user must verify import, UI rendering and game performance in Minecraft.
+## Validação final
+
+A validação estática local passou:
+- Integridade do ZIP e caminhos únicos/seguros.
+- Manifesto v3 e versões SemVer como texto.
+- UUIDs válidos e únicos.
+- 318/318 JSON válidos.
+- 188 arquivos de partículas verificados.
+- 94 biomas e 104 arquivos de neblina; sem referências personalizadas ausentes.
+- Quatro arquivos de interface registrados em `ui/_ui_defs.json`.
+- Oito texturas de vegetação 16×16 e com transparência real.
+- Créditos e licença presentes.
+
+## O que ainda precisa ser testado
+
+1. Importar o pacote na versão exata do Minecraft Bedrock utilizada.
+2. Conferir nome, versão e UUID na tela de importação.
+3. Abrir inventário, crafting, baús e contêineres.
+4. Verificar se a vegetação continua reconhecível nos biomas.
+5. Testar carregamento de chunks novos com as distâncias recomendadas.
+6. Comparar FPS médio e estabilidade de frame time, no mesmo mundo e na mesma cena, com e sem LowMine.
+
+Nenhum aumento de FPS é declarado antes desse teste.
