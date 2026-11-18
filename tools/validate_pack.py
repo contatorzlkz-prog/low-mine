@@ -110,7 +110,7 @@ def validate(filename):
         report["fog_definitions"] = len(fog_ids)
 
         registered = parsed.get("ui/_ui_defs.json", {}).get("ui_defs", [])
-        required_ui = ["ui/inventory_screen.json", "ui/chest_screen.json", "ui/data_driven_container_screen.json"]
+        required_ui = ["ui/inventory_screen.json", "ui/inventory_screen_pocket.json", "ui/chest_screen.json", "ui/data_driven_container_screen.json"]
         for name in required_ui:
             if name not in registered or name not in parsed:
                 errors.append(f"UI override missing or not registered: {name}")
@@ -118,6 +118,10 @@ def validate(filename):
         for key in ("inventory_screen@crafting.inventory_screen_base", "crafting_screen@crafting.inventory_screen_base"):
             if inv.get(key, {}).get("$screen_background_alpha") != 0.08:
                 errors.append(f"Inventory alpha override missing: {key}")
+        pocket = parsed.get("ui/inventory_screen_pocket.json", {})
+        pocket_root = pocket.get("inventory_screen_pocket@crafting_pocket.inventory_screen_pocket_base", {})
+        if pocket_root.get("$screen_background_alpha") != 0.08:
+            errors.append("Pocket inventory screen alpha override missing")
         chest = parsed.get("ui/chest_screen.json", {})
         for key in ("small_chest_screen@common.inventory_screen_common", "large_chest_screen@common.inventory_screen_common",
                     "ender_chest_screen@common.inventory_screen_common", "shulker_box_screen@chest.small_chest_screen",
@@ -129,6 +133,9 @@ def validate(filename):
         if len(dd) < 2 or dd[0].get("$screen_background_alpha") != 0.08:
             errors.append("Data-driven container UI override incomplete")
         report["registered_ui_overrides"] = [x for x in required_ui if x in registered]
+        for texture in ["textures/ui/dialog_background_opaque.png", "textures/ui/dialog_background_opaque_overlap_bottom.png"]:
+            if texture not in unique:
+                errors.append(f"Translucent dialog texture missing: {texture}")
 
         pngs = [n for n in names if n.lower().endswith(".png")]
         pixels, dimensions = 0, {}
