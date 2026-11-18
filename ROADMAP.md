@@ -1,39 +1,43 @@
 # Roadmap
 
-## Phase 1 — Audit and safe rebrand
-- [x] Inspect the supplied Boosted FPS v2.4.1 archive and inventory its structure.
-- [x] Preserve XiaoCraft attribution and the original CC BY-NC 3.0 terms.
-- [x] Give the adaptation its own stable manifest/module UUIDs.
-- [x] Rename internal settings and custom fog identifiers to the LowMine namespace.
-- [x] Add LowMine pack art, title art, subpack names and localized labels.
-- [x] Validate all 487 JSON files, nine setting references, 29 language files and biome fog links.
-- [x] Add a reproducible builder and static validator.
+## Phase 1 — Audit and single-profile conversion
+- [x] Inspect the supplied Boosted FPS v2.4.1 archive.
+- [x] Preserve XiaoCraft attribution and CC BY-NC 3.0 terms.
+- [x] Keep the LowMine header/module UUID identity between versions.
+- [x] Remove the PvP subpack and flatten the former Lite profile.
+- [x] Remove the unused geyser toggle and set optional particle controls to minimum.
+- [x] Add translucent inventory/chest/hotbar/touch UI overrides and register the UI files.
+- [x] Reduce selected menu/UI textures and the cloud texture.
+- [x] Add the v0.3 builder and version-aware static validator.
+- [x] Pass static validation: JSON, settings, localization, fog links, UI registrations and archive integrity.
 
 ## Phase 2 — Minecraft runtime test (waiting for user test)
-- [ ] Import v0.2.0 into Bedrock and verify it appears without warnings.
-- [ ] Confirm the settings screen opens and all nine controls work.
-- [ ] Test Lite and PvP separately.
-- [ ] Check fog on several biomes, water, Nether and End.
-- [ ] Check potion particles, geysers, sulfur, cauldrons, arrow trails and XP-orb visibility.
-- [ ] Check HUD, chat, title screen, multiplayer and world reload.
-- [ ] Record Bedrock version and content-log errors.
+- [ ] Import v0.3.0 into the exact Bedrock version in use.
+- [ ] Confirm the pack loads and the settings menu shows eight controls.
+- [ ] Confirm the player's inventory and crafting screen open correctly.
+- [ ] Check small/large chest, Ender Chest, shulker box, barrel and other containers.
+- [ ] Check backdrop transparency on desktop and touch/pocket UI.
+- [ ] Check hotbar and item slots remain readable/usable in normal, selected and pressed states.
+- [ ] Check touch controls remain easy to operate.
+- [ ] Inspect fog on plains, forests, caves, water, Nether and End.
+- [ ] Check HUD, chat, clouds, particles, XP collection, multiplayer and world reload.
+- [ ] Record exact Bedrock version, content-log messages, missing textures and UI regressions.
 
-## Phase 3 — Performance baseline
-- [ ] Measure vanilla with the same world and scene.
-- [ ] Measure the original source pack and LowMine v0.2.0 under the same conditions.
-- [ ] Record average FPS and frame-time stability, not FPS alone.
-- [ ] Keep device, render distance, simulation distance, resolution and scene identical.
-- [ ] Separate low-memory devices from stronger devices.
+## Phase 3 — Controlled performance comparison
+- [ ] Measure vanilla without LowMine.
+- [ ] Measure v0.3.0 in the same world/scene.
+- [ ] Keep device, resolution, render distance, simulation distance and scene constant.
+- [ ] Record average FPS and frame-time stability, not just a single FPS reading.
+- [ ] Compare memory/RAM behavior where the platform exposes it.
+- [ ] Do not treat smaller ZIP size or PNG pixel count as a measured FPS result.
 
-## Phase 4 — Targeted optimization
-- [ ] Review high-cost particle spawn rates and particle lifetimes.
-- [ ] Check whether entity overrides can be reduced without removing useful gameplay feedback.
-- [ ] Review fog overrides only after visual compatibility testing.
-- [ ] Review UI overrides and duplicated assets.
-- [ ] Compare Lite and PvP memory footprint and file overlap.
-- [ ] Make one isolated change per commit and benchmark it against v0.2.0.
+## Phase 4 — Further safe resource-pack optimization
+- [ ] Inspect any remaining high-resolution textures before resizing them.
+- [ ] Review remaining entity/particle overrides for redundancy.
+- [ ] Keep readability and item recognition as explicit constraints.
+- [ ] Make one change per build so regressions can be identified.
 
-## Phase 5 — Release quality
-- [ ] Test on the Bedrock versions and devices actually supported.
-- [ ] Publish only verified compatibility statements and measured results.
-- [ ] Keep a changelog and known-issues list for every release.
+## Engine-level features outside resource-pack scope
+- RenderDragon frustum/occlusion/chunk culling cannot be replaced by a resource pack.
+- Rust can be used for separate tools or supported server software, not injected as the Bedrock client renderer through a .mcpack.
+- Revisit these only if official Bedrock APIs expose an appropriate renderer/visibility hook.
