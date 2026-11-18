@@ -1,18 +1,17 @@
-LowMine Ultra Low v0.3.0 — attribution and license
+LowMine Ultra Low v0.3.2 — attribution and license
 
 This package is an adaptation of:
   Boosted FPS (Optimized Performance) v2.4.1
   Original author: XiaoCraft
   Original project: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance
 
-Changes made by the LowMine Project in v0.3.0:
-  - Removed the separate PvP subpack and made the former Lite profile the only profile.
-  - Reduced particle defaults to the minimum and disabled optional visual toggles by default.
-  - Removed an unused geyser setting whose Lite emitters were already disabled.
-  - Added desktop and pocket inventory UI overrides plus chest/container overrides.
-  - Reduced opacity of shared dialog panel textures, inventory slots, hotbar and touch controls.
-  - Reduced selected menu textures and removed visible cloud texture detail.
-  - Tightened the visual fog range; this is not renderer occlusion culling.
+Changes made by the LowMine Project in v0.3.2:
+  - Removed the PvP subpack and kept the former Lite profile as the only profile.
+  - Corrected manifest v3 version fields to SemVer strings after the v0.3.0 import failure.
+  - Removed experimental custom pack settings and their Molang queries.
+  - Set all included particle emitter maximums and spawn counts to zero.
+  - Disabled XP-orb drawing without changing the game's XP collection behavior.
+  - Kept translucent desktop/pocket inventory and chest UI, hotbar/touch edits and short visual fog.
 
 This is an adaptation, not an original replacement for the source work. No measured FPS improvement is claimed. Runtime testing is required.
 
