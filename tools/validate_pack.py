@@ -48,8 +48,12 @@ def validate(filename):
         h = m.get("header", {})
         report["pack_name"] = h.get("name")
         report["version"] = h.get("version")
-        if m.get("format_version") != 3 or h.get("version") != [0, 3, 0]:
-            errors.append("Expected manifest format 3 and version [0, 3, 0]")
+        if m.get("format_version") != 3 or h.get("version") != "0.3.1" or not isinstance(h.get("version"), str):
+            errors.append("Expected manifest format 3 and SemVer string version 0.3.1")
+        if not isinstance(h.get("min_engine_version"), str):
+            errors.append("Manifest v3 min_engine_version must be a SemVer string")
+        if any(not isinstance(x.get("version"), str) or x.get("version") != h.get("version") for x in m.get("modules", [])):
+            errors.append("Manifest v3 module versions must be matching SemVer strings")
         if m.get("subpacks") or any(n.startswith("subpacks/") or "pvp_fps" in n.lower() for n in names):
             errors.append("PvP/subpack content must not exist in Ultra Low")
         if "pbr" in m.get("capabilities", []):
@@ -71,6 +75,10 @@ def validate(filename):
         if len(settings) != 8 or len(setting_ids) != len(set(setting_ids)):
             errors.append(f"Expected 8 unique settings, found {len(settings)}")
         report["active_settings"] = {s.get("name"): s.get("default") for s in settings}
+        unresolved_labels = [s.get("text") for s in m.get("settings", [])
+                             if isinstance(s.get("text"), str) and s.get("text").startswith("lowmine.")]
+        if unresolved_labels:
+            errors.append(f"Manifest v3 setting labels must be literal display text: {unresolved_labels}")
 
         refs = collections.Counter()
         for name in names:
