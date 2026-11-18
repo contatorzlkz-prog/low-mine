@@ -1,87 +1,63 @@
 # LowMine Equilibrado 8x
 
 <p align="center">
-  <a href="https://github.com/contatorzlkz-prog/low-mine/releases/download/lowmine-v0.5.0/LowMine-Equilibrado-8x-v0.5.0.mcpack">
+  <a href="https://github.com/contatorzlkz-prog/low-mine/releases/download/lowmine-v0.6.0/LowMine-Equilibrado-8x-v0.6.0.mcpack">
     <img src="https://img.shields.io/badge/⬇%20BAIXAR%20LOWMINE-.MCPACK-2ea44f?style=for-the-badge" alt="Baixar LowMine Equilibrado 8x">
   </a>
 </p>
 
-**LowMine Equilibrado 8x v0.5.0** é um pacote de recursos do Minecraft Bedrock com identidade visual e arte próprias, texturas 8×8, interface translúcida e efeitos configuráveis. O projeto combina conteúdo original LowMine com um conjunto limitado de recursos adaptados sob licença, descritos em CREDITOS.md e no arquivo CREDITOS.txt dentro do pacote.
+**LowMine Equilibrado 8x v0.6.0** é um Resource Pack independente para Minecraft Bedrock. Esta atualização redesenha a arte em pixel art 8×8, amplia a cobertura de vegetação e madeira, melhora as folhas com transparência recortada e variantes opacas e adiciona nuvens e sol compactos.
 
-> **Desempenho precisa ser medido no jogo.** A validação confirma a estrutura do pacote, não um ganho de FPS. Texturas menores podem reduzir a memória ocupada pelas imagens substituídas; elas não corrigem geração de chunks nem simulação do motor.
+A identidade visual reutiliza formas-base entre espécies e aplica paletas próprias por árvore. As texturas de bloco substituídas usam 8×8 pixels; céu usa imagens 32×32. Não há PBR extra, scripts, loops ou Behavior Pack.
 
-## O que esta versão contém
+> A validação é estrutural. Ganho de FPS e comportamento visual precisam ser comparados dentro do Minecraft, no mesmo mundo, aparelho e configurações. Texturas menores podem reduzir a memória ocupada pelas imagens substituídas, mas não reduzem geração de chunks ou simulação.
 
-- 38 texturas originais de blocos em 8×8, incluindo grama, samambaias, folhas, pedra, terra, areia, cascalho e madeira.
-- 46 imagens PNG no total, incluindo as texturas de bloco, a interface e o ícone.
-- Inventário, crafting e baús com fundos mais transparentes; contornos e estados de seleção preservados.
-- Água com cáusticas e ondas desativadas.
-- Sombras blocadas, com tamanho de texel 16, nos modos que suportam essa definição.
-- 14 definições de partículas adaptadas e configuráveis, com quantidade inicial de 50% e limite por emissão de 6.
-- Um único perfil, sem subpacote PvP.
-- Nenhum JavaScript, TypeScript, arquivo .mcfunction ou Behavior Pack no pacote.
+## O que mudou
 
-## Configuração inicial
+- **137 texturas de bloco 8×8**: grama, solo, pedra, areia, cascalho, flores, brotos, samambaias, arbustos, cipós, bambu, vegetação aquática, musgo e serapilheira.
+- **Folhas e árvores redesenhadas**: carvalho, abeto, bétula, selva, acácia, carvalho escuro, mangue, cerejeira, azaleia, pale oak e álamos.
+- Folhas com alpha recortado e variantes opacas correspondentes.
+- Troncos, topos, madeira descascada e tábuas com paletas por espécie.
+- Nuvens e sol em **32×32**, sem animação, brilho extra ou partículas.
+- Partículas padrão reduzidas para **30%**, limite **4 por emissão** nos emissores substituídos.
+- Água sem cáusticas/ondas; sombras blocadas mantidas conforme o modo gráfico.
+- Um perfil; zero scripts no jogo.
 
-| Opção | Padrão |
-|---|---:|
-| Quantidade de partículas | 50% |
-| Limite por efeito | 6 |
-| Efeitos de poções | Ligado |
-| Magia de bruxas e evocadores | Ligado |
-| Rastros de flechas | Ligado |
-| Efeitos de caldeirão | Ligado |
-| Gêiseres | Desligado |
-| Gás de gêiseres | Desligado |
-| Partículas de enxofre | Desligado |
-
-O limite é aplicado somente aos emissores que o LowMine inclui e substitui. Ele não controla todas as partículas nativas do Minecraft.
-
-## Auditoria estática do pacote
+### Auditoria estática
 
 | Verificação | Resultado |
 |---|---:|
-| Entradas no MCpack | 69 |
-| JSON válidos | 21 de 21 |
-| PNG | 46 |
-| Texturas de bloco 8×8 | 38 |
+| Entradas no MCpack | 170 |
+| JSON válidos | 21 |
+| PNG | 147 |
+| Texturas de bloco 8×8 | 137 |
+| Nuvens/sol | 2 × 32×32 |
 | Definições de partículas | 14 |
-| Telas de interface registradas | 3 (+ arquivo de registro) |
-| Scripts executados pelo jogo | 0 |
-| Tamanho compactado | 32.218 bytes |
+| Scripts incluídos | 0 |
+| Tamanho | 60.902 bytes |
 
-SHA-256: 841b70ccb54acbc235e61334c7ad448bee95b1ec0cc53887b67449a21bbb240b
+SHA-256: `a10c3d4195e901740d90160bd058d71a279e66c67828a4166c4a918c9a880660`
 
-O manifesto não ativa capacidades PBR extras. O arquivo ui/_ui_defs.json registra as três telas personalizadas para o Bedrock. A auditoria estática não inicia o Minecraft nem mede FPS. A quantidade de PNGs não equivale à quantidade de texture handles, pois parte das texturas de blocos é agrupada em atlas pelo próprio jogo.
+Validação não inicia Minecraft nem mede FPS.
 
-## Instalação e primeiro teste
+## Instalação e teste
 
-1. Baixe LowMine-Equilibrado-8x-v0.5.0.mcpack.
-2. Abra o arquivo com Minecraft Bedrock.
-3. Confirme o nome LowMine Equilibrado 8x v0.5.0.
-4. Ative o pacote como recurso global ou nos recursos do mundo.
-5. Abra as configurações do pacote e confira os controles.
-6. Teste inventário, crafting, baús, vegetação, água e sombras.
-7. Compare com o jogo sem LowMine usando o mesmo mundo, posição e configurações.
+1. Baixe `LowMine-Equilibrado-8x-v0.6.0.mcpack`.
+2. Abra com Minecraft Bedrock e ative o pack.
+3. Deixe somente um perfil LowMine ativo.
+4. Teste florestas, folhas, troncos, plantas, água, céu, inventário e baús.
+5. Compare com e sem LowMine na mesma cena, resolução e distâncias.
 
-Preencha docs/TEST_REPORT_TEMPLATE.md para registrar o resultado.
+Comece com 4 chunks de renderização e 4 de simulação. O Resource Pack não controla geração de chunks, entidades ou RenderDragon.
 
-## Configuração inicial para computador modesto
+## Limites visuais
 
-Comece com 4 chunks de renderização e 4 de simulação. Se ficar estável, teste 6 chunks de renderização mantendo 4 de simulação. Use gráficos simples e desative os efeitos avançados disponíveis na sua versão.
+As folhas possuem recorte transparente, mas a geometria e o número de planos continuam sendo os do Minecraft. Um Resource Pack puro não faz folhas caírem automaticamente de todas as árvores; isso exigiria lógica/entidades/Behavior Pack e não faz parte deste pacote leve.
 
-A distância de renderização controla quantos chunks o cliente desenha. A distância de simulação controla onde entidades, plantas, líquidos e outras mecânicas continuam atualizando. O Resource Pack não muda essas opções e não pré-gera chunks. Consulte docs/CONFIGURACAO-CPU-FRACA.md.
+A arte da espada e dos itens de combate permanece sem alteração nesta versão.
 
 ## Autoria e licenças
 
-- **Criação LowMine:** identidade visual, manifesto, ícone, 38 texturas 8×8, interface e ferramentas do projeto.
-- **Recursos adaptados:** 14 definições de partículas, configurações de água e sombras do FPS Optimizer v2.9.2, de XiaoCraft, sob CC BY-NC 3.0. As alterações estão descritas em CREDITOS.md.
-- **Referências sem arquivos copiados:** PotatoCraft 8x v1.4, Embeddium Optimizer v1.6 e Vanilla × Optimizer v2.4.2.
+A arte de 137 texturas 8×8, paletas, ícone, nuvens e sol é LowMine. Permanecem 14 definições de partículas, água e sombras adaptadas do FPS Optimizer v2.9.2, de XiaoCraft, sob CC BY-NC 3.0. Créditos em `CREDITOS.md` e `CREDITOS.txt`.
 
-A composição inclui material CC BY-NC 3.0 e deve respeitar a condição não comercial dessa licença. Leia CREDITOS.md antes de redistribuir.
-
-## Limites técnicos
-
-O LowMine não substitui o RenderDragon, não implementa culling universal, não impede a geração de chunks, não controla a distância de renderização/simulação e não injeta Rust no cliente. Neblina, texturas e água/sombras alteram recursos visuais, não o código do motor.
-
-Leia docs/LIMITES-DO-RENDERIZADOR.md para entender o que é possível otimizar em um Resource Pack.
+PotatoCraft 8x, Embeddium Optimizer e Vanilla × Optimizer foram apenas referências técnicas, sem cópia de arquivos. A condição não comercial da licença CC BY-NC 3.0 deve ser respeitada. Minecraft é marca da Mojang/Microsoft; LowMine não é afiliado nem endossado por elas.

@@ -28,44 +28,39 @@ jobs:
     steps:
       - name: Baixar repositório
         uses: actions/checkout@v4
-
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Instalar Pillow
         run: python -m pip install --disable-pip-version-check Pillow
-
       - name: Verificar sintaxe das ferramentas
-        run: python -m py_compile tools/gerar_pacote.py tools/validar_pacote.py
-
-      - name: Construir pacote e prévia de texturas
+        run: python -m py_compile tools/gerar_pacote.py tools/validar_pacote.py tools/redesenhar_v060.py tools/validar_pacote_v060.py
+      - name: Construir pacote-base
         run: python tools/gerar_pacote.py
-
-      - name: Validar o pacote gerado
-        run: python tools/validar_pacote.py build/LowMine-Equilibrado-8x-v0.5.0.mcpack
-
+      - name: Aplicar redesign LowMine v0.6.0
+        run: python tools/redesenhar_v060.py
+      - name: Validar pacote redesenhado
+        run: python tools/validar_pacote_v060.py build/LowMine-Equilibrado-8x-v0.6.0.mcpack
       - name: Publicar artefatos para teste
         uses: actions/upload-artifact@v4
         with:
-          name: LowMine-Equilibrado-8x-v0.5.0
+          name: LowMine-Equilibrado-8x-v0.6.0
           path: |
-            build/LowMine-Equilibrado-8x-v0.5.0.mcpack
-            build/LowMine-Texturas-8x8-v0.5.0.png
+            build/LowMine-Equilibrado-8x-v0.6.0.mcpack
+            build/LowMine-Texturas-8x8-v0.6.0.png
           if-no-files-found: error
           retention-days: 14
-
       - name: Criar ou atualizar Release com download permanente
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: lowmine-v0.5.0
-          name: LowMine Equilibrado 8x v0.5.0
+          tag_name: lowmine-v0.6.0
+          name: LowMine Equilibrado 8x v0.6.0
           target_commitish: ${{ github.sha }}
           prerelease: true
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: |
-            build/LowMine-Equilibrado-8x-v0.5.0.mcpack
-            build/LowMine-Texturas-8x8-v0.5.0.png
+            build/LowMine-Equilibrado-8x-v0.6.0.mcpack
+            build/LowMine-Texturas-8x8-v0.6.0.png

@@ -1,75 +1,51 @@
-# Auditoria técnica — LowMine Equilibrado 8x v0.5.0
+# Auditoria técnica — LowMine Equilibrado 8x v0.6.0
 
 ## Escopo
-Esta auditoria verifica estrutura do ZIP, manifesto, JSON, partículas, interface, água, sombras, créditos e dimensões das imagens. Ela não inicia o Minecraft, não mede FPS e não confirma o comportamento de cada tela em uma versão específica do Bedrock.
+Auditoria estrutural do ZIP, manifesto, JSON, partículas, UI, água, sombras, créditos e dimensões. Não inicia Minecraft nem mede FPS.
 
 ## Identidade
-- Arquivo: LowMine-Equilibrado-8x-v0.5.0.mcpack
-- Tamanho compactado: 32.218 bytes
-- SHA-256: 841b70ccb54acbc235e61334c7ad448bee95b1ec0cc53887b67449a21bbb240b
-- Manifesto: formato 3
-- Versão: string SemVer 0.5.0
-- UUID do cabeçalho: 21ca0070-fc45-5c56-8812-4b1cda3172a8
-- UUID do módulo: 006202c4-abf5-58cc-8640-9c11d742a01d
+- Arquivo: `LowMine-Equilibrado-8x-v0.6.0.mcpack`
+- Tamanho: 60.902 bytes
+- SHA-256: `a10c3d4195e901740d90160bd058d71a279e66c67828a4166c4a918c9a880660`
+- Manifesto formato 3; versão 0.6.0
+- UUID cabeçalho: `21ca0070-fc45-5c56-8812-4b1cda3172a8`
+- UUID módulo: `006202c4-abf5-58cc-8640-9c11d742a01d`
 - Versão mínima declarada: 1.26.40
-- Um único perfil, sem subpacote PvP
+- Um perfil
 
-## Contagem de arquivos
+## Contagem
 
 | Tipo | Quantidade |
 |---|---:|
-| Entradas no ZIP | 69 |
+| Entradas ZIP | 170 |
 | JSON | 21 |
-| PNG | 46 |
-| Texturas de bloco 8×8 | 38 |
-| Definições de partículas | 14 |
-| Arquivos de interface | 3 |
-| Scripts de jogo | 0 |
+| PNG | 147 |
+| Texturas bloco 8×8 | 137 |
+| Partículas | 14 |
+| Nuvens/sol 32×32 | 2 |
+| Scripts no pacote | 0 |
 
-O ZIP passou pelo teste CRC. Todos os 21 arquivos JSON foram lidos sem erro. Todas as 38 texturas de bloco medem 8×8 pixels.
+ZIP passou CRC. Todos JSON foram lidos sem erro. As 137 texturas de bloco medem 8×8; nuvens e sol medem 32×32.
 
-## Texturas LowMine
-As 38 imagens de bloco foram desenhadas para o LowMine com uma paleta de cores coerente. Incluem grama, samambaias, folhas de diferentes árvores, terra, pedra, pedregulho, cascalho, areia, tábuas e tronco.
+## Texturas
+Cobertura inclui grama, solo, pedra, areia, cascalho, samambaias, flores, brotos, folhas, troncos, madeira, arbustos, cipós, bambu, vegetação aquática, musgo e serapilheira. Folhas reutilizam uma silhueta-base com paletas por espécie e pares transparentes/opacos.
 
-Os nomes/caminhos foram conferidos com o mapeamento atual de texturas do Bedrock/Mojang. As imagens não foram extraídas dos quatro pacotes estudados. A resolução 8×8 reduz a área de pixels das imagens substituídas; não remove geometria, planos de vegetação ou trabalho de geração de chunks.
+Texturas não foram copiadas de pacotes de referência. 8×8 reduz área de pixels das imagens substituídas, mas não altera geometria, planos de vegetação, geração de chunks ou simulação.
 
-## Partículas
-- 14 arquivos JSON adaptados do FPS Optimizer v2.9.2.
-- Consultas de configuração convertidas de opt: para lowmine:.
-- Quantidade padrão: 50%.
-- Limite padrão por emissão: 6.
-- Poções, magia, caldeirões e rastros visuais ativados por padrão.
-- Gêiseres, gás e partículas de enxofre desativados por padrão.
+## Ambiente e partículas
+- Nuvens e sol: 32×32, sem animação.
+- 14 arquivos de partículas adaptados do FPS Optimizer v2.9.2, namespace `lowmine:`.
+- Quantidade padrão 30%; limite 4 por emissão nos emissores substituídos.
+- Água `minecraft:default_water`, cáusticas/ondas desativadas.
+- Sombras blocky_shadows, texel_size 16.
+- Não há PBR/shader extra.
 
-O limite afeta apenas os emissores que o LowMine substitui; não controla todos os efeitos nativos do Minecraft.
+O controle de partículas não afeta todos emissores nativos. Água/sombras dependem da versão/modo gráfico e não garantem FPS maior.
 
-## Água e sombras
-- Identificador de água: minecraft:default_water.
-- Cáusticas: desativadas.
-- Ondas: desativadas.
-- Concentrações de clorofila, sedimentos suspensos e CDOM: 0.
-- Sombras: blocky_shadows.
-- Tamanho de texel: 16.
+## Interface, scripts e créditos
+Inventário desktop, pocket e baús preservados. Não há JS, TS, `.mcfunction` ou Behavior Pack. Python serve apenas para compilar/validar fora do jogo. Folhas caindo globalmente exigiriam lógica/Behavior Pack.
 
-O suporte depende da versão e do modo gráfico. Essas configurações são principalmente visuais e não são garantia de ganho de FPS em todo hardware.
-
-## Interface
-- Telas: inventário desktop, inventário pocket e baús.
-- As três telas estão registradas em ui/_ui_defs.json.
-- O manifesto não ativa capacidades PBR extras.
-- Alpha de fundo configurado: 0,10.
-- Texturas próprias para painéis, slots e barra de itens.
-- Contorno de seleção preservado.
-- A estrutura de UI JSON pode variar entre versões e modos de interface; confirmar no jogo é obrigatório.
-
-## Scripts
-Não há JavaScript, TypeScript, .mcfunction ou Behavior Pack no arquivo. O código Python do projeto serve para compilar e validar o pacote no computador; não é incluído nem executado dentro do Minecraft.
-
-## Créditos
-- Conteúdo original LowMine: identidade, ícone, interface e arte 8×8.
-- Material adaptado: 14 partículas, água e sombras do FPS Optimizer v2.9.2, XiaoCraft, CC BY-NC 3.0.
-- PotatoCraft, Embeddium Optimizer e Vanilla × Optimizer: referência técnica; nenhum arquivo foi copiado.
-- A composição mantém a condição não comercial do material adaptado. Consulte CREDITOS.md.
+Arte autoral: 137 texturas, paletas, nuvens, sol, ícone e UI. Material adaptado: partículas, água e sombras do FPS Optimizer v2.9.2, XiaoCraft, CC BY-NC 3.0. PotatoCraft, Embeddium e Vanilla × são somente referências. Consulte `CREDITOS.md`.
 
 ## Resultado
-Validação estática aprovada para o arquivo identificado pelo SHA-256 acima. Ainda é necessário importar no Bedrock, abrir inventário/baús, verificar vegetação, água/sombras e medir desempenho em cenas iguais com e sem LowMine.
+Validação estática aprovada para o SHA acima. Ainda é necessário importar no Bedrock, testar visualmente folhas/vegetação/água/UI e medir FPS/frame time em cenas equivalentes.
