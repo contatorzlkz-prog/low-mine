@@ -1,22 +1,18 @@
-# Release artifacts
+# Pacotes de teste e lançamentos
 
-## v0.3.2 — import-fixed Ultra Low test candidate
+## 0.4.0 — LowMine Equilibrado
 
-Filename: `LowMine-Ultra-Low-v0.3.2-FIXED.mcpack`
+Arquivo de teste: `LowMine-Equilibrado-v0.4.0-TEST.mcpack`
 
-- Size: 655,459 bytes.
-- SHA-256: `89bd88e7351943abede9ea0f8a49fe1cc3ff224b7a005302cd60622b471905b2`
+- Tamanho: 658.214 bytes.
+- SHA-256: `898a63dc7b221d8e0a2ab489f3f41b965ddc3a2cf6c05658beb8d25940a6f91a`.
 
-The package passed static validation: manifest v3 string versions, 318 JSON files, 188 disabled particle definitions, 94 biome entries, 104 fog files, four registered UI overrides, no PvP subpack and no experimental custom settings. Minecraft import and FPS are not yet verified.
+O pacote passou na validação estática: 933 entradas, 318 JSON válidos, 188 definições de partículas, 94 biomas, 104 arquivos de neblina, quatro telas de UI registradas e oito texturas de vegetação 16×16.
 
-Before a public GitHub release:
-1. Upload the exact `.mcpack` under this directory.
-2. Verify the SHA-256 above.
-3. Test the import on the exact Bedrock version and check inventory/chest UI.
-4. Record FPS/frame-time comparisons using the same scene/device/settings.
+A importação e o desempenho ainda precisam ser testados dentro do Minecraft. O binário é fornecido separadamente para teste e ainda não está anexado ao repositório.
 
-The binary is supplied separately for the user's test; current GitHub connector actions cannot upload binary release assets directly.
-
-## v0.3.0 — failed import candidate
-
-Superseded. It used invalid manifest v3 version types and should not be used.
+Antes de publicar um lançamento:
+1. Envie o .mcpack para esta pasta por uma interface do GitHub que aceite arquivos binários.
+2. Confira se o SHA-256 corresponde ao valor acima.
+3. Teste importação, interface, vegetação e carregamento de chunks.
+4. Atualize este arquivo com os resultados reais do jogo.
