@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Aplica o refinamento visual LowMine 0.6.1 sem alterar a estrutura do pack."""
+"""Aplica o refinamento visual LowMine 0.6.2 sem alterar a estrutura do pack."""
 from __future__ import annotations
 import argparse
 import hashlib
@@ -12,8 +12,8 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = ROOT / "build" / "LowMine-Equilibrado-8x-v0.5.0.mcpack"
-DEFAULT_OUTPUT = ROOT / "build" / "LowMine-Equilibrado-8x-v0.6.1.mcpack"
-DEFAULT_PREVIEW = ROOT / "build" / "LowMine-Preview-v0.6.1.png"
+DEFAULT_OUTPUT = ROOT / "build" / "LowMine-Equilibrado-8x-v0.6.2.mcpack"
+DEFAULT_PREVIEW = ROOT / "build" / "LowMine-Preview-v0.6.2.png"
 
 def rgb(value: str) -> tuple[int, int, int]:
     value = value.lstrip("#")
@@ -229,6 +229,104 @@ def armor_icon(material: str, piece: str) -> Image.Image:
             image.putpixel((x, y), color + (255,))
     return image.resize((16, 16), Image.Resampling.NEAREST)
 
+WEAPON_PALETTES = {
+    "wood": ["302018", "79502F", "B7864E", "E0B36A"],
+    "stone": ["34343A", "62636A", "95979A", "D4D5D3"],
+    "iron": ["303943", "77848C", "C2CCD0", "F0F4F2"],
+    "gold": ["5D3D0D", "A97818", "E0B53B", "FFE08A"],
+    "diamond": ["10434B", "27888C", "65D5CC", "C8FFF0"],
+    "netherite": ["201C28", "443B4A", "786879", "C4ADBA"],
+    "copper": ["4A2B20", "99512F", "D8874C", "9AC0AC"],
+}
+
+WEAPON_FILES = {
+    "wood_sword": ("sword", "wood"),
+    "stone_sword": ("sword", "stone"),
+    "iron_sword": ("sword", "iron"),
+    "gold_sword": ("sword", "gold"),
+    "diamond_sword": ("sword", "diamond"),
+    "netherite_sword": ("sword", "netherite"),
+    "copper_sword": ("sword", "copper"),
+    "bow_standby": ("bow", "standby"),
+    "bow_pulling_0": ("bow", "pull0"),
+    "bow_pulling_1": ("bow", "pull1"),
+    "bow_pulling_2": ("bow", "pull2"),
+    "crossbow_standby": ("crossbow", "standby"),
+    "crossbow_pulling_0": ("crossbow", "pull0"),
+    "crossbow_pulling_1": ("crossbow", "pull1"),
+    "crossbow_pulling_2": ("crossbow", "pull2"),
+    "crossbow_arrow": ("crossbow", "arrow"),
+    "crossbow_firework": ("crossbow", "firework"),
+    "arrow": ("arrow", "iron"),
+    "trident": ("trident", "diamond"),
+}
+
+def weapon_icon(kind: str, palette_name: str) -> Image.Image:
+    palette = [rgb(color) for color in WEAPON_PALETTES.get(palette_name, WEAPON_PALETTES["iron"])]
+    image = Image.new("RGBA", (8, 8), (0, 0, 0, 0))
+
+    def dot(x: int, y: int, color: int) -> None:
+        if 0 <= x < 8 and 0 <= y < 8:
+            image.putpixel((x, y), palette[color] + (255,))
+
+    if kind == "sword":
+        blade = [(6, 0), (5, 1), (4, 2), (3, 3), (2, 4)]
+        for x, y in blade:
+            dot(x + 1, y, 0)
+            dot(x, y + 1, 0)
+            dot(x, y, 2)
+            dot(x + 1, y - 1, 3)
+        for x, y in ((1, 4), (2, 5), (3, 4)):
+            dot(x, y, 1)
+        for x, y in ((1, 6), (0, 7)):
+            dot(x, y, 0)
+        dot(2, 6, 3)
+    elif kind == "bow":
+        # Arco curvo e corda; as variantes deslocam a corda para simular a pose de puxada.
+        for x, y in ((2, 0), (1, 1), (1, 2), (2, 3), (2, 4), (1, 5), (1, 6), (2, 7)):
+            dot(x, y, 1)
+        for x, y in ((3, 0), (2, 1), (2, 2), (3, 3), (3, 4), (2, 5), (2, 6), (3, 7)):
+            dot(x, y, 0)
+        cord_x = {"standby": 5, "pull0": 5, "pull1": 6, "pull2": 7}[palette_name]
+        for y in range(8):
+            dot(cord_x, y, 3)
+        if palette_name in ("pull1", "pull2"):
+            dot(4, 3, 2)
+            dot(4, 4, 2)
+    elif kind == "crossbow":
+        for x, y in ((1, 3), (2, 3), (3, 3), (4, 3), (5, 3), (6, 3)):
+            dot(x, y, 0)
+        for x, y in ((2, 4), (3, 4), (4, 4), (5, 4)):
+            dot(x, y, 1)
+        for x, y in ((3, 5), (4, 5), (3, 6)):
+            dot(x, y, 0)
+        for x, y in ((0, 2), (1, 1), (2, 2), (5, 1), (6, 2), (7, 1)):
+            dot(x, y, 2)
+        if palette_name == "arrow":
+            for x in range(1, 7):
+                dot(x, 0, 3 if x in (1, 6) else 2)
+        elif palette_name == "firework":
+            for x, y in ((1, 0), (3, 0), (5, 0), (2, 1), (4, 1)):
+                dot(x, y, 3)
+        elif palette_name in ("pull1", "pull2"):
+            dot(4, 2, 3)
+            dot(5, 2, 3)
+    elif kind == "arrow":
+        for x, y in ((6, 0), (5, 1), (4, 2), (3, 3), (2, 4), (1, 5)):
+            dot(x, y, 1)
+        for x, y in ((6, 0), (7, 0), (6, 1), (5, 1), (4, 2)):
+            dot(x, y, 3 if x == 6 and y == 0 else 2)
+        for x, y in ((0, 4), (1, 4), (0, 5), (2, 6), (1, 6)):
+            dot(x, y, 0)
+    elif kind == "trident":
+        for x, y in ((3, 0), (4, 0), (3, 1), (4, 1), (3, 2), (4, 2),
+                     (3, 3), (4, 3), (3, 4), (4, 4), (3, 5), (4, 5),
+                     (3, 6), (4, 6), (3, 7)):
+            dot(x, y, 2 if y % 3 else 3)
+        for x, y in ((1, 0), (2, 1), (5, 1), (6, 0), (2, 2), (5, 2)):
+            dot(x, y, 3)
+    return image.resize((16, 16), Image.Resampling.NEAREST)
+
 def encode_png(image: Image.Image) -> bytes:
     buffer = io.BytesIO()
     image.save(buffer, format="PNG", optimize=True)
@@ -277,32 +375,38 @@ def main() -> int:
             files[path] = encode_png(armor_icon(material, piece))
             armor_paths.append(path)
 
+    weapon_paths: list[str] = []
+    for texture_name, (kind, palette_name) in WEAPON_FILES.items():
+        path = f"textures/items/{texture_name}.png"
+        files[path] = encode_png(weapon_icon(kind, palette_name))
+        weapon_paths.append(path)
+
     manifest_path = "manifest.json"
     if manifest_path not in files:
         raise SystemExit("manifest.json ausente no pacote-base.")
     manifest = json.loads(files[manifest_path].decode("utf-8-sig"))
-    manifest["header"]["version"] = "0.6.1"
+    manifest["header"]["version"] = "0.6.2"
     for module in manifest.get("modules", []):
-        module["version"] = "0.6.1"
+        module["version"] = "0.6.2"
     manifest["header"]["description"] = (
-        "LowMine Equilibrado 8x 0.6.1 - troncos naturais, armaduras pixel art e UI transparente."
+        "LowMine Equilibrado 8x 0.6.2 - troncos naturais, armaduras pixel art e UI transparente."
     )
     files[manifest_path] = (json.dumps(manifest, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
 
     list_path = "textures/textures_list.json"
     if list_path in files:
         texture_list = json.loads(files[list_path].decode("utf-8-sig"))
-        additions = sorted({path[:-4] for path in armor_paths})
+        additions = sorted({path[:-4] for path in armor_paths + weapon_paths})
         files[list_path] = (json.dumps(sorted(set(texture_list) | set(additions)),
                                        ensure_ascii=False, indent=2) + "\n").encode("utf-8")
 
     note = (
-        "\nLowMine 0.6.1: troncos com veios irregulares em 8x8 e paletas compactas; "
+        "\nLowMine 0.6.2: troncos com veios irregulares em 8x8 e paletas compactas; "
         "sete conjuntos de armaduras redesenhados em mapas UV 64x32 e ícones pixel art. "
         "Inventário, telas mobile e contêineres mantêm os fundos transparentes.\n"
     ).encode("utf-8")
     for note_path in ("LEIA-ME.txt", "CREDITOS.txt"):
-        if note_path in files and b"LowMine 0.6.1" not in files[note_path]:
+        if note_path in files and b"LowMine 0.6.2" not in files[note_path]:
             files[note_path] += note
 
     args.saida.parent.mkdir(parents=True, exist_ok=True)
@@ -311,9 +415,9 @@ def main() -> int:
         for name in sorted(files):
             target.writestr(name, files[name])
 
-    preview = Image.new("RGB", (640, 320), (24, 26, 31))
+    preview = Image.new("RGB", (640, 360), (24, 26, 31))
     draw = ImageDraw.Draw(preview)
-    draw.text((12, 10), "LOWMINE 0.6.1  |  TRONCOS 8x8", fill=(235, 235, 235))
+    draw.text((12, 10), "LOWMINE 0.6.2  |  TRONCOS 8x8", fill=(235, 235, 235))
     x, y = 12, 38
     for name in log_names[:12]:
         with Image.open(io.BytesIO(files[name])) as source_image:
@@ -330,6 +434,13 @@ def main() -> int:
             thumb = source_image.resize((80, 40), Image.Resampling.NEAREST)
             preview.paste(thumb, (x, 228))
         x += 88
+    draw.text((12, 292), "ITENS  |  ESPADA, ARCO, BESTA E PROJÉTEIS", fill=(235, 235, 235))
+    x = 12
+    for texture_name in ("wood_sword", "iron_sword", "diamond_sword", "bow_standby", "crossbow_standby", "arrow", "trident"):
+        with Image.open(io.BytesIO(files[f"textures/items/{texture_name}.png"])) as source_image:
+            thumb = source_image.resize((24, 24), Image.Resampling.NEAREST)
+            preview.paste(thumb, (x, 318), thumb)
+        x += 40
     args.previa.parent.mkdir(parents=True, exist_ok=True)
     preview.save(args.previa, format="PNG", optimize=True)
 
@@ -338,6 +449,7 @@ def main() -> int:
         "bytes": args.saida.stat().st_size,
         "troncos_redesenhados": len(log_names),
         "texturas_armadura": len(armor_paths),
+        "texturas_itens_pvp": len(weapon_paths),
         "conjuntos_armadura": len(ARMOR),
         "resolucao_troncos": "8x8",
         "mapas_uv_armadura": "64x32",
