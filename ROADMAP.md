@@ -1,31 +1,35 @@
-# Plano de desenvolvimento
+# Plano de desenvolvimento LowMine
 
-## Concluído — versão 0.4.0
-- [x] Manter um único perfil e remover o PvP.
-- [x] Manter UUIDs estáveis e versão SemVer como texto no manifesto v3.
-- [x] Preservar 177 limites de partículas em zero e reduzir outras 11 contagens.
-- [x] Criar oito texturas 16×16 para grama e samambaias.
-- [x] Aumentar a transparência do inventário, crafting, baús e hotbar.
-- [x] Ajustar a neblina visual para 64–96 blocos.
-- [x] Validar 933 entradas, 318 JSON, 94 biomas, 104 arquivos de neblina e telas de UI.
+## Concluído — v0.5.0
+- [x] Criar identidade própria LowMine Equilibrado 8x.
+- [x] Desenhar 38 texturas de bloco originais em 8×8, com paletas consistentes.
+- [x] Criar ícone, painéis e elementos de UI LowMine.
+- [x] Adaptar 14 definições de partículas do FPS Optimizer com namespace próprio e limite por rajada.
+- [x] Adaptar água sem cáusticas/ondas e sombras blocadas, com créditos/licença.
+- [x] Manter apenas um perfil, sem PvP.
+- [x] Criar validador de manifesto, JSON, UI, partículas, licença e texturas.
+- [x] Manter o pacote sem scripts/loops executados pelo jogo.
+- [x] Documentar referências e direitos dos quatro pacotes estudados.
 
-## Próxima etapa — teste dentro do Minecraft
-- [ ] Confirmar que a importação mostra LowMine Equilibrado v0.4.0.
-- [ ] Testar inventário, crafting, baús, Ender Chest, shulker e barril.
-- [ ] Verificar se slots e contornos continuam claros.
-- [ ] Comparar grama curta, samambaias, grama alta e versões secas em biomas diferentes.
-- [ ] Testar carregamento de chunks ao andar, correr e voar.
-- [ ] Registrar a versão exata do Bedrock e os erros do Content Log.
-- [ ] Comparar FPS e estabilidade de frame time com e sem LowMine na mesma cena.
+## Próxima etapa — teste no Minecraft
+- [ ] Importar o v0.5.0 na versão exata do Bedrock usada.
+- [ ] Conferir nome, versão, UUID e opções do pacote.
+- [ ] Testar inventário, crafting, baús e inventário pocket em desktop/toque.
+- [ ] Conferir a água e as sombras em dispositivos/modos compatíveis.
+- [ ] Verificar se partículas mantêm leitura sem criar picos em poções e combates.
+- [ ] Conferir folhas, grama, samambaias e blocos 8×8 em vários biomas.
+- [ ] Registrar erros do Content Log, travamentos e prints.
+- [ ] Medir FPS e estabilidade de frame time em cenas equivalentes, com e sem LowMine.
 
-## Otimização futura
-- [ ] Separar travamento de geração de chunks de queda de FPS por renderização.
-- [ ] Medir consumo de memória das texturas com ferramentas compatíveis.
-- [ ] Revisar mais texturas somente quando houver um ganho provável e sem apagar a leitura dos blocos.
-- [ ] Fazer uma alteração por versão e manter um pacote estável para retorno.
+## Otimização guiada por medições
+- [ ] Distinguir geração de terreno novo, renderização de cena e simulação de entidades.
+- [ ] Medir a carga de texturas com ferramenta de inspeção apropriada quando disponível.
+- [ ] Verificar se o limite de rajada precisa ser 4, 6 ou 8 usando testes reais.
+- [ ] Ajustar transparência somente após conferir legibilidade/seleção.
+- [ ] Fazer uma mudança por versão e manter builds anteriores para regressão.
 
-## Fora do escopo de um pacote de recursos
-- O resource pack não pode definir a distância de renderização ou de simulação do mundo.
-- O nevoeiro não implementa frustum culling ou occlusion culling.
-- O Block Culling não é um filtro global de geometria vanilla.
-- Rust pode servir para ferramentas externas de análise e compilação, mas não substitui o RenderDragon por meio de um .mcpack.
+## Fora do escopo de um Resource Pack
+- Alterar o gerador de chunks ou cache do Minecraft.
+- Forçar frustum/occlusion culling do RenderDragon.
+- Mudar render distance ou simulation distance.
+- Rodar Rust dentro do cliente Bedrock.
