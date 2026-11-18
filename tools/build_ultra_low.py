@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Build LowMine Ultra Low v0.3.0 from the v0.2.0 .mcpack. Requires Pillow.
+"""Build LowMine Ultra Low v0.3.1 from the v0.2.0 .mcpack. Requires Pillow.
 Static pack edits only: this cannot alter RenderDragon or measure FPS."""
 import argparse, hashlib, json, shutil, stat, tempfile, zipfile
 from pathlib import Path, PurePosixPath
 from PIL import Image
 
-V = [0, 3, 0]
+V = "0.3.1"
 EN = {
-"lowmine.settings.title":"LOWMINE ULTRA LOW  |  v0.3.0",
+"lowmine.settings.title":"LOWMINE ULTRA LOW  |  v0.3.1",
 "lowmine.settings.intro":"Single ultra-low profile. Optional visuals are disabled by default.",
 "lowmine.section.particles":"MINIMAL PARTICLES",
 "lowmine.setting.particle_amount":"Particle amount (%)",
@@ -33,7 +33,7 @@ EN = {
 "accessibility.chat.howtoemote":"§dLowMine Ultra Low loaded. §7Adapted from XiaoCraft's Boosted FPS."
 }
 PT = {
-"lowmine.settings.title":"LOWMINE ULTRA LOW  |  v0.3.0",
+"lowmine.settings.title":"LOWMINE ULTRA LOW  |  v0.3.1",
 "lowmine.settings.intro":"Perfil único ultra leve. Os efeitos visuais opcionais começam desativados.",
 "lowmine.section.particles":"PARTÍCULAS NO MÍNIMO",
 "lowmine.setting.particle_amount":"Quantidade de partículas (%)",
@@ -83,7 +83,7 @@ def flatten(root):
     return {"lite_files_flattened":moved,"base_files_overwritten":over,"pvp_files_removed":removed}
 def manifest(root):
     p=root/"manifest.json"; m=json.loads(p.read_text(encoding="utf-8")); h=m["header"]
-    h["name"]="§l§dLowMine Ultra Low §r§7v0.3.0"
+    h["name"]="§l§dLowMine Ultra Low §r§7v0.3.1"
     h["description"]="§dLowMine Ultra Low§r\n§7Single ultra-low profile for Minecraft Bedrock\n§7Reduced particles, transparent UI and low-resolution textures\n§7Original work by XiaoCraft (CC BY-NC 3.0). See ATTRIBUTION.txt."
     h["version"]=V
     for x in m.get("modules",[]): x["description"]="LowMine Ultra Low — single-profile resource pack"; x["version"]=V
@@ -95,6 +95,10 @@ def manifest(root):
         if x.get("name")=="lowmine:particle_amount": x["default"]=0
         if x.get("type")=="toggle": x["default"]=False
         out.append(x)
+    # Manifest v3 setting labels are literal text values in the current documented schema.
+    for item in out:
+        if isinstance(item.get("text"), str) and item["text"] in PT:
+            item["text"] = PT[item["text"]]
     m["settings"]=out
     m["metadata"]={"authors":["XiaoCraft (original author)","LowMine Project (adaptation)"],"license":"CC BY-NC 3.0 (adapted source work; see ATTRIBUTION.txt)","url":"https://github.com/contatorzlkz-prog/low-mine","product_type":"addon"}
     js(p,m)
@@ -180,7 +184,7 @@ def main():
             extract(z,root)
         flat=flatten(root); manifest(root); lang(root); changed=images(root); fogged=fog(root); ui(root)
         (root/"ATTRIBUTION.txt").write_text(
-"LowMine Ultra Low v0.3.0 — attribution and license\n\nThis package is an adaptation of:\n  Boosted FPS (Optimized Performance) v2.4.1\n  Original author: XiaoCraft\n  Original project: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance\n\nChanges made by the LowMine Project in v0.3.0:\n  - Removed the separate PvP subpack and flattened the former Lite profile as the only pack.\n  - Reduced particle defaults to the minimum and disabled optional visual toggles by default.\n  - Made inventory/chest screen backdrops and hotbar/touch UI textures more transparent.\n  - Reduced selected menu textures and removed visible cloud texture detail.\n  - Tightened the visual fog range; this is not renderer occlusion culling.\n\nThis is an adaptation, not an original replacement for the source work. No measured FPS improvement is claimed. Runtime testing is required.\n\nThe original work is listed under the Creative Commons Attribution-NonCommercial 3.0 Unported license (CC BY-NC 3.0):\n  https://creativecommons.org/licenses/by-nc/3.0/\n\nThe original author and project are credited above. This adaptation is not endorsed by or affiliated with XiaoCraft. The license prohibits use primarily intended for commercial advantage or private monetary compensation. Keep attribution and license notices with redistributed copies.\n",encoding="utf-8")
+"LowMine Ultra Low v0.3.1 — attribution and license\n\nThis package is an adaptation of:\n  Boosted FPS (Optimized Performance) v2.4.1\n  Original author: XiaoCraft\n  Original project: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance\n\nChanges made by the LowMine Project in v0.3.1:\n  - Removed the separate PvP subpack and flattened the former Lite profile as the only pack.\n  - Reduced particle defaults to the minimum and disabled optional visual toggles by default.\n  - Made inventory/chest screen backdrops and hotbar/touch UI textures more transparent.\n  - Reduced selected menu textures and removed visible cloud texture detail.\n  - Tightened the visual fog range; this is not renderer occlusion culling.\n\nThis is an adaptation, not an original replacement for the source work. No measured FPS improvement is claimed. Runtime testing is required.\n\nThe original work is listed under the Creative Commons Attribution-NonCommercial 3.0 Unported license (CC BY-NC 3.0):\n  https://creativecommons.org/licenses/by-nc/3.0/\n\nThe original author and project are credited above. This adaptation is not endorsed by or affiliated with XiaoCraft. The license prohibits use primarily intended for commercial advantage or private monetary compensation. Keep attribution and license notices with redistributed copies.\n",encoding="utf-8")
         x.output.parent.mkdir(parents=True,exist_ok=True)
         with zipfile.ZipFile(x.output,"w") as z:
             for p in sorted(q for q in root.rglob("*") if q.is_file()):
