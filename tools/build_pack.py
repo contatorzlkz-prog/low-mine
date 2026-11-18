@@ -86,7 +86,7 @@ PT_BR = {
 
 
 def stable_uuid(label: str) -> str:
-    return str(uuid.uuid5(PROJECT_NAMESPACE, f"{label}:v{VERSION}"))
+    return str(uuid.uuid5(PROJECT_NAMESPACE, label))
 
 
 def write_json(path: Path, value: object) -> None:
