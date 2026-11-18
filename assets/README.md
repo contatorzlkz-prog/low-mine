@@ -1,10 +1,12 @@
-# Branding asset inputs
+# Recursos e texturas do projeto
 
-The v0.2.0 build uses two PNG inputs:
+As oito texturas de vegetação da versão 0.4.0 são geradas pelo script `tools/gerar_pacote.py`:
+- Grama curta.
+- Samambaia.
+- Parte superior e inferior da grama alta.
+- Parte superior e inferior da samambaia alta.
+- Grama seca curta e alta.
 
-- `lowmine-pack-icon.png`: extract `pack_icon.png` from the built `.mcpack`.
-- `lowmine-title.png`: extract `textures/ui/title.png` from the built `.mcpack`.
+Todas têm 16×16 pixels, fundo transparente e densidade visual reduzida. Os arquivos são inseridos no .mcpack nos caminhos vanilla correspondentes.
 
-Place them in this folder with those exact filenames before running `tools/build_pack.py`. The `.mcpack` format is a ZIP archive, so a normal ZIP utility can inspect it.
-
-The builder intentionally takes branding files as explicit inputs; it does not silently reuse or overwrite art from the original author.
+O projeto não redistribui o pacote vanilla completo. As substituições usam os nomes e caminhos de textura documentados nos arquivos de referência da Mojang.
