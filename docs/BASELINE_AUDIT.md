@@ -1,110 +1,81 @@
-# LowMine technical audit — v0.2.0 and v0.3.0
+# LowMine technical audit — v0.3.2
 
-## Source and scope
+## Import failure root cause
 
-The supplied source pack was `Boosted FPS v2.4.1.mcpack`, authored by XiaoCraft. LowMine remains an attributed adaptation under the original CC BY-NC 3.0 terms.
+The v0.3.0 test package used JSON arrays such as `[0, 3, 0]` for the manifest `header.version` and module `version` fields. Bedrock manifest format version 3 requires SemVer strings such as `"0.3.2"`. That mismatch explains the import screen's unknown name, zero UUID and version 0.0.0. v0.3.2 uses strings for header and module versions and is checked by the validator.
 
-This is a static archive audit. It does not launch Minecraft, emulate RenderDragon, verify live UI behavior or measure FPS.
+The v0.3.2 manifest also removes experimental custom pack settings. All included LowMine particle emitters are disabled directly in their definitions instead of depending on custom settings-query support.
 
-## v0.3.0 archive facts
+## Package identity
 
-| Item | v0.2.0 | v0.3.0 |
-|---|---:|---:|
-| Archive entries | 1,136 | 925 |
-| JSON files | 487 | 318 |
-| PNG files | 605 | 566 |
-| Language files | 29 | 29 |
-| Active configurable controls | 9 | 8 |
-| Profiles | Lite + PvP | One flattened Ultra Low profile |
-| Archive size | 1,206,757 bytes | 664,342 bytes |
+- File: `LowMine-Ultra-Low-v0.3.2-FIXED.mcpack`
+- Size: 655,459 bytes.
+- SHA-256: `89bd88e7351943abede9ea0f8a49fe1cc3ff224b7a005302cd60622b471905b2`
+- Manifest format: 3.
+- Header version: string `"0.3.2"`.
+- Module version: string `"0.3.2"`.
+- UUIDs: valid, unique and retained from the LowMine identity.
+- No custom `settings`, `subpacks` or PvP files.
 
-The v0.3.0 archive has no `subpacks/` directory and no PvP profile files. The previous Lite subpack contained 288 files; 109 of these replaced same-path base files when flattened. The PvP subpack contained 106 files and was removed.
+## Static archive audit
 
-The compressed archive is 542,415 bytes (44.95%) smaller than v0.2.0. This is a packaging/file-content comparison, not a runtime memory or FPS measurement.
+| Item | Count/result |
+|---|---:|
+| ZIP entries | 925 |
+| JSON files | 318 |
+| Invalid JSON | 0 |
+| PNG files | 566 |
+| Total PNG pixel area | 610,722 |
+| Biome entries | 94 |
+| Fog JSON files | 104 |
+| Particle JSON definitions | 188 |
+| `max_particles` fields set to 0 | 177 |
+| `num_particles` fields set to `"0"` | 11 |
+| Desktop/pocket/chest UI files registered | 4 |
+| Custom fog IDs unresolved | 0 |
 
-## PNG texture-footprint estimate
+All 188 particle definitions shipped with LowMine are statically disabled. This does not disable built-in effects that are not provided by this pack and does not imply a measured FPS gain.
 
-- v0.2.0 PNG pixel count: 2,254,921.
-- v0.3.0 PNG pixel count: 610,722.
-- Pixel-area reduction: 72.92%.
-- At four bytes per pixel, a rough uncompressed RGBA estimate is 9.02 MB versus 2.443 MB.
+## UI changes
 
-This estimate sums width × height × 4 for PNG images. It is not actual GPU VRAM: Bedrock may atlas, transcode, compress or load textures differently. It is useful only as a consistent image-footprint comparison between these two archives.
+The package retains the desktop inventory/crafting, pocket inventory, chest (small/large/Ender/shulker/barrel) and data-driven container UI overrides. These are registered via `ui/_ui_defs.json` and use current Mojang sample screen names/parents and a desktop backdrop alpha of 0.08.
 
-Selected images changed:
-- Both pack icons: 400×400 to 256×256.
-- Title image: 2048×302 to 1024×151.
-- Emote wheel images: reduced to 128×119 or 96×96.
-- Cloud texture: replaced with a transparent 1×1 PNG. This does not remove cloud geometry from the engine.
-- Inventory slot fills, hotbar panels and mobile touch-control PNG alpha reduced.
-- Shared `dialog_background_opaque.png` and `dialog_background_opaque_overlap_bottom.png` alpha reduced to 28% of their source alpha, retaining their border shapes. Because these are shared vanilla UI textures, other classic dialogs using them may also become translucent.
+Shared dialog-panel PNG alpha is reduced. This can affect other classic UI dialogs that use the same shared textures. UI JSON overrides are version-sensitive and must be tested in the exact Bedrock build.
 
-Block/item textures were not blindly downscaled. Most source textures were already small (many 16×16 or similarly small sprites); preserving their pixel detail avoids unnecessary blur and keeps the current art style.
+## Texture footprint and performance interpretation
 
-## Particles and settings
+- The v0.2.0 PNG pixel area was 2,254,921; v0.3.2 is 610,722, a 72.92% reduction in summed pixel area.
+- A rough RGBA estimate is pixels × 4 bytes: about 9.02 MB vs 2.44 MB.
+- This is not actual GPU VRAM: Bedrock can atlas, transcode, load or retain textures differently.
+- 566 PNG files is not the same as 566 GPU texture handles; block textures can be combined into atlases.
+- The compressed package is much smaller than the source archive, but archive size is not runtime FPS.
 
-- Active controls: 8 (one slider and seven toggles).
-- Particle amount default: 0%.
-- All seven optional toggles default to off.
-- The unused geyser toggle was removed because the former Lite profile's geyser particle definitions were already set to `max_particles: 0` and no emitter queried that setting.
-- The XP-orb control affects its render controller only; it does not change XP awarding or collection logic.
+Microsoft's current guidance says loaded textures are typically uncompressed in memory, texture handles have per-texture overhead, block textures can be atlas exceptions, too many files add overhead, and add-ons should target fewer than 800 texture handles. It also recommends keeping texture dimensions/usage lean and simplifying costly particle systems:
+https://learn.microsoft.com/en-us/minecraft/creator/documents/practices/improvingperformanceandresourceusage?view=minecraft-bedrock-stable
 
-The pack contains 188 particle JSON definitions: 177 use a static zero max-particle cap, and 11 use a LowMine slider expression for num_particles. With the slider at 0% and all optional toggles off, those pack-defined emitters are gated at their lowest setting. This does not disable every particle built into Minecraft; effects not overridden by this pack may still appear. Static inspection counts definitions, not live particles or CPU/GPU savings.
+The official texture-budget reference explains the texel × 4 estimate and platform performance tiers:
+https://learn.microsoft.com/en-us/minecraft/creator/documents/texturebudgets?view=minecraft-bedrock-stable
 
-## Fog and biomes
+## Renderer limitations
 
-- Root `biomes_client.json`: 94 biome entries.
-- Fog JSON files: 104 definitions.
-- Custom LowMine fog identifiers referenced by the biome map resolve to definitions.
-- The v0.3.0 build sets the `distance.air` fog start/end values to 32/48 in all 104 fog definitions where those fields exist.
+Fog is visual and does not itself guarantee engine culling. Bedrock's Block Culling feature targets covered faces of custom block geometry, not universal vanilla terrain/behind-camera culling. A .mcpack cannot inject Rust into the client or replace RenderDragon.
 
-This makes distant terrain visually disappear sooner. It is **not** a camera-direction culling system. The fog does not provide a resource-pack instruction to discard all blocks behind the fog, behind the camera or under the world. Do not interpret this as a confirmed CPU/GPU optimization.
+See [RENDERING_LIMITS.md](RENDERING_LIMITS.md).
 
-## Inventory/chest UI and hotbar
+## Static validation result
 
-New or overridden files:
-- `ui/inventory_screen.json` — desktop/classic inventory and crafting.
-- `ui/inventory_screen_pocket.json` — separate pocket/touch inventory screen.
-- `ui/chest_screen.json` — small/large chest, Ender Chest, shulker and barrel panels.
-- `ui/data_driven_container_screen.json` — data-driven container screens.
-
-All four are registered in `ui/_ui_defs.json`. Inventory/crafting screens and desktop chest/container screens override the vanilla backdrop alpha to 0.08 while retaining screen inheritance and pocket-screen branches. The pocket inventory screen's separate backdrop alpha is also set to 0.08.
-
-The shared opaque dialog texture alpha is reduced so the actual inventory/chest panels are less opaque, not just the space around the panels. This is a shared vanilla asset, so it can affect other classic UI dialogs. Slot/hotbar/touch textures are faded while selected and pressed states retain more opacity.
-
-These overrides use the classic JSON UI route. Some Bedrock builds or Ore UI modes may ignore or behave differently with resource-pack JSON UI files. Only in-game testing can verify whether the user's exact Bedrock version applies them.
-
-## Static validation
-
-The final v0.3.0 package passed:
-- ZIP integrity and unique-path checks.
-- 188 particle definitions audited (177 static max-particle caps at zero; 11 slider-gated definitions).
-- 925 archive entries, with no unsafe relative paths.
+The local v0.3.2 validator passed:
+- ZIP CRC/integrity check.
+- Unique, safe archive paths.
+- Manifest format 3 and correct string versions.
+- Valid/unique manifest UUIDs and XiaoCraft/CC BY-NC metadata.
+- No experimental settings and no PvP content.
 - 318/318 JSON files parsed.
-- Eight active setting IDs match all pack-setting query references.
-- All 29 language files include every manifest setting label.
-- 94 biome entries and 104 fog definitions; no unresolved custom fog IDs.
-- Inventory, pocket inventory, chest and data-driven UI overrides are registered and contain expected alpha/desktop/pocket branches.
-- No PvP folder or subpack declarations remain.
-- Two builds with identical source inputs produced byte-identical output.
+- 188 particle definitions all statically disabled.
+- No experimental pack-setting Molang queries remaining.
+- XP orb render disabled; no orb billboard animation script.
+- 94 biomes and 104 fog files; all LowMine fog identifiers resolve.
+- All four custom UI files are registered and have expected screen structure.
+- Translucent dialog textures and required assets exist.
 
-Tools: `tools/build_ultra_low.py` and `tools/validate_pack.py`.
-
-## v0.3.0 artifact identity
-
-- File: `LowMine-Ultra-Low-v0.3.0-TEST.mcpack`
-- Size: 664,342 bytes.
-- SHA-256: `3689a23fc55104dbc86aa85f1604fc8e00ef870aed3d69011c5a190680f25a8d`
-
-## Known limitations and next tests
-
-1. Import v0.3.0 into the exact Minecraft Bedrock build in use.
-2. Confirm the pack and eight settings appear.
-3. Test desktop and pocket inventory/crafting, all container screens, hotbar and touch controls.
-4. Inspect fog and cloud appearance in several dimensions and biomes.
-5. Check world load, gameplay feedback, multiplayer, and content-log messages.
-6. Compare vanilla and LowMine in the same world/scene, device, resolution, render distance and simulation distance; record FPS and frame-time stability.
-
-## Original v0.2.0 audit (historical)
-
-The v0.2.0 baseline had 1,136 files, 487 JSON files, 605 PNGs, 29 language files, nine active controls and two subpacks. It is superseded by v0.3.0.
+Static validation does not launch Bedrock. The user must verify import, UI rendering and game performance in Minecraft.
