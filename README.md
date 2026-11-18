@@ -1,64 +1,65 @@
-# LowMine Performance
+# LowMine Ultra Low
 
-LowMine is a Minecraft Bedrock resource-pack project for low-end devices. The current test candidate is an attributed adaptation of **Boosted FPS (Optimized Performance) v2.4.1 by XiaoCraft**.
+LowMine is a Minecraft Bedrock resource-pack adaptation for low-end devices. **v0.3.0 removes the PvP profile and keeps one deliberately low-visual profile.** The original work is credited to XiaoCraft and remains subject to CC BY-NC 3.0.
 
-> **v0.2.0 is a test candidate, not a benchmarked release.** Static validation is complete; Minecraft import, in-game behavior, compatibility and FPS measurements still need to be tested.
+> **Test candidate only.** Static checks pass, but import, UI behavior, compatibility and real FPS/frame-time results still need to be tested in Minecraft.
 
-## v0.2.0 changes
+## v0.3.0 changes
 
-- Rebranded pack name, icons, title image, profile labels and localized settings.
-- Assigned new stable manifest/module UUIDs and a dedicated `lowmine:` namespace for settings and custom fog identifiers.
-- Added nine configurable controls: one particle slider and eight toggles.
-- Set particle amount to 50% by default; optional visual effects start disabled, while potion/status visuals stay enabled.
-- Reduced the menu title texture from 4096×604 to 2048×302 (75% fewer pixels for that image only).
-- Preserved the original Lite/PvP structure, fog behavior, HUD overrides, PBR capability and original creator credits.
-- Added static validation and reproducible-build tooling.
+- Removed the PvP subpack and flattened the former Lite profile into the only profile.
+- Set custom particle amount to 0% and turned optional visual controls off by default.
+- Removed the unused geyser toggle: the Lite profile already hard-disables those geyser emitters, and no pack-setting query used that toggle.
+- Added registered JSON UI overrides targeting inventory, crafting, chest, barrel, shulker and data-driven container screens with a low desktop backdrop alpha.
+- Reduced the alpha of hotbar/inventory slot backgrounds and mobile touch-control textures.
+- Reduced selected menu images and the emote wheel; replaced the cloud texture with a transparent 1×1 image.
+- Tightened the air fog range to 32–48 in 104 fog definitions. This is visual fog, not renderer culling.
+- Preserved the existing LowMine UUID identity so Bedrock can treat this as an update to v0.2.0.
 
-No measured FPS increase is claimed. Reducing one menu texture does not establish an in-game FPS gain.
+No measured FPS gain is claimed. Fog does not guarantee that hidden chunks stop being processed, and transparent UI does not directly make the game world render faster.
 
-## Package baseline
+## Static package audit
 
-| Property | Audited value |
-|---|---:|
-| Minecraft Bedrock manifest | format version 3 |
-| Minimum engine version in source manifest | 1.26.40 |
-| Profiles | LowMine Lite, LowMine PvP |
-| Configurable controls | 9 |
-| JSON files | 487 |
-| Valid JSON files | 487 |
-| Base biome entries | 94 |
-| Fog definitions per base/Lite set | 104 |
-| Archive entries in v0.2.0 | 1,136 |
+| Property | v0.2.0 | v0.3.0 |
+|---|---:|---:|
+| Archive entries | 1,136 | 924 |
+| JSON files | 487 | 317 |
+| PNG files | 605 | 566 |
+| Interactive settings | 9 | 8 |
+| Profiles | Lite + PvP | One Ultra Low profile |
+| PNG pixel count | 2,254,921 | 610,722 |
 
-See [the technical audit](docs/BASELINE_AUDIT.md), [roadmap](ROADMAP.md) and [changelog](CHANGELOG.md).
+The summed PNG pixel area is **72.92% lower** than the v0.2.0 archive. At four bytes per pixel, that is a rough uncompressed RGBA estimate of 9.02 MB versus 2.44 MB, not a measurement of actual GPU memory or runtime FPS. The compressed package is 662,876 bytes, about 45.07% smaller than v0.2.0.
 
-## Test instructions
+Other checks: 317/317 JSON files parsed, 29 language files checked, 94 biome entries and 104 fog definitions checked, with no unresolved custom fog references. See [the complete audit](docs/BASELINE_AUDIT.md).
 
-1. Import `LowMine-Performance-v0.2.0.mcpack` into Minecraft Bedrock.
-2. Confirm the pack appears as **LowMine Performance v0.2.0**.
-3. Activate it and open its settings using the gear icon.
-4. Check that the nine controls appear with readable labels.
-5. Test **LowMine Lite** and **LowMine PvP** separately. Lite is the stronger visual-reduction profile; PvP preserves its extra HUD and a longer view.
-6. Check particles, potion visuals, XP-orb visibility, biome fog, chat/HUD and world loading.
+## Import and test
 
-Record the exact Bedrock version, device, selected profile, render distance and any content-log errors. See the audit document for the test checklist.
+1. Import `LowMine-Ultra-Low-v0.3.0-TEST.mcpack` into Minecraft Bedrock.
+2. Activate **LowMine Ultra Low** in Global Resources or the world's Resource Packs.
+3. Open pack settings and confirm the eight active controls appear.
+4. Open the player inventory, a small chest, a large chest, an Ender Chest, a shulker box and a barrel. Check the backdrop transparency.
+5. Check the hotbar, inventory slots and mobile touch controls. Confirm selected/pressed states remain visible and buttons can still be used.
+6. Enter a world and check particles, fog, clouds, HUD, chat, water, Nether/End and multiplayer.
 
-## Build and validation
+The inventory/chest UI work uses classic JSON UI definitions from Mojang's current sample pack. Some Bedrock builds/UI modes may not apply resource-pack JSON UI overrides (including newer Ore UI paths). If the interface stays unchanged or breaks, report the exact Bedrock version and a screenshot; do not assume the override is active just because the JSON parses.
 
-Requires Python 3.10+.
+Record the exact Bedrock version, device, render distance, simulation distance, selected settings and any content-log messages. Use [the runtime test template](docs/TEST_REPORT_TEMPLATE.md).
+
+## Build and validate
+
+Requires Python 3.10+ and Pillow:
 
 ```bash
-python tools/build_pack.py "Boosted FPS v2.4.1.mcpack" "LowMine-Performance-v0.2.0.mcpack" --icon assets/lowmine-pack-icon.png --title assets/lowmine-title.png
-python tools/validate_pack.py "LowMine-Performance-v0.2.0.mcpack"
+python -m pip install Pillow
+python tools/build_ultra_low.py "LowMine-Performance-v0.2.0.mcpack" "LowMine-Ultra-Low-v0.3.0.mcpack"
+python tools/validate_pack.py "LowMine-Ultra-Low-v0.3.0.mcpack"
 ```
 
-Before rebuilding, create the two branding inputs in assets/: extract pack_icon.png from the v0.2.0 package as assets/lowmine-pack-icon.png, and textures/ui/title.png as assets/lowmine-title.png. The builder uses stable UUIDs and fixed ZIP timestamps so identical inputs produce identical output bytes. The validator checks ZIP integrity, manifest IDs, JSON syntax, settings references, translations, subpack folders, fog references and required assets. These checks do not emulate Minecraft.
+The v0.2.0 input package is required as the build source and is not committed in this repository. The builder preserves the LowMine UUID identity, writes deterministic ZIP timestamps and removes the PvP folder. The validator checks manifest, JSON, settings, translations, fog links and registered UI overrides. Static validation is not an in-game compatibility test.
 
-The v0.2.0 .mcpack binary is currently delivered as a test artifact outside this repository; it must be uploaded to releases/ manually before a GitHub release can be published.
+## Rendering limitations
 
-## Compatibility note
-
-This pack uses manifest format version 3 and resource-pack setting queries such as `query.get_pack_setting` and `query.is_pack_setting_enabled`. Microsoft documents pack settings and their Molang integration, but the feature documentation still describes the capability as subject to change. Test it on the exact Bedrock release you use: [Microsoft custom pack settings guide](https://github.com/MicrosoftDocs/minecraft-creator/blob/main/creator/Documents/AddOns/CustomPackSettings.md).
+A resource pack cannot patch RenderDragon, install a new Rust renderer, or tell the client to discard all geometry behind the player's camera or beyond a fog color. Bedrock handles chunk render distance inside the game engine. Block Culling applies to faces of custom block geometry, not a universal visibility switch for vanilla terrain. See [rendering limits and feasible optimizations](docs/RENDERING_LIMITS.md).
 
 ## Attribution and license
 
@@ -67,4 +68,4 @@ Original work: **Boosted FPS (Optimized Performance) v2.4.1**, by **XiaoCraft**.
 - Original project: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance
 - License: **Creative Commons Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0)** — https://creativecommons.org/licenses/by-nc/3.0/
 
-This is an adaptation, not an original replacement or an endorsed project. Original author credit and modification notices are retained. The original non-commercial license conditions must be respected; do not distribute or use this adaptation for commercial advantage. Read [ATTRIBUTION.txt](ATTRIBUTION.txt).
+This is an adaptation, not a new original pack or an endorsed project. Keep the original author credit and modification notice. The original non-commercial license terms apply; read [ATTRIBUTION.txt](ATTRIBUTION.txt).
