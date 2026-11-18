@@ -110,8 +110,8 @@ No runtime test or FPS claim is included in this audit.
 ## Final v0.2.0 artifact identity
 
 - File: `LowMine-Performance-v0.2.0.mcpack`
-- Size: 1,206,758 bytes.
-- SHA-256: `48eb7015b9829810d9d9d56e842ef209914502ffe61e80df0a629d2c9c29bfe6`
+- Size: 1,206,757 bytes.
+- SHA-256: `59af4cfb14f639e736f08d5d8d9a1e6557e31896c6d17ee6bdc7654c9aa8a035`
 - Supplied source size: 1,242,751 bytes (the package archive is 35,993 bytes / 2.90% smaller).
 - Two builds from identical source and branding inputs produced byte-identical output.
 
