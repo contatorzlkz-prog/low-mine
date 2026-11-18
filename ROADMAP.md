@@ -1,9 +1,10 @@
 # Plano de desenvolvimento LowMine
 
-## Concluído — v0.6.1
+## Concluído — v0.6.2
 - [x] Redesenhar os troncos da base com veios não retilíneos em 8×8.
 - [x] Usar quatro tons por paleta de espécie para manter leitura com poucos pixels.
 - [x] Adicionar mapas UV e ícones de sete conjuntos de armaduras.
+- [x] Criar ícones de itens para espadas, arco, besta, flecha e tridente.
 - [x] Preservar transparência do inventário desktop/mobile e de baús, Ender, shulker e barril.
 - [x] Adicionar prévia visual e validador estático para a nova versão.
 - [x] Preservar um perfil e nenhum script/loop executado no jogo.
@@ -14,7 +15,7 @@
 - [x] Preservar créditos, licença e recursos existentes.
 
 ## Próxima etapa — teste no Minecraft
-- [ ] Importar v0.6.1 na versão exata do Bedrock.
+- [ ] Importar v0.6.2 na versão exata do Bedrock.
 - [ ] Conferir armaduras equipadas em personagens e ícones no inventário.
 - [ ] Testar troncos de todas as espécies e suas faces superiores.
 - [ ] Testar inventário, crafting, pocket, baús, Ender, shulker e barril.

@@ -1,10 +1,11 @@
-# Créditos e licenças — LowMine Equilibrado 8x v0.6.1
+# Créditos e licenças — LowMine Equilibrado 8x v0.6.2
 
 ## Conteúdo criado pelo projeto LowMine
 - Identidade visual, manifesto, UUIDs e ferramentas de compilação.
 - 38 texturas de bloco em 8×8 provenientes da base LowMine 0.5.0.
 - Novos veios, nós e padrões de topo dos troncos em 8×8, com paletas compactas.
 - Mapas UV 64×32 e ícones pixel art para couro, malha, ferro, ouro, diamante, netherita e cobre.
+- Ícones de espadas, arco, besta, flecha e tridente em pixel art compacto para itens do Minecraft.
 - Elementos próprios de interface já existentes na base LowMine.
 
 ## Material adaptado com licença

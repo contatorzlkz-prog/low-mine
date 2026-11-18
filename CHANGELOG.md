@@ -1,6 +1,13 @@
 # Histórico de versões
 
-## 0.6.1 — troncos e armaduras
+## 0.6.2 — itens visuais de PvP
+- Adicionados ícones pixel art 8×8 para sete espadas, arco (repouso e três poses), besta (repouso e três poses), flecha e tridente.
+- Os ícones são exportados em 16×16 para manter a compatibilidade do atlas Bedrock.
+- O validador agora verifica a presença e dimensão dos novos itens.
+- Mantidos os troncos 8×8, sete conjuntos de armaduras e a interface transparente da versão anterior.
+
+
+## 0.6.2 — troncos e armaduras
 - Compilação baseada na base reproduzível 0.5.0.
 - Troncos com veios irregulares, nós e anéis superiores em 8×8 usando quatro tons por espécie.
 - Sete conjuntos de armaduras: couro, malha, ferro, ouro, diamante, netherita e cobre.

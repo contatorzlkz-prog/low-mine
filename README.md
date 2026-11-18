@@ -1,12 +1,12 @@
-# LowMine Equilibrado 8x v0.6.1
+# LowMine Equilibrado 8x v0.6.2
 
 <p align="center">
-  <a href="https://github.com/contatorzlkz-prog/low-mine/releases/download/lowmine-v0.6.1/LowMine-Equilibrado-8x-v0.6.1.mcpack">
+  <a href="https://github.com/contatorzlkz-prog/low-mine/releases/download/lowmine-v0.6.2/LowMine-Equilibrado-8x-v0.6.2.mcpack">
     <img src="https://img.shields.io/badge/⬇%20BAIXAR%20LOWMINE-.MCPACK-2ea44f?style=for-the-badge" alt="Baixar LowMine Equilibrado 8x">
   </a>
 </p>
 
-**LowMine Equilibrado 8x v0.6.1** é um Resource Pack para Minecraft Bedrock. Esta compilação parte da base reproduzível v0.5.0, mantendo suas 38 texturas de bloco autorais em 8×8, a interface translúcida e os recursos existentes. A atualização redesenha os troncos incluídos com veios irregulares e paletas compactas e adiciona sete conjuntos de armaduras.
+**LowMine Equilibrado 8x v0.6.2** é um Resource Pack para Minecraft Bedrock. Esta compilação parte da base reproduzível v0.5.0, mantendo suas 38 texturas de bloco autorais em 8×8, a interface translúcida e os recursos existentes. A atualização redesenha os troncos incluídos com veios irregulares e paletas compactas e adiciona sete conjuntos de armaduras.
 
 A interface transparente preservada inclui inventário desktop, inventário mobile e telas de contêineres: baú pequeno/grande, baú do End, shulker e barril. Os blocos existentes continuam em 8×8. Mapas de armadura usam 64×32 porque essa é a dimensão UV esperada pelo modelo Bedrock; ícones de armadura usam pixel art 8×8 ampliada por nearest-neighbor para 16×16.
 
@@ -19,6 +19,7 @@ A interface transparente preservada inclui inventário desktop, inventário mobi
 - **Sete conjuntos de armaduras**: couro, malha, ferro, ouro, diamante, netherita e cobre.
 - Mapas UV das armaduras em **64×32**, com transparência e detalhes de placa/costura.
 - Ícones de capacete, peitoral, calças e botas em pixel art 8×8, exportados em 16×16 para o atlas Bedrock.
+- **Itens visuais de PvP**: sete espadas por material, animações estáticas do arco e da besta, flechas e tridente, com arte 8×8 ampliada por nearest-neighbor.
 - **Interface transparente mantida** para inventário desktop, pocket/mobile e contêineres incluídos no pack.
 - As 38 texturas de bloco 8×8 da base 0.5.0 são preservadas.
 - Sem shaders PBR extras, scripts executados no jogo, loops ou partículas adicionais.
@@ -29,7 +30,7 @@ A atualização preserva os arquivos inventory_screen.json, inventory_screen_poc
 
 ## Instalação e teste
 
-1. Baixe LowMine-Equilibrado-8x-v0.6.1.mcpack pela seção Releases.
+1. Baixe LowMine-Equilibrado-8x-v0.6.2.mcpack pela seção Releases.
 2. Abra com Minecraft Bedrock e ative o pack.
 3. Deixe somente um perfil LowMine ativo.
 4. Confira troncos de diferentes espécies, armaduras equipadas, ícones, inventário e baús.

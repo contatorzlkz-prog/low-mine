@@ -40,29 +40,29 @@ jobs:
         run: python -m py_compile tools/gerar_pacote.py tools/validar_pacote.py tools/redesenhar_v061.py tools/validar_pacote_v061.py
       - name: Construir base estável 0.5.0
         run: python tools/gerar_pacote.py
-      - name: Redesenhar troncos e armaduras LowMine 0.6.1
+      - name: Redesenhar troncos e armaduras LowMine 0.6.2
         run: python tools/redesenhar_v061.py
-      - name: Validar pacote v0.6.1
-        run: python tools/validar_pacote_v061.py build/LowMine-Equilibrado-8x-v0.6.1.mcpack
+      - name: Validar pacote v0.6.2
+        run: python tools/validar_pacote_v061.py build/LowMine-Equilibrado-8x-v0.6.2.mcpack
       - name: Publicar artefatos para teste
         uses: actions/upload-artifact@v4
         with:
-          name: LowMine-Equilibrado-8x-v0.6.1
+          name: LowMine-Equilibrado-8x-v0.6.2
           path: |
-            build/LowMine-Equilibrado-8x-v0.6.1.mcpack
-            build/LowMine-Preview-v0.6.1.png
+            build/LowMine-Equilibrado-8x-v0.6.2.mcpack
+            build/LowMine-Preview-v0.6.2.png
           if-no-files-found: error
           retention-days: 14
       - name: Criar Release com download permanente
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: lowmine-v0.6.1
-          name: LowMine Equilibrado 8x v0.6.1
+          tag_name: lowmine-v0.6.2
+          name: LowMine Equilibrado 8x v0.6.2
           target_commitish: main
           prerelease: true
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: |
-            build/LowMine-Equilibrado-8x-v0.6.1.mcpack
-            build/LowMine-Preview-v0.6.1.png
+            build/LowMine-Equilibrado-8x-v0.6.2.mcpack
+            build/LowMine-Preview-v0.6.2.png
