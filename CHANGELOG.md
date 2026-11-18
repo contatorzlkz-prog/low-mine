@@ -1,25 +1,17 @@
 # Changelog
 
-## 0.3.0 — Single Ultra Low profile test candidate
-- Removed the PvP subpack and promoted the former Lite profile to the pack root.
-- Removed the unused geyser control; the Lite geyser emitters were already hard-disabled.
-- Set particle amount to 0% and all seven remaining toggles off by default.
-- Audited all 188 included particle definitions: 177 have zero max particles and 11 are gated by the 0% default slider.
-- Added desktop and pocket inventory/crafting UI overrides, plus chest and data-driven container overrides.
-- Registered all four UI files in `ui/_ui_defs.json`.
-- Reduced opacity of shared dialog panel textures, inventory slots, hotbar and touch controls. Selected/pressed states retain more opacity.
-- Reduced selected menu textures and the cloud texture.
-- Tightened the air fog range to 32–48 in 104 fog definitions (visual-only; no engine culling).
-- Removed the unused PBR capability.
-- Static validation: 318/318 JSON files valid; 8 active setting IDs resolve; all 29 language files contain required labels; 94 biome entries and 104 fog definitions checked; no missing custom fog IDs.
-- Reproducible build check passed: two builds produced byte-identical output.
-- No Minecraft runtime or FPS improvement is claimed until tested.
+## 0.3.2 — import fix and static low-particle profile
+- Fixed the import failure caused by using version arrays for manifest v3. Header and module versions are now SemVer strings.
+- Removed manifest custom pack settings; the ultra-low profile no longer depends on experimental settings queries or a settings screen.
+- Set all 188 included particle definitions to zero spawn count / maximum (177 max-particle caps and 11 instant-spawn counts).
+- Kept XP-orb rendering hidden without altering XP collection.
+- Preserved single flattened profile, inventory/chest UI transparency, hotbar/touch edits and short visual fog.
+- Static checks passed: 925 archive entries, 318 valid JSON files, 94 biome entries, 104 fog definitions and all UI overrides registered.
+- No in-game FPS result is claimed until benchmarked.
 
-## 0.2.0 — Rebrand and audited test candidate
-- Rebranded the pack as LowMine Performance.
-- Established LowMine UUIDs and the `lowmine:` namespace.
-- Added nine configurable controls and Brazilian Portuguese text.
-- Added pack builder, validator and audit documentation.
+## 0.3.0 — failed import test candidate (superseded)
+- Removed PvP and added UI/texture changes.
+- Import failed because manifest v3 version values were emitted as arrays; do not use this package.
 
-## 0.1.0 — Initial repository baseline
-- Created the LowMine repository and recorded the original attribution/license.
+## 0.2.0 — rebrand baseline
+- Established LowMine branding, identifiers and tooling.
