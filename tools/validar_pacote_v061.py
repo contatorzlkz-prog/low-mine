@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validação estática do LowMine Equilibrado 8x v0.6.1."""
+"""Validação estática do LowMine Equilibrado 8x v0.6.2."""
 from __future__ import annotations
 import argparse
 import hashlib
@@ -46,10 +46,10 @@ def validate(path: Path) -> dict:
         else:
             manifest = json.loads(pack.read("manifest.json").decode("utf-8-sig"))
         header = manifest.get("header", {})
-        if header.get("version") != "0.6.1":
-            failures.append("Versão do cabeçalho não é 0.6.1")
-        if any(module.get("version") != "0.6.1" for module in manifest.get("modules", [])):
-            failures.append("Versão de um módulo não é 0.6.1")
+        if header.get("version") != "0.6.2":
+            failures.append("Versão do cabeçalho não é 0.6.2")
+        if any(module.get("version") != "0.6.2" for module in manifest.get("modules", [])):
+            failures.append("Versão de um módulo não é 0.6.2")
 
         for ui_path in UI_FILES:
             if ui_path not in names:
@@ -102,6 +102,25 @@ def validate(path: Path) -> dict:
                         if image.size != (16, 16):
                             failures.append(f"Ícone de armadura deve ser 16x16: {name}")
 
+        weapon_names = (
+            "wood_sword", "stone_sword", "iron_sword", "gold_sword",
+            "diamond_sword", "netherite_sword", "copper_sword",
+            "bow_standby", "bow_pulling_0", "bow_pulling_1", "bow_pulling_2",
+            "crossbow_standby", "crossbow_pulling_0", "crossbow_pulling_1",
+            "crossbow_pulling_2", "crossbow_arrow", "crossbow_firework",
+            "arrow", "trident",
+        )
+        weapon_icons = []
+        for texture_name in weapon_names:
+            name = f"textures/items/{texture_name}.png"
+            weapon_icons.append(name)
+            if name not in names:
+                failures.append(f"Textura de item ausente: {name}")
+            else:
+                with Image.open(BytesIO(pack.read(name))) as image:
+                    if image.size != (16, 16):
+                        failures.append(f"Textura de item deve ser 16x16: {name}")
+
         scripts = [
             name for name in names
             if name.lower().endswith((".js", ".ts", ".mcfunction"))
@@ -118,6 +137,7 @@ def validate(path: Path) -> dict:
             "troncos": len(log_pngs),
             "mapas_de_armadura_64x32": len(armor_maps),
             "icones_de_armadura_16x16": len(armor_icons),
+            "icones_de_itens_pvp_16x16": len(weapon_icons),
             "telas_ui_preservadas": len(UI_FILES),
             "tipos_de_conteineres": len(CONTAINERS),
             "scripts": len(scripts),
