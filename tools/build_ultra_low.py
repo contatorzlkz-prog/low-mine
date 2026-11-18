@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Build LowMine Ultra Low v0.3.1 from the v0.2.0 .mcpack. Requires Pillow.
+"""Build LowMine Ultra Low v0.3.2 from the v0.2.0 .mcpack. Requires Pillow.
 Static pack edits only: this cannot alter RenderDragon or measure FPS."""
 import argparse, hashlib, json, shutil, stat, tempfile, zipfile
 from pathlib import Path, PurePosixPath
 from PIL import Image
 
-V = "0.3.1"
+V = "0.3.2"
 EN = {
-"lowmine.settings.title":"LOWMINE ULTRA LOW  |  v0.3.1",
+"lowmine.settings.title":"LOWMINE ULTRA LOW  |  v0.3.2",
 "lowmine.settings.intro":"Single ultra-low profile. Optional visuals are disabled by default.",
 "lowmine.section.particles":"MINIMAL PARTICLES",
 "lowmine.setting.particle_amount":"Particle amount (%)",
@@ -33,7 +33,7 @@ EN = {
 "accessibility.chat.howtoemote":"§dLowMine Ultra Low loaded. §7Adapted from XiaoCraft's Boosted FPS."
 }
 PT = {
-"lowmine.settings.title":"LOWMINE ULTRA LOW  |  v0.3.1",
+"lowmine.settings.title":"LOWMINE ULTRA LOW  |  v0.3.2",
 "lowmine.settings.intro":"Perfil único ultra leve. Os efeitos visuais opcionais começam desativados.",
 "lowmine.section.particles":"PARTÍCULAS NO MÍNIMO",
 "lowmine.setting.particle_amount":"Quantidade de partículas (%)",
@@ -83,23 +83,13 @@ def flatten(root):
     return {"lite_files_flattened":moved,"base_files_overwritten":over,"pvp_files_removed":removed}
 def manifest(root):
     p=root/"manifest.json"; m=json.loads(p.read_text(encoding="utf-8")); h=m["header"]
-    h["name"]="§l§dLowMine Ultra Low §r§7v0.3.1"
+    h["name"]="§l§dLowMine Ultra Low §r§7v0.3.2"
     h["description"]="§dLowMine Ultra Low§r\n§7Single ultra-low profile for Minecraft Bedrock\n§7Reduced particles, transparent UI and low-resolution textures\n§7Original work by XiaoCraft (CC BY-NC 3.0). See ATTRIBUTION.txt."
     h["version"]=V
     for x in m.get("modules",[]): x["description"]="LowMine Ultra Low — single-profile resource pack"; x["version"]=V
     m.pop("subpacks",None); m["capabilities"]=[x for x in m.get("capabilities",[]) if x!="pbr"]
-    out=[]
-    removed={"lowmine.section.profiles","lowmine.subpacks.help","lowmine.setting.geysers","lowmine.setting.geysers.help"}
-    for x in m.get("settings",[]):
-        if x.get("text") in removed or x.get("name")=="lowmine:geysers": continue
-        if x.get("name")=="lowmine:particle_amount": x["default"]=0
-        if x.get("type")=="toggle": x["default"]=False
-        out.append(x)
-    # Manifest v3 setting labels are literal text values in the current documented schema.
-    for item in out:
-        if isinstance(item.get("text"), str) and item["text"] in PT:
-            item["text"] = PT[item["text"]]
-    m["settings"]=out
+    # This single-profile pack does not rely on experimental custom pack settings.
+    m.pop("settings", None)
     m["metadata"]={"authors":["XiaoCraft (original author)","LowMine Project (adaptation)"],"license":"CC BY-NC 3.0 (adapted source work; see ATTRIBUTION.txt)","url":"https://github.com/contatorzlkz-prog/low-mine","product_type":"addon"}
     js(p,m)
 def lang(root):
@@ -160,20 +150,170 @@ def fog(root):
         d=json.loads(p.read_text(encoding="utf-8")); a=d.get("minecraft:fog_settings",{}).get("distance",{}).get("air",{})
         if "fog_start" in a and "fog_end" in a: a["fog_start"],a["fog_end"]=32,48; js(p,d); count+=1
     return count
+def optimize_particles(root):
+    """Hard-disable every particle definition included by this resource pack."""
+    particle_files=sorted((root/"particles").glob("*.json"))
+    max_fields=0
+    instant_fields=0
+    changed_files=0
+
+    def walk(node):
+        nonlocal max_fields,instant_fields
+        if isinstance(node,dict):
+            for key,value in list(node.items()):
+                if key=="max_particles":
+                    node[key]=0
+                    max_fields+=1
+                elif key=="num_particles":
+                    node[key]="0"
+                    instant_fields+=1
+                else:
+                    walk(value)
+        elif isinstance(node,list):
+            for value in node:
+                walk(value)
+
+    for path in particle_files:
+        data=json.loads(path.read_text(encoding="utf-8-sig"))
+        before=json.dumps(data,sort_keys=True)
+        walk(data)
+        if before!=json.dumps(data,sort_keys=True):
+            changed_files+=1
+        js(path,data)
+
+    return {
+        "particle_definition_files":len(particle_files),
+        "max_particles_fields_zeroed":max_fields,
+        "num_particles_fields_zeroed":instant_fields,
+        "particle_files_changed":changed_files
+    }
+
+
+def hide_xp_orbs(root):
+    """Hide only the orb renderer; the game's XP collection behavior is untouched."""
+    path=root/"entity/experience_orb.entity.json"
+    data=json.loads(path.read_text(encoding="utf-8-sig"))
+    description=data["minecraft:client_entity"]["description"]
+    description.pop("animations",None)
+    description.pop("scripts",None)
+    description["render_controllers"]=[{"controller.render.experience_orb":"0"}]
+    js(path,data)
+
+
 def ui(root):
-    js(root/"ui/inventory_screen.json",{"namespace":"crafting","crafting_screen@crafting.inventory_screen_base":{"$screen_background_alpha":.08},"inventory_screen@crafting.inventory_screen_base":{"$screen_background_alpha":.08}})
-    # Pocket/mobile inventory uses a separate screen definition in current Bedrock samples.
-    js(root/"ui/inventory_screen_pocket.json",{"namespace":"crafting_pocket","inventory_screen_pocket@crafting_pocket.inventory_screen_pocket_base":{"$screen_background_alpha":.08}})
-    c={"namespace":"chest"}
-    variants=[("small_chest_screen","chest.small_chest_panel","pocket_containers.small_chest_panel","common.inventory_screen_common"),("large_chest_screen","chest.large_chest_panel","pocket_containers.large_chest_panel","common.inventory_screen_common"),("ender_chest_screen","chest.ender_chest_panel","pocket_containers.ender_chest_panel","common.inventory_screen_common"),("shulker_box_screen","chest.shulker_box_panel","pocket_containers.shulker_box_panel","chest.small_chest_screen"),("barrel_screen","chest.barrel_panel","pocket_containers.barrel_panel","chest.small_chest_screen")]
-    for key,desk,pocket,parent in variants:
-        c[key+"@"+parent]={"$close_on_player_hurt|default":True,"$use_custom_pocket_toast|default":False,"close_on_player_hurt":"$close_on_player_hurt","use_custom_pocket_toast":"$use_custom_pocket_toast","variables":[{"requires":"$desktop_screen","$screen_content":desk,"$screen_bg_content":"common.screen_background","$screen_background_alpha":.08},{"requires":"$pocket_screen","$use_custom_pocket_toast":True,"$screen_content":pocket}]}
-    js(root/"ui/chest_screen.json",c)
-    js(root/"ui/data_driven_container_screen.json",{"namespace":"data_driven_container","screen@common.inventory_screen_common":{"$close_on_player_hurt|default":True,"$use_custom_pocket_toast|default":False,"close_on_player_hurt":"$close_on_player_hurt","use_custom_pocket_toast":"$use_custom_pocket_toast","variables":[{"requires":"$desktop_screen","$screen_content":"data_driven_container.desktop_panel","$screen_bg_content":"common.screen_background","$screen_background_alpha":.08},{"requires":"$pocket_screen","$use_custom_pocket_toast":True,"$screen_content":"pocket_containers.data_driven_container_panel"}]}})
-    p=root/"ui/_ui_defs.json"; d=json.loads(p.read_text(encoding="utf-8-sig")) if p.exists() else {"ui_defs":[]}
-    for n in ["ui/inventory_screen.json","ui/inventory_screen_pocket.json","ui/chest_screen.json","ui/data_driven_container_screen.json"]:
-        if n not in d.setdefault("ui_defs",[]): d["ui_defs"].append(n)
-    js(p,d)
+    # Current Mojang sample screens use separate desktop and pocket inventory files.
+    inventory = {
+        "namespace": "crafting",
+        "inventory_screen@crafting.inventory_screen_base": {
+            "send_telemetry": False,
+            "$screen_content": "crafting.recipe_inventory_screen_content",
+            "$screen_bg_content": "common.screen_background",
+            "$screen_background_alpha": 0.08,
+            "$top_half_variant": "crafting.survival_panel_top_half"
+        },
+        "crafting_screen@crafting.inventory_screen_base": {
+            "send_telemetry": False,
+            "$uses_bundle_tooltip": True,
+            "$screen_content": "crafting.recipe_inventory_screen_content",
+            "$screen_bg_content": "common.screen_background",
+            "$screen_background_alpha": 0.08,
+            "$top_half_variant": "crafting.crafting_panel_top_half",
+            "$close_on_player_hurt|default": True,
+            "close_on_player_hurt": "$close_on_player_hurt"
+        }
+    }
+    js(root/"ui/inventory_screen.json", inventory)
+
+    pocket = {
+        "namespace": "crafting_pocket",
+        "inventory_screen_pocket@crafting_pocket.inventory_screen_pocket_base": {
+            "send_telemetry": False,
+            "$screen_content": "crafting_pocket.recipe_inventory_screen_content_pocket",
+            "$screen_bg_content": "common.screen_background",
+            "$screen_background_alpha": 0.08,
+            "$top_half_variant": "crafting_pocket.survival_panel_pocket"
+        },
+        "creative_inventory_screen_pocket@crafting_pocket.inventory_screen_pocket_base": {
+            "send_telemetry": False,
+            "$screen_content": "crafting_pocket.recipe_inventory_screen_content_pocket",
+            "$screen_bg_content": "common.screen_background",
+            "$screen_background_alpha": 0.08,
+            "$top_half_variant": "crafting_pocket.crafting_panel_pocket"
+        }
+    }
+    js(root/"ui/inventory_screen_pocket.json", pocket)
+
+    chest={"namespace":"chest"}
+    specs=[
+        ("small_chest_screen","chest.small_chest_panel","common.inventory_screen_common"),
+        ("large_chest_screen","chest.large_chest_panel","common.inventory_screen_common"),
+        ("ender_chest_screen","chest.ender_chest_panel","common.inventory_screen_common"),
+        ("shulker_box_screen","chest.shulker_box_panel","chest.small_chest_screen"),
+        ("barrel_screen","chest.barrel_panel","chest.small_chest_screen")
+    ]
+    for key,content,parent in specs:
+        item={
+            "$use_custom_pocket_toast|default": False,
+            "variables": [
+                {
+                    "requires":"$desktop_screen",
+                    "$screen_content":content,
+                    "$screen_bg_content":"common.screen_background",
+                    "$screen_background_alpha":0.08
+                },
+                {
+                    "requires":"$pocket_screen",
+                    "$use_custom_pocket_toast":True,
+                    "$screen_content":"pocket_containers."+key.replace("_screen","_panel")
+                }
+            ]
+        }
+        if key in {"small_chest_screen","large_chest_screen","ender_chest_screen"}:
+            item["$close_on_player_hurt|default"]=True
+            item["close_on_player_hurt"]="$close_on_player_hurt"
+            item["use_custom_pocket_toast"]="$use_custom_pocket_toast"
+        else:
+            item["$close_on_player_hurt"]=True
+        chest[key+"@"+parent]=item
+    js(root/"ui/chest_screen.json",chest)
+
+    data_driven={
+        "namespace":"data_driven_container",
+        "screen@common.inventory_screen_common":{
+            "$close_on_player_hurt|default":True,
+            "$use_custom_pocket_toast|default":False,
+            "close_on_player_hurt":"$close_on_player_hurt",
+            "use_custom_pocket_toast":"$use_custom_pocket_toast",
+            "variables":[
+                {
+                    "requires":"$desktop_screen",
+                    "$screen_content":"data_driven_container.desktop_panel",
+                    "$screen_bg_content":"common.screen_background",
+                    "$screen_background_alpha":0.08
+                },
+                {
+                    "requires":"$pocket_screen",
+                    "$use_custom_pocket_toast":True,
+                    "$screen_content":"pocket_containers.data_driven_container_panel"
+                }
+            ]
+        }
+    }
+    js(root/"ui/data_driven_container_screen.json",data_driven)
+
+    registry_path=root/"ui/_ui_defs.json"
+    registry=json.loads(registry_path.read_text(encoding="utf-8-sig")) if registry_path.exists() else {"ui_defs":[]}
+    for name in [
+        "ui/inventory_screen.json",
+        "ui/inventory_screen_pocket.json",
+        "ui/chest_screen.json",
+        "ui/data_driven_container_screen.json"
+    ]:
+        if name not in registry.setdefault("ui_defs",[]):
+            registry["ui_defs"].append(name)
+    js(registry_path,registry)
+
+
 def main():
     a=argparse.ArgumentParser(description=__doc__); a.add_argument("source",type=Path); a.add_argument("output",type=Path); x=a.parse_args()
     if not x.source.is_file(): a.error("Source .mcpack not found")
@@ -182,9 +322,10 @@ def main():
         with zipfile.ZipFile(x.source) as z:
             if z.testzip(): raise ValueError("Source archive CRC error")
             extract(z,root)
-        flat=flatten(root); manifest(root); lang(root); changed=images(root); fogged=fog(root); ui(root)
+        flat=flatten(root); manifest(root); lang(root); changed=images(root); particles=optimize_particles(root); hide_xp_orbs(root); fogged=fog(root); ui(root)
         (root/"ATTRIBUTION.txt").write_text(
-"LowMine Ultra Low v0.3.1 — attribution and license\n\nThis package is an adaptation of:\n  Boosted FPS (Optimized Performance) v2.4.1\n  Original author: XiaoCraft\n  Original project: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance\n\nChanges made by the LowMine Project in v0.3.1:\n  - Removed the separate PvP subpack and flattened the former Lite profile as the only pack.\n  - Reduced particle defaults to the minimum and disabled optional visual toggles by default.\n  - Made inventory/chest screen backdrops and hotbar/touch UI textures more transparent.\n  - Reduced selected menu textures and removed visible cloud texture detail.\n  - Tightened the visual fog range; this is not renderer occlusion culling.\n\nThis is an adaptation, not an original replacement for the source work. No measured FPS improvement is claimed. Runtime testing is required.\n\nThe original work is listed under the Creative Commons Attribution-NonCommercial 3.0 Unported license (CC BY-NC 3.0):\n  https://creativecommons.org/licenses/by-nc/3.0/\n\nThe original author and project are credited above. This adaptation is not endorsed by or affiliated with XiaoCraft. The license prohibits use primarily intended for commercial advantage or private monetary compensation. Keep attribution and license notices with redistributed copies.\n",encoding="utf-8")
+"LowMine Ultra Low v0.3.2 — attribution and license\n\nThis package is an adaptation of:\n  Boosted FPS (Optimized Performance) v2.4.1\n  Original author: XiaoCraft\n  Original project: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance\n\nChanges made by the LowMine Project in v0.3.2:\n  - Removed the separate PvP subpack and flattened the former Lite profile as the only pack.\n  - Set every included particle emitter spawn count / maximum to zero; no experimental settings query is required.
+  - Removed experimental custom pack settings and disabled XP-orb drawing without changing XP collection.\n  - Made inventory/chest screen backdrops and hotbar/touch UI textures more transparent.\n  - Reduced selected menu textures and removed visible cloud texture detail.\n  - Tightened the visual fog range; this is not renderer occlusion culling.\n\nThis is an adaptation, not an original replacement for the source work. No measured FPS improvement is claimed. Runtime testing is required.\n\nThe original work is listed under the Creative Commons Attribution-NonCommercial 3.0 Unported license (CC BY-NC 3.0):\n  https://creativecommons.org/licenses/by-nc/3.0/\n\nThe original author and project are credited above. This adaptation is not endorsed by or affiliated with XiaoCraft. The license prohibits use primarily intended for commercial advantage or private monetary compensation. Keep attribution and license notices with redistributed copies.\n",encoding="utf-8")
         x.output.parent.mkdir(parents=True,exist_ok=True)
         with zipfile.ZipFile(x.output,"w") as z:
             for p in sorted(q for q in root.rglob("*") if q.is_file()):
@@ -193,7 +334,22 @@ def main():
     with zipfile.ZipFile(x.output) as z:
         if z.testzip(): raise ValueError("Built archive CRC error")
         if any(n.startswith("subpacks/") for n in z.namelist()): raise ValueError("Unexpected subpacks remain")
-        for n in z.namelist():
-            if n.endswith(".json"): json.loads(z.read(n).decode("utf-8-sig"))
-    print(json.dumps({"flatten":flat,"images_changed":changed,"fog_files_updated":fogged,"bytes":x.output.stat().st_size,"sha256":hashlib.sha256(x.output.read_bytes()).hexdigest()},indent=2))
+        parsed={n:json.loads(z.read(n).decode("utf-8-sig")) for n in z.namelist() if n.endswith(".json")}
+        manifest_doc=parsed["manifest.json"]
+        assert isinstance(manifest_doc["header"]["version"],str) and manifest_doc["header"]["version"]=="0.3.2"
+        assert all(isinstance(m["version"],str) and m["version"]=="0.3.2" for m in manifest_doc.get("modules",[]))
+        assert "settings" not in manifest_doc and "subpacks" not in manifest_doc
+        assert manifest_doc.get("metadata",{}).get("authors")
+        for n,d in parsed.items():
+            if n.startswith("particles/") and n.endswith(".json"):
+                def check_emitter(node):
+                    if isinstance(node,dict):
+                        for k,v in node.items():
+                            if k=="max_particles" and v!=0: raise ValueError(f"Nonzero max_particles in {n}: {v}")
+                            if k=="num_particles" and v!="0": raise ValueError(f"Nonzero num_particles in {n}: {v}")
+                            check_emitter(v)
+                    elif isinstance(node,list):
+                        for v in node: check_emitter(v)
+                check_emitter(d)
+    print(json.dumps({"flatten":flat,"images_changed":changed,"particles":particles,"fog_files_updated":fogged,"bytes":x.output.stat().st_size,"sha256":hashlib.sha256(x.output.read_bytes()).hexdigest()},indent=2))
 if __name__=="__main__": main()
