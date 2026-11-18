@@ -8,7 +8,7 @@ A auditoria verifica apenas os arquivos do .mcpack: manifesto, JSON, imagens, te
 
 - Arquivo: `LowMine-Equilibrado-v0.4.0-TEST.mcpack`
 - Tamanho: 658.214 bytes.
-- SHA-256: `898a63dc7b221d8e0a2ab489f3f41b965ddc3a2cf6c05658beb8d25940a6f91a`
+- SHA-256: `98cdb09e379a4ce92159c7599fdd6b6967e4cf7c370e19953fe437ee5c6e15c7`
 - Manifesto: formato 3.
 - Versão do cabeçalho e do módulo: string SemVer `"0.4.0"`.
 - UUIDs: mantidos da identidade LowMine.
