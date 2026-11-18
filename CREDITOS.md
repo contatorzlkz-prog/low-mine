@@ -1,11 +1,11 @@
-# Créditos e licenças — LowMine Equilibrado 8x v0.6.2
+# Créditos e licenças — LowMine Equilibrado 8x v0.6.3
 
 ## Conteúdo criado pelo projeto LowMine
 - Identidade visual, manifesto, UUIDs e ferramentas de compilação.
 - 38 texturas de bloco em 8×8 provenientes da base LowMine 0.5.0.
-- Novos veios, nós e padrões de topo dos troncos em 8×8, com paletas compactas.
+- Padrões de troncos 8×8 com veios quebrados, nós discretos e paletas compactas por espécie.
+- Refinamento em 8×8 de terra, pedra, pedregulho, cascalho, areia e tábuas presentes na base.
 - Mapas UV 64×32 e ícones pixel art para couro, malha, ferro, ouro, diamante, netherita e cobre.
-- Ícones de espadas, arco, besta, flecha e tridente em pixel art compacto para itens do Minecraft.
 - Elementos próprios de interface já existentes na base LowMine.
 
 ## Material adaptado com licença
@@ -24,7 +24,7 @@ A atribuição original, licença e alterações permanecem em CREDITOS.txt dent
 | Embeddium Optimizer v1.6 | Organização de overrides/perfis |
 | Vanilla × Optimizer v2.4.2 | Referência técnica de água e sombras |
 
-Nenhuma textura, código ou arquivo desses pacotes foi copiado para esta atualização.
+Nenhuma textura, código ou arquivo desses três pacotes foi copiado para esta atualização.
 
 ## Condições
 O material derivado do FPS Optimizer continua sob CC BY-NC 3.0. Esta composição não deve ser vendida nem usada principalmente para vantagem comercial sem autorização adicional.

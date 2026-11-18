@@ -1,11 +1,19 @@
 # Histórico de versões
 
+## 0.6.3 — refinamento de madeira, blocos e armaduras
+- Troncos redesenhados em 8×8 com marcas curtas, nós discretos e padrões diferentes por espécie.
+- Paletas de tronco limitadas a quatro tons por madeira.
+- Terra, pedra, pedregulho, cascalho, areia e tábuas refinados em 8×8 quando presentes na base.
+- Sete conjuntos de armaduras redesenhados com contornos, placas, costuras e malha compactos.
+- Mantidos os arquivos de UI transparente para desktop, mobile e cinco tipos de contêiner.
+- Preservados sem alterações os visuais de itens já incluídos na versão 0.6.2.
+- Validador atualizado para verificar dimensões, mapas UV, ícones, arquivos de UI e JSON.
+
 ## 0.6.2 — itens visuais de PvP
 - Adicionados ícones pixel art 8×8 para sete espadas, arco (repouso e três poses), besta (repouso e três poses), flecha e tridente.
 - Os ícones são exportados em 16×16 para manter a compatibilidade do atlas Bedrock.
-- O validador agora verifica a presença e dimensão dos novos itens.
+- O validador verifica a presença e dimensão dos novos itens.
 - Mantidos os troncos 8×8, sete conjuntos de armaduras e a interface transparente da versão anterior.
-
 
 ## 0.6.2 — troncos e armaduras
 - Compilação baseada na base reproduzível 0.5.0.
@@ -14,7 +22,7 @@
 - Mapas UV 64×32 e ícones pixel art 8×8 exportados em 16×16.
 - Interface transparente da base preservada para desktop, mobile, baús, baú do End, shulker e barril.
 - Adicionada validação estática independente e prévia visual no CI.
-- O gerador v0.6.0 anterior foi retirado do pipeline porque o bundle comprimido está inválido; a expansão de 137 texturas da documentação antiga não integra este artefato.
+- O gerador v0.6.0 anterior foi retirado do pipeline porque seu bundle-fonte comprimido está inválido; a expansão de 137 texturas da documentação antiga não integra este artefato.
 
 ## 0.5.0 — LowMine Equilibrado 8x
 - Criada identidade visual LowMine e ícone próprios.
