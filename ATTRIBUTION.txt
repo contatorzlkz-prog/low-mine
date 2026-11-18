@@ -1,24 +1,21 @@
-LowMine Performance v0.2.0 — attribution and license
+LowMine Ultra Low v0.3.0 — attribution and license
 
 This package is an adaptation of:
   Boosted FPS (Optimized Performance) v2.4.1
   Original author: XiaoCraft
   Original project: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance
 
-Changes made by the LowMine Project in v0.2.0:
-  - Rebranded the pack, profiles, icons, title image and localized settings.
-  - Assigned new stable manifest and module UUIDs.
-  - Renamed custom setting and custom fog identifiers to the LowMine namespace.
-  - Added nine configurable controls with revised default values.
-  - Reduced the title image from 4096x604 to 2048x302.
-  - Added Brazilian Portuguese settings text and English fallback labels.
-  - Added a reproducible build process and static validation.
+Changes made by the LowMine Project in v0.3.0:
+  - Removed the separate PvP subpack and made the former Lite profile the only profile.
+  - Reduced particle defaults to the minimum and disabled optional visual toggles by default.
+  - Removed an unused geyser setting whose Lite emitters were already disabled.
+  - Made inventory/chest screen backdrops and hotbar/touch UI textures more transparent.
+  - Reduced selected menu textures and removed visible cloud texture detail.
+  - Tightened the visual fog range; this is not renderer occlusion culling.
 
-This is an adaptation, not an original replacement for the source work. No measured FPS improvement is claimed. Runtime testing is still required.
+This is an adaptation, not an original replacement for the source work. No measured FPS improvement is claimed. Runtime testing is required.
 
 The original work is listed under the Creative Commons Attribution-NonCommercial 3.0 Unported license (CC BY-NC 3.0):
   https://creativecommons.org/licenses/by-nc/3.0/
 
-The original author and project are credited above, and the changes are identified. This adaptation is not endorsed by or affiliated with XiaoCraft.
-
-The license prohibits use primarily intended for commercial advantage or private monetary compensation. Keep the attribution and license information with redistributed copies, and respect the full license terms.
+The original author and project are credited above. This adaptation is not endorsed by or affiliated with XiaoCraft. The license prohibits use primarily intended for commercial advantage or private monetary compensation. Keep attribution and license notices with redistributed copies.
