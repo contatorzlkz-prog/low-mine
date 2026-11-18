@@ -20,6 +20,7 @@ try:
             part.read_text(encoding="ascii").strip()
             for part in sorted(PARTS.glob("*.b64"))
         )
+    encoded += "=" * (-len(encoded) % 4)
     code = zlib.decompress(base64.b64decode(encoded)).decode("utf-8")
 except Exception as exc:
     raise SystemExit(f"Não foi possível carregar a implementação v0.6.0: {exc}") from exc
