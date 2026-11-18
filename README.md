@@ -7,7 +7,7 @@ LowMine is a Minecraft Bedrock resource-pack adaptation for low-end devices. **v
 ## v0.3.0 changes
 
 - Removed the PvP subpack and flattened the former Lite profile into the only profile.
-- Set custom particle amount to 0% and turned optional visual controls off by default.
+- Set custom particle amount to 0% and turned optional visual controls off by default. The pack contains 188 particle definitions: 177 have zero max particles and 11 are rate-gated by the zero-default slider.
 - Removed the unused geyser toggle: the Lite profile already hard-disables those geyser emitters, and no pack-setting query used that toggle.
 - Added registered desktop and pocket/touch JSON UI overrides for inventory and crafting, plus desktop chest, barrel, shulker and data-driven containers.
 - Lowered inventory/chest backdrop alpha to 0.08 where the classic UI exposes the screen background variable.
