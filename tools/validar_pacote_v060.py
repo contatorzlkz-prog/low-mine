@@ -5,9 +5,10 @@ import base64, sys, zlib
 from pathlib import Path
 TOOLS = Path(__file__).resolve().parent
 SOURCE = TOOLS / "validar_v060_impl.py"
-BUNDLE = TOOLS / "validar_v060_impl.zlib.b64"
+PARTS = TOOLS / "validator_v060_parts"
 try:
-    code = zlib.decompress(base64.b64decode(BUNDLE.read_text(encoding="ascii"))).decode("utf-8")
+    encoded = "".join(p.read_text(encoding="ascii").strip() for p in sorted(PARTS.glob("*.b64")))
+    code = zlib.decompress(base64.b64decode(encoded)).decode("utf-8")
 except Exception as exc:
     raise SystemExit(f"Não foi possível carregar o validador v0.6.0: {exc}") from exc
 sys.argv = [str(SOURCE), *sys.argv[1:]]

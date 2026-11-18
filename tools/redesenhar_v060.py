@@ -6,9 +6,10 @@ from pathlib import Path
 TOOLS = Path(__file__).resolve().parent
 ROOT = TOOLS.parent
 SOURCE = TOOLS / "redesenhar_v060_impl.py"
-BUNDLE = TOOLS / "redesenhar_v060_impl.zlib.b64"
+PARTS = TOOLS / "redesign_v060_parts"
 try:
-    code = zlib.decompress(base64.b64decode(BUNDLE.read_text(encoding="ascii"))).decode("utf-8")
+    encoded = "".join(p.read_text(encoding="ascii").strip() for p in sorted(PARTS.glob("*.b64")))
+    code = zlib.decompress(base64.b64decode(encoded)).decode("utf-8")
 except Exception as exc:
     raise SystemExit(f"Não foi possível carregar a implementação v0.6.0: {exc}") from exc
 args = sys.argv[1:]
