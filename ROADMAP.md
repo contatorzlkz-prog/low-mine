@@ -6,19 +6,20 @@
 - [x] Keep the LowMine header/module UUID identity between versions.
 - [x] Remove the PvP subpack and flatten the former Lite profile.
 - [x] Remove the unused geyser toggle and set optional particle controls to minimum.
-- [x] Add translucent inventory/chest/hotbar/touch UI overrides and register the UI files.
-- [x] Reduce selected menu/UI textures and the cloud texture.
+- [x] Add desktop and pocket inventory, chest and data-driven container UI overrides.
+- [x] Reduce opacity of shared dialog backgrounds, hotbar/slot and touch-control textures.
+- [x] Reduce selected menu textures and the cloud texture.
 - [x] Add the v0.3 builder and version-aware static validator.
-- [x] Pass static validation: JSON, settings, localization, fog links, UI registrations and archive integrity.
+- [x] Pass static validation: 318 JSON files, 8 active controls, 29 languages, 94 biomes, 104 fog definitions and registered UI overrides.
 
 ## Phase 2 — Minecraft runtime test (waiting for user test)
 - [ ] Import v0.3.0 into the exact Bedrock version in use.
-- [ ] Confirm the pack loads and the settings menu shows eight controls.
-- [ ] Confirm the player's inventory and crafting screen open correctly.
+- [ ] Confirm the pack loads and the eight settings appear.
+- [ ] Confirm inventory and crafting screens open correctly with transparent backdrops.
 - [ ] Check small/large chest, Ender Chest, shulker box, barrel and other containers.
-- [ ] Check backdrop transparency on desktop and touch/pocket UI.
-- [ ] Check hotbar and item slots remain readable/usable in normal, selected and pressed states.
-- [ ] Check touch controls remain easy to operate.
+- [ ] Check desktop and pocket/touch inventory UI separately.
+- [ ] Check hotbar and item slots remain readable in normal, selected and pressed states.
+- [ ] Check touch controls remain usable.
 - [ ] Inspect fog on plains, forests, caves, water, Nether and End.
 - [ ] Check HUD, chat, clouds, particles, XP collection, multiplayer and world reload.
 - [ ] Record exact Bedrock version, content-log messages, missing textures and UI regressions.
