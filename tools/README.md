@@ -11,13 +11,11 @@ Na raiz do repositório:
 ~~~bash
 python -m pip install Pillow
 python tools/gerar_pacote.py
-python tools/redesenhar_v060.py
-python tools/validar_pacote_v060.py build/LowMine-Equilibrado-8x-v0.6.0.mcpack
 python tools/redesenhar_v061.py
 python tools/validar_pacote_v061.py build/LowMine-Equilibrado-8x-v0.6.1.mcpack
 ~~~
 
-A primeira etapa compila a base 0.5.0. A etapa v0.6.0 aplica 137 texturas de bloco autorais, vegetação, nuvens/sol e perfil de partículas. A etapa v0.6.1 refina os troncos existentes em 8×8, cria sete conjuntos de armaduras com mapas UV 64×32 e ícones pixel art 8×8 exportados em 16×16.
+A primeira etapa compila a base 0.5.0. A etapa v0.6.1 redesenha troncos existentes em 8×8, cria sete conjuntos de armaduras com mapas UV 64×32 e ícones pixel art 8×8 exportados em 16×16. O pacote preserva as 38 texturas de bloco já fornecidas, a interface transparente e os recursos licenciados da base.
 
 Arquivos gerados:
 - build/LowMine-Equilibrado-8x-v0.6.1.mcpack
@@ -26,12 +24,12 @@ Arquivos gerados:
 Para destinos diferentes:
 
 ~~~bash
-python tools/redesenhar_v061.py --base build/LowMine-Equilibrado-8x-v0.6.0.mcpack --saida build/teste.mcpack --previa build/previa.png
+python tools/redesenhar_v061.py --base build/LowMine-Equilibrado-8x-v0.5.0.mcpack --saida build/teste.mcpack --previa build/previa.png
 python tools/validar_pacote_v061.py build/teste.mcpack
 ~~~
 
-As implementações compactadas em *_impl.zlib.b64 são fontes versionadas do projeto, descompactadas localmente pelos pontos de entrada Python.
+A geração v0.6.0 anterior não faz parte do pipeline atual porque seu bundle-fonte comprimido está inválido. As implementações compactadas permanecem versionadas para recuperação futura.
 
 ## Integração contínua
-O GitHub Actions compila, valida as duas etapas e publica artefatos de teste por 14 dias. Na branch main, cria uma pré-release lowmine-v0.6.1 com o MCpack e uma prévia da arte.
+O GitHub Actions compila a base, aplica o redesign 0.6.1, valida ZIP/manifesto/dimensões/UI e publica artefatos de teste por 14 dias. Na branch main, cria uma pré-release lowmine-v0.6.1 com o MCpack e a prévia da arte.
 A validação estática não substitui importação, teste visual e medição de desempenho dentro do Minecraft.
