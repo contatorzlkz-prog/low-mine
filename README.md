@@ -11,7 +11,7 @@
 - Two subpacks: **LowMine Lite** (adapted from `Pure FPS`) and **LowMine PvP** (adapted from `PvP + FPS`).
 - Nine configurable controls in the manifest: eight toggles and one slider.
 - 94 biome entries in the base biome configuration.
-- 1,136 files in the imported package baseline.
+- 1,136 files in the adapted package archive (including the attribution notice).
 
 ## Package
 
