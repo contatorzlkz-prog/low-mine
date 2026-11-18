@@ -2,21 +2,21 @@
 
 Place distributable Bedrock packages in this directory before publishing GitHub releases.
 
-## 0.2.0 — test candidate
+## 0.3.0 — Ultra Low test candidate
 
-Expected filename: `LowMine-Performance-v0.2.0.mcpack`
+Expected filename: `LowMine-Ultra-Low-v0.3.0-TEST.mcpack`
 
-SHA-256:
-`59af4cfb14f639e736f08d5d8d9a1e6557e31896c6d17ee6bdc7654c9aa8a035`
+- Size: 662,876 bytes.
+- SHA-256: `143c508d67ae25046d7ff782cde36190cacabd0d74f4443071afaea4240003c6`
 
-The package was generated and passed static validation, including ZIP integrity, 487 JSON parses, manifest/settings references, all 29 language files and base/Lite fog references. It has not yet been imported or performance-tested in Minecraft. The binary is supplied separately for the user's test and has not been committed here yet.
+The archive passed static validation: ZIP integrity, 317 JSON files, eight setting-query references, all 29 language files, 94 biome entries, 104 fog definitions and the registered inventory/chest UI override structure. It has not yet been imported or FPS-tested in Minecraft. The binary is delivered separately for the user's test and has not yet been committed here.
 
-Before making a public GitHub release:
-1. Upload the exact `.mcpack` file under this directory.
-2. Verify the uploaded SHA-256 matches the value above.
-3. Test the import and both profiles in Minecraft Bedrock.
+Before a public GitHub release:
+1. Upload the exact `.mcpack` under this directory.
+2. Verify the uploaded SHA-256.
+3. Test import, inventory/chest UI, hotbar, touch controls and the single profile in Minecraft.
 4. Update the changelog with runtime results and known issues.
 
-## 0.1.0 — initial baseline
+## 0.2.0 — Rebrand baseline
 
-The first adapted package was generated as an internal baseline and superseded by v0.2.0.
+Superseded by the single-profile v0.3.0 test candidate.
