@@ -136,6 +136,10 @@ def images(root):
         if p.exists(): alpha(p,f)
     for p in ui.glob("hotbar_*.png"):
         if p.stem not in {"hotbar_start_cap","hotbar_end_cap"}: alpha(p,.38)
+    # Shared vanilla dialog-panel textures: lower their fill opacity while retaining edges.
+    for name in ["dialog_background_opaque.png","dialog_background_opaque_overlap_bottom.png"]:
+        p=ui/name
+        if p.exists(): alpha(p,.28)
     c=root/"textures/gui/controls"
     if c.exists():
         for p in c.glob("*.png"): alpha(p,.68 if "pressed" in p.stem else .48)
@@ -154,6 +158,8 @@ def fog(root):
     return count
 def ui(root):
     js(root/"ui/inventory_screen.json",{"namespace":"crafting","crafting_screen@crafting.inventory_screen_base":{"$screen_background_alpha":.08},"inventory_screen@crafting.inventory_screen_base":{"$screen_background_alpha":.08}})
+    # Pocket/mobile inventory uses a separate screen definition in current Bedrock samples.
+    js(root/"ui/inventory_screen_pocket.json",{"namespace":"crafting_pocket","inventory_screen_pocket@crafting_pocket.inventory_screen_pocket_base":{"$screen_background_alpha":.08}})
     c={"namespace":"chest"}
     variants=[("small_chest_screen","chest.small_chest_panel","pocket_containers.small_chest_panel","common.inventory_screen_common"),("large_chest_screen","chest.large_chest_panel","pocket_containers.large_chest_panel","common.inventory_screen_common"),("ender_chest_screen","chest.ender_chest_panel","pocket_containers.ender_chest_panel","common.inventory_screen_common"),("shulker_box_screen","chest.shulker_box_panel","pocket_containers.shulker_box_panel","chest.small_chest_screen"),("barrel_screen","chest.barrel_panel","pocket_containers.barrel_panel","chest.small_chest_screen")]
     for key,desk,pocket,parent in variants:
@@ -161,7 +167,7 @@ def ui(root):
     js(root/"ui/chest_screen.json",c)
     js(root/"ui/data_driven_container_screen.json",{"namespace":"data_driven_container","screen@common.inventory_screen_common":{"$close_on_player_hurt|default":True,"$use_custom_pocket_toast|default":False,"close_on_player_hurt":"$close_on_player_hurt","use_custom_pocket_toast":"$use_custom_pocket_toast","variables":[{"requires":"$desktop_screen","$screen_content":"data_driven_container.desktop_panel","$screen_bg_content":"common.screen_background","$screen_background_alpha":.08},{"requires":"$pocket_screen","$use_custom_pocket_toast":True,"$screen_content":"pocket_containers.data_driven_container_panel"}]}})
     p=root/"ui/_ui_defs.json"; d=json.loads(p.read_text(encoding="utf-8-sig")) if p.exists() else {"ui_defs":[]}
-    for n in ["ui/inventory_screen.json","ui/chest_screen.json","ui/data_driven_container_screen.json"]:
+    for n in ["ui/inventory_screen.json","ui/inventory_screen_pocket.json","ui/chest_screen.json","ui/data_driven_container_screen.json"]:
         if n not in d.setdefault("ui_defs",[]): d["ui_defs"].append(n)
     js(p,d)
 def main():
