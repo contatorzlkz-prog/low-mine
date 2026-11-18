@@ -106,3 +106,13 @@ The validation script is `tools/validate_pack.py`. The builder is `tools/build_p
 Manifest custom pack settings are documented by Microsoft for resource packs and are read through Molang, but the feature documentation notes that the capability may change. See the [official custom pack settings guide](https://github.com/MicrosoftDocs/minecraft-creator/blob/main/creator/Documents/AddOns/CustomPackSettings.md).
 
 No runtime test or FPS claim is included in this audit.
+
+## Final v0.2.0 artifact identity
+
+- File: `LowMine-Performance-v0.2.0.mcpack`
+- Size: 1,206,758 bytes.
+- SHA-256: `48eb7015b9829810d9d9d56e842ef209914502ffe61e80df0a629d2c9c29bfe6`
+- Supplied source size: 1,242,751 bytes (the package archive is 35,993 bytes / 2.90% smaller).
+- Two builds from identical source and branding inputs produced byte-identical output.
+
+The archive-size change is a packaging comparison only. It is not a benchmark or proof of improved frame rate.
