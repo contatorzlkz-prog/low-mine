@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 import uuid
 import zipfile
@@ -108,7 +109,7 @@ def validar(arquivo: Path) -> dict:
             raw = z.read(nome).decode("utf-8", errors="replace")
             if "opt:" in raw:
                 erros.append(f"Namespace antigo opt: encontrado em {nome}")
-            references.update(part for part in raw.split() if part.startswith("lowmine:"))
+            references.update(re.findall(r"lowmine:[A-Za-z0-9_]+", raw))
         settings = {
             item.get("name")
             for item in m.get("settings", [])
