@@ -11,7 +11,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_INPUT = ROOT / "build" / "LowMine-Equilibrado-8x-v0.6.0.mcpack"
+DEFAULT_INPUT = ROOT / "build" / "LowMine-Equilibrado-8x-v0.5.0.mcpack"
 DEFAULT_OUTPUT = ROOT / "build" / "LowMine-Equilibrado-8x-v0.6.1.mcpack"
 DEFAULT_PREVIEW = ROOT / "build" / "LowMine-Preview-v0.6.1.png"
 
