@@ -9,7 +9,8 @@ Changes made by the LowMine Project in v0.3.0:
   - Removed the separate PvP subpack and made the former Lite profile the only profile.
   - Reduced particle defaults to the minimum and disabled optional visual toggles by default.
   - Removed an unused geyser setting whose Lite emitters were already disabled.
-  - Made inventory/chest screen backdrops and hotbar/touch UI textures more transparent.
+  - Added desktop and pocket inventory UI overrides plus chest/container overrides.
+  - Reduced opacity of shared dialog panel textures, inventory slots, hotbar and touch controls.
   - Reduced selected menu textures and removed visible cloud texture detail.
   - Tightened the visual fog range; this is not renderer occlusion culling.
 
