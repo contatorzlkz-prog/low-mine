@@ -42,6 +42,16 @@ Rust could be used for separate tooling (for example, a pack inspector, asset op
 
 The game's own video settings control render distance and simulation distance. Lowering render distance is the supported way to ask the client to draw fewer distant chunks; a resource pack cannot reliably override that engine setting. Simulation distance changes how far gameplay simulation is active and is distinct from a resource pack texture or fog.
 
+## UI reference files
+
+The desktop and pocket inventory screens are separate in the current Mojang Bedrock sample pack. The sample also registers UI files through `ui/_ui_defs.json`:
+- [Desktop inventory screen](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/ui/inventory_screen.json)
+- [Pocket/touch inventory screen](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/ui/inventory_screen_pocket.json)
+- [Chest screens](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/ui/chest_screen.json)
+- [UI definition registry](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/ui/_ui_defs.json)
+
+LowMine follows this split for its test override. This is still version-sensitive JSON UI customization, not a universal guarantee across all Bedrock UI modes.
+
 ## LowMine's safe optimization scope
 
 1. Keep particle emitters conservative and disable pack-owned visual effects the player does not need.
