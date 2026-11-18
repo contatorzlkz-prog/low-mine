@@ -1,49 +1,68 @@
 # LowMine Performance
 
-**LowMine** is a Minecraft Bedrock performance resource-pack project focused on low-end devices. The initial baseline is an explicitly credited adaptation of **Boosted FPS (Optimized Performance) v2.4.1 by XiaoCraft**.
+LowMine is a Minecraft Bedrock resource-pack project for low-end devices. The current test candidate is an attributed adaptation of **Boosted FPS (Optimized Performance) v2.4.1 by XiaoCraft**.
 
-> This repository baseline does not claim a measured FPS increase. Runtime testing and repeatable benchmarks are required before calling any change an optimization.
+> **v0.2.0 is a test candidate, not a benchmarked release.** Static validation is complete; Minecraft import, in-game behavior, compatibility and FPS measurements still need to be tested.
 
-## Current baseline
+## v0.2.0 changes
 
-- Minecraft Bedrock resource pack (`.mcpack`).
-- Minimum engine version carried over from the source manifest: `1.26.40`.
-- Two subpacks: **LowMine Lite** (adapted from `Pure FPS`) and **LowMine PvP** (adapted from `PvP + FPS`).
-- Nine configurable controls in the manifest: eight toggles and one slider.
-- 94 biome entries in the base biome configuration.
-- 1,136 files in the adapted package archive (including the attribution notice).
+- Rebranded pack name, icons, title image, profile labels and localized settings.
+- Assigned new stable manifest/module UUIDs and a dedicated `lowmine:` namespace for settings and custom fog identifiers.
+- Added nine configurable controls: one particle slider and eight toggles.
+- Set particle amount to 50% by default; optional visual effects start disabled, while potion/status visuals stay enabled.
+- Reduced the menu title texture from 4096×604 to 2048×302 (75% fewer pixels for that image only).
+- Preserved the original Lite/PvP structure, fog behavior, HUD overrides, PBR capability and original creator credits.
+- Added static validation and reproducible-build tooling.
 
-## Package
+No measured FPS increase is claimed. Reducing one menu texture does not establish an in-game FPS gain.
 
-The first adapted build is named `LowMine-Performance-v0.1.0.mcpack`. It is packaged with the resource-pack manifest at the archive root and includes an `ATTRIBUTION.txt` notice. The binary package is supplied separately from this initial documentation commit; it still needs to be attached to the repository as a release asset or committed under `releases/`.
+## Package baseline
 
-To import a build, open the `.mcpack` file with Minecraft Bedrock, then activate it under Global Resources or a world's Resource Packs settings. Select the desired subpack in the pack settings.
+| Property | Audited value |
+|---|---:|
+| Minecraft Bedrock manifest | format version 3 |
+| Minimum engine version in source manifest | 1.26.40 |
+| Profiles | LowMine Lite, LowMine PvP |
+| Configurable controls | 9 |
+| JSON files | 487 |
+| Valid JSON files | 487 |
+| Base biome entries | 94 |
+| Fog definitions per base/Lite set | 104 |
+| Archive entries in v0.2.0 | 1,136 |
 
-## Development status
+See [the technical audit](docs/BASELINE_AUDIT.md), [roadmap](ROADMAP.md) and [changelog](CHANGELOG.md).
 
-| Area | Status |
-|---|---|
-| Repository setup and attribution | Complete |
-| Baseline package identity and UI rename | Complete in local build |
-| Structural JSON validation | Complete |
-| Compatibility testing in Bedrock | Pending |
-| Controlled FPS / frame-time benchmarks | Pending |
-| Actual optimization changes | Pending |
+## Test instructions
 
-See [the baseline audit](docs/BASELINE_AUDIT.md), [roadmap](ROADMAP.md), and [changelog](CHANGELOG.md).
+1. Import `LowMine-Performance-v0.2.0.mcpack` into Minecraft Bedrock.
+2. Confirm the pack appears as **LowMine Performance v0.2.0**.
+3. Activate it and open its settings using the gear icon.
+4. Check that the nine controls appear with readable labels.
+5. Test **LowMine Lite** and **LowMine PvP** separately. Lite is the stronger visual-reduction profile; PvP preserves its extra HUD and a longer view.
+6. Check particles, potion visuals, XP-orb visibility, biome fog, chat/HUD and world loading.
+
+Record the exact Bedrock version, device, selected profile, render distance and any content-log errors. See the audit document for the test checklist.
+
+## Build and validation
+
+Requires Python 3.10+.
+
+```bash
+python tools/build_pack.py "Boosted FPS v2.4.1.mcpack" "LowMine-Performance-v0.2.0.mcpack" --icon assets/lowmine-pack-icon.png --title assets/lowmine-title.png
+python tools/validate_pack.py "LowMine-Performance-v0.2.0.mcpack"
+```
+
+The builder uses stable UUIDs and fixed ZIP timestamps so identical inputs produce identical output bytes. The validator checks ZIP integrity, manifest IDs, JSON syntax, settings references, translations, subpack folders, fog references and required assets. These checks do not emulate Minecraft.
+
+## Compatibility note
+
+This pack uses manifest format version 3 and resource-pack setting queries such as `query.get_pack_setting` and `query.is_pack_setting_enabled`. Microsoft documents pack settings and their Molang integration, but the feature documentation still describes the capability as subject to change. Test it on the exact Bedrock release you use: [Microsoft custom pack settings guide](https://github.com/MicrosoftDocs/minecraft-creator/blob/main/creator/Documents/AddOns/CustomPackSettings.md).
 
 ## Attribution and license
 
 Original work: **Boosted FPS (Optimized Performance) v2.4.1**, by **XiaoCraft**.
 
-Source: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance
+- Original project: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance
+- License: **Creative Commons Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0)** — https://creativecommons.org/licenses/by-nc/3.0/
 
-The original work is listed under **Creative Commons Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0)**: https://creativecommons.org/licenses/by-nc/3.0/. This adaptation identifies its changes, retains attribution, and must stay within the original non-commercial license terms. It is not endorsed by or affiliated with XiaoCraft. Read [ATTRIBUTION.txt](ATTRIBUTION.txt) before redistributing.
-
-## Project principles
-
-1. Preserve Bedrock compatibility before changing assets.
-2. Measure frame time and stability instead of assuming that removing visual effects always improves FPS.
-3. Keep changes modular and reversible, with separate profiles where useful.
-4. Avoid unnecessary resource overrides and preserve the vanilla visual identity where possible.
-5. Document every optimization, its trade-offs, and the game versions / devices tested.
+This is an adaptation, not an original replacement or an endorsed project. Original author credit and modification notices are retained. The original non-commercial license conditions must be respected; do not distribute or use this adaptation for commercial advantage. Read [ATTRIBUTION.txt](ATTRIBUTION.txt).
