@@ -1,86 +1,96 @@
-# LowMine Equilibrado
+# LowMine Equilibrado 8x
 
-**LowMine Equilibrado** é uma adaptação de pacote de recursos do Minecraft Bedrock, pensada para PCs modestos. A versão **0.4.0** mantém um único perfil, remove o PvP e procura equilibrar aparência, transparência da interface e quantidade de efeitos.
+**LowMine Equilibrado 8x v0.5.0** é um pacote de recursos do Minecraft Bedrock com identidade, texturas 8×8, ícone, interface e ferramentas desenvolvidas para o projeto LowMine. Ele combina esse conteúdo próprio com recursos adaptados de terceiros, sempre identificados em CREDITOS.md.
 
-> **Importante:** um pacote de recursos não consegue corrigir a geração de chunks do motor do Minecraft. O LowMine reduz alguns custos visuais; as configurações de distância do próprio jogo continuam sendo fundamentais.
+> **Não é uma promessa de FPS.** O pacote foi validado estruturalmente, mas ainda precisa ser importado e medido no Minecraft na máquina de destino. Texturas menores podem reduzir memória de textura; não corrigem diretamente geração de chunks, simulação ou CPU.
 
-## O que mudou na versão 0.4.0
+## O que esta versão reúne
 
-- Mantém um único perfil, sem subpacote PvP.
-- Mantém 177 limites de partículas do perfil Lite em zero e reduz outras 11 contagens para valores baixos, preservando alguns efeitos importantes.
-- Cria oito texturas 16×16 simplificadas para grama curta, samambaia, grama alta e versões secas.
-- Deixa inventário, crafting, baús e painéis mais transparentes, preservando melhor os contornos e os estados de seleção.
-- Ajusta a neblina visual para começar em 64 e terminar em 96 blocos.
-- Mantém os UUIDs do LowMine e atualiza a versão do manifesto para `0.4.0`.
+- 38 texturas de bloco em 8×8 originais LowMine, incluindo pedra, terra, areia, madeira, grama, samambaias e variações de folhas.
+- 50 imagens PNG no pacote, contando ícone e UI.
+- Interface mais translúcida para inventário, crafting, baús e inventário pocket; contorno de seleção preservado.
+- Água com cáusticas e ondas desativadas e concentrações de partículas aquáticas zeradas.
+- Sombras blocadas (texel_size 16) nos modos que suportam essa configuração.
+- 14 definições de partículas adaptadas do FPS Optimizer v2.9.2, com quantidade padrão de 50% e limite de rajada 6.
+- Um único perfil; não existe subpacote PvP.
+- Nenhum JavaScript, TypeScript, .mcfunction, Behavior Pack ou loop de script é incluído.
 
-As texturas novas substituem **a imagem** da vegetação. Elas não removem nem alteram a geometria nativa dos blocos.
+## Perfil equilibrado de partículas
 
-## Auditoria do pacote
+| Controle | Padrão |
+|---|---:|
+| Quantidade de partículas | 50% |
+| Limite por efeito/rajada | 6 |
+| Poções | Ligado |
+| Magia de bruxas/evocadores | Ligado |
+| Rastros de flechas | Ligado |
+| Efeitos de caldeirão | Ligado |
+| Gêiseres | Desligado |
+| Gás de gêiseres | Desligado |
+| Partículas de enxofre | Desligado |
+
+O limite usa Math.min nas definições adaptadas de partículas para limitar picos de emissão. num_particles aceita número ou expressão Molang na documentação da Microsoft. Isso limita apenas os emissores que o LowMine substitui; partículas nativas fora desse conjunto continuam existindo.
+
+## Auditoria estática do pacote
 
 | Verificação | Resultado |
 |---|---:|
-| Arquivos no pacote | 933 |
-| Arquivos JSON | 318 válidos |
-| Imagens PNG | 574 |
-| Definições de partículas do pacote | 188 |
-| Limites `max_particles` mantidos em zero | 177 |
-| Biomas verificados | 94 |
-| Definições de neblina | 104 |
-| Texturas novas de vegetação | 8 |
-| Perfil PvP | Removido |
+| Entradas no .mcpack | 72 |
+| JSON válidos | 21 / 21 |
+| Imagens PNG | 50 |
+| Texturas de bloco 8×8 | 38 |
+| Definições de partículas | 14 |
+| Arquivos de interface registrados | 3 |
+| Arquivos de script no pacote | 0 |
+| Tamanho compactado | 32.451 bytes |
 
-Tamanho compactado: **658.214 bytes**. SHA-256: `98cdb09e379a4ce92159c7599fdd6b6967e4cf7c370e19953fe437ee5c6e15c7`.
+SHA-256: 68635f505fc9267b480019177e6ec2a3f1095bc9b67baa4551c6672add6ec16b.
 
-A validação estática confirma estrutura, JSON, manifesto, texturas, referências de neblina e telas de interface. Ela não executa o Minecraft e não mede FPS.
+A auditoria verifica arquivos e referências; não mede FPS nem prova o comportamento no jogo. A contagem de PNGs também não equivale à quantidade de texture handles, pois o Bedrock agrupa algumas texturas de blocos em atlas.
 
-## Configuração recomendada para PC fraco
+## Instalação e primeiro teste
 
-Comece com:
-- **Distância de renderização:** 6 chunks.
-- **Distância de simulação:** 4 chunks.
-- **Gráficos:** Simples, se essa opção existir.
-- **Vibrant Visuals / Visuais vibrantes:** desativado.
-- **Iluminação suave, nuvens e folhas sofisticadas:** desativadas ou no mínimo, se disponíveis.
-- **Limite de FPS:** 30 se o jogo não conseguir manter 60 de forma estável; use 60 somente se conseguir sustentá-los.
+1. Baixe LowMine-Equilibrado-8x-v0.5.0.mcpack.
+2. Abra com Minecraft Bedrock e confirme LowMine Equilibrado 8x v0.5.0.
+3. Ative o pacote na lista de Recursos Globais ou nos recursos do mundo.
+4. Abra as configurações do pacote e confira os sliders e toggles.
+5. Teste inventário, crafting, baús, água, sombras, grama, folhas e partículas.
+6. Compare com o jogo sem LowMine usando o mesmo mundo, local, resolução e distâncias.
 
-Caso ainda ocorram travamentos ao carregar terreno novo, experimente 4 chunks de renderização. Veja [Configuração recomendada e diagnóstico de chunks](docs/CONFIGURACAO-CPU-FRACA.md).
+Veja o relatório de teste em docs/TEST_REPORT_TEMPLATE.md antes de comparar resultados.
 
-A Microsoft explica que a distância de renderização determina quantos chunks o cliente desenha e que a distância de simulação também processa entidades, plantas, líquidos e atualizações do mundo. A distância de simulação tem custo adicional porque afeta a lógica do jogo e o trabalho do cliente. Consulte [Render Distance e Simulation Distance](https://learn.microsoft.com/en-us/minecraft/creator/documents/simulationrenderdistanceguide?view=minecraft-bedrock-stable).
+## Configuração inicial para PC modesto
 
-## Instalar e testar
+Comece com **4 chunks de renderização e 4 de simulação** no computador que congela ao explorar terreno. Se ficar estável, experimente 6 chunks de renderização mantendo simulação em 4. Desative os recursos gráficos avançados disponíveis e use um limite de FPS que a máquina consiga sustentar sem oscilações grandes.
 
-1. Baixe `LowMine-Equilibrado-v0.4.0-TEST.mcpack`.
-2. Abra o arquivo com o Minecraft Bedrock.
-3. Confirme que o nome e a versão aparecem corretamente.
-4. Ative o único pacote **LowMine Equilibrado**.
-5. Teste inventário, crafting, baús, hotbar, grama, samambaias e carregamento de terreno novo.
-6. Compare com o jogo sem LowMine usando o mesmo mundo, posição, distância de renderização e distância de simulação.
-
-Use o [modelo de relatório de teste](docs/TEST_REPORT_TEMPLATE.md) para anotar erros e resultados.
+A distância de renderização controla quantos chunks o cliente desenha; a distância de simulação controla onde entidades, plantas, líquidos e outras mecânicas são atualizadas. O resource pack não consegue mudar essas opções nem pré-gerar chunks. Consulte Configuração para CPU fraca e diagnóstico de travamentos em docs/CONFIGURACAO-CPU-FRACA.md.
 
 ## Compilar e validar
 
 Requisitos: Python 3.10+ e Pillow.
 
-```bash
-python -m pip install Pillow
-python tools/gerar_pacote.py "LowMine-Ultra-Low-v0.3.2-FIXED.mcpack" "LowMine-Equilibrado-v0.4.0-TEST.mcpack"
-python tools/validar_pacote.py "LowMine-Equilibrado-v0.4.0-TEST.mcpack"
-```
+Execute na raiz do repositório:
 
-O pacote v0.3.2 é usado como base do build e não está armazenado como binário neste repositório.
+    python -m pip install Pillow
+    python tools/gerar_pacote.py
+    python tools/validar_pacote.py build/LowMine-Equilibrado-8x-v0.5.0.mcpack
 
-## Limites técnicos
+O GitHub Actions também compila os scripts, gera o .mcpack, executa o validador e publica um artefato de teste em cada atualização de código relevante. Consulte tools/README.md.
 
-O nevoeiro altera a aparência da distância, mas não faz o RenderDragon ignorar chunks. O Block Culling trabalha com faces encobertas de geometrias personalizadas; não é um sistema universal para esconder tudo atrás da câmera ou abaixo do solo. Um `.mcpack` também não pode injetar Rust no renderizador do Bedrock.
+## Autoria, adaptações e licenças
 
-As possibilidades reais e as referências de desenvolvimento estão em [Limites do renderizador e otimizações possíveis](docs/LIMITES-DO-RENDERIZADOR.md).
+- **Criação LowMine:** identidade, manifesto, texturas 8×8, ícone, UI, seleção de configurações e ferramentas de build/validação.
+- **Material adaptado:** 14 partículas, água e sombras do FPS Optimizer v2.9.2 de XiaoCraft, sob CC BY-NC 3.0, com namespace e configuração alterados.
+- **Referências sem arquivos copiados:** PotatoCraft 8x v1.4, Embeddium Optimizer v1.6 e Vanilla × Optimizer v2.4.2.
 
-## Créditos e licença
+O pacote é uma composição e não reivindica a autoria das partes de terceiros. A licença não comercial do material adaptado precisa ser respeitada; portanto, não publique ou venda esta composição para obter vantagem comercial sem outra autorização. Leia CREDITOS.md e o arquivo CREDITOS.txt dentro do pacote.
 
-O pacote original é **Boosted FPS (Optimized Performance) v2.4.1**, criado por **XiaoCraft**.
+## O que o pacote não faz
 
-- Projeto original: https://www.curseforge.com/minecraft-bedrock/texture-packs/boosted-fps-optimized-performance
-- Licença original: **Creative Commons Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0)** — https://creativecommons.org/licenses/by-nc/3.0/
+- Não substitui o RenderDragon.
+- Não implementa frustum/occlusion culling universal.
+- Não impede a geração de chunks.
+- Não controla distância de renderização ou simulação.
+- Não injeta Rust no cliente.
 
-O LowMine é uma adaptação, não um projeto original ou endossado por XiaoCraft. Os créditos e as condições não comerciais da licença original devem ser mantidos. Consulte [ATTRIBUTION.txt](ATTRIBUTION.txt).
+Névoa, texturas 8×8 e água/sombras alteram recursos visuais, não o código do motor. Consulte Limites do renderizador e técnicas reais em docs/LIMITES-DO-RENDERIZADOR.md.
