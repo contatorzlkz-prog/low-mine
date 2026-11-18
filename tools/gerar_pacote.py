@@ -171,6 +171,23 @@ def atualizar_manifesto(raiz):
                 "url":"https://github.com/contatorzlkz-prog/low-mine","product_type":"addon"}
  salvar_json(p,m)
 
+def atualizar_textos(raiz):
+ pt=raiz/"texts/pt_BR.lang"
+ if pt.exists():
+  linhas=pt.read_text(encoding="utf-8-sig",errors="replace").splitlines()
+  linhas=[x for x in linhas if not x.startswith("lowmine.")]
+  linhas += ["","## LowMine Equilibrado","pack.name=§dLowMine Equilibrado§r",
+             "pack.description=§7Perfil único equilibrado para PCs fracos.§r",
+             "lowmine.settings.title=LOWMINE EQUILIBRADO | v0.4.0",
+             "lowmine.settings.intro=Perfil único: vegetação simples, partículas essenciais reduzidas e interface transparente.",
+             "lowmine.credit=Adaptação de Boosted FPS por XiaoCraft. Consulte ATTRIBUTION.txt."]
+  pt.write_text("\n".join(linhas)+"\n",encoding="utf-8")
+ for p in raiz.rglob("*.lang"):
+  if p==pt: continue
+  linhas=p.read_text(encoding="utf-8-sig",errors="replace").splitlines()
+  linhas=[x.replace("LowMine Ultra Low","LowMine Equilibrado").replace("v0.3.2","v0.4.0") for x in linhas]
+  p.write_text("\n".join(linhas)+"\n",encoding="utf-8")
+
 def atualizar_atribuicao(raiz):
  texto=f"""LowMine Equilibrado v{VERSAO} — créditos e licença
 
@@ -204,6 +221,7 @@ def compilar(origem:Path,destino:Path):
    if z.testzip(): raise ValueError("CRC inválido no pacote de origem")
    extrair_seguro(z,raiz)
   atualizar_manifesto(raiz)
+  atualizar_textos(raiz)
   ajustar_particulas(raiz)
   ajustar_neblina(raiz)
   ajustar_interface(raiz)
