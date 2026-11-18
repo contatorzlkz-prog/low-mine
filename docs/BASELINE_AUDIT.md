@@ -1,118 +1,107 @@
-# LowMine technical audit — v0.2.0
+# LowMine technical audit — v0.2.0 and v0.3.0
 
 ## Source and scope
 
-The input supplied for this project was `Boosted FPS v2.4.1.mcpack`. The package manifest identifies its original project as Boosted FPS and its author as XiaoCraft. LowMine is an adaptation; the original attribution and CC BY-NC 3.0 terms are retained.
+The supplied source pack was `Boosted FPS v2.4.1.mcpack`, authored by XiaoCraft. LowMine remains an attributed adaptation under the original CC BY-NC 3.0 terms.
 
-This audit is static. It reads the archive, JSON, manifest, language files and image dimensions. It does not launch Minecraft, emulate a device, verify every render path or measure FPS.
+This is a static archive audit. It does not launch Minecraft, emulate RenderDragon, verify live UI behavior or measure FPS.
 
-## Archive inventory
+## v0.3.0 archive facts
 
-| File type | Count |
-|---|---:|
-| JSON | 487 |
-| PNG | 605 |
-| TGA | 11 |
-| Language files | 29 |
-| UI files | 2 |
-| Material files | 1 |
-| Attribution notice | 1 |
-| Total v0.2.0 entries | 1,136 |
+| Item | v0.2.0 | v0.3.0 |
+|---|---:|---:|
+| Archive entries | 1,136 | 924 |
+| JSON files | 487 | 317 |
+| PNG files | 605 | 566 |
+| Language files | 29 | 29 |
+| Active configurable controls | 9 | 8 |
+| Profiles | Lite + PvP | One flattened Ultra Low profile |
+| Archive size | 1,206,757 bytes | 662,876 bytes |
 
-The source archive contained 1,135 entries. LowMine v0.2.0 has 1,136 because it adds `ATTRIBUTION.txt`. There are no duplicate archive paths or unsafe relative paths in the generated build.
+The v0.3.0 archive has no `subpacks/` directory and no PvP profile files. The previous Lite subpack contained 288 files; 109 of these replaced same-path base files when flattened. The PvP subpack contained 106 files and was removed.
 
-## Manifest and profiles
+The compressed archive is 543,881 bytes (45.07%) smaller than v0.2.0. This is a packaging/file-content comparison, not a runtime memory or FPS measurement.
 
-- Manifest format version: 3.
-- Minimum engine version carried over from the supplied manifest: `1.26.40`.
-- Profiles: **LowMine Lite** (source folder `fps`) and **LowMine PvP** (source folder `pvp_fps`).
-- Nine configurable controls: one slider and eight toggles.
-- All manifest/module UUIDs are valid and unique.
-- All custom setting identifiers use the `lowmine:` namespace.
-- All setting references found in the resource files resolve to a declared manifest setting.
+## PNG texture-footprint estimate
 
-### Setting defaults
+- v0.2.0 PNG pixel count: 2,254,921.
+- v0.3.0 PNG pixel count: 610,722.
+- Pixel-area reduction: 72.92%.
+- At four bytes per pixel, a rough uncompressed RGBA estimate is 9.02 MB versus 2.443 MB.
 
-| Setting | Default | Effect described by the source definitions |
-|---|---:|---|
-| Particle amount | 50% | Scales configurable custom emitters |
-| Potion/status effects | On | Keeps potion/status particle visuals |
-| Witch/Evoker effects | Off | Custom brewing and spell particles |
-| Arrow trails | Off | Custom arrow-trail particles |
-| Cauldron effects | Off | Custom cauldron drips and splashes |
-| Geysers | Off | Custom geyser columns, plumes and puffs |
-| Geyser gas | Off | Gas particles around geyser fields |
-| Sulfur particles | Off | Sulfur cave bubbles and cubes |
-| XP orbs | Off | Hides the orb model; does not alter XP collection logic |
+This estimate sums width × height × 4 for PNG images. It is not actual GPU VRAM: Bedrock may atlas, transcode, compress or load textures differently. It is useful only as a consistent image-footprint comparison between these two archives.
 
-The slider controls the custom particle definitions that query it. It is not a global Minecraft particle setting.
+Selected images changed:
+- Both pack icons: 400×400 to 256×256.
+- Title image: 2048×302 to 1024×151.
+- Emote wheel images: reduced to 128×119 or 96×96.
+- Cloud texture: replaced with a transparent 1×1 PNG.
+- Inventory slots, hotbar panels and touch controls: alpha reduced.
 
-## Particle/profile audit
+Block/item textures were not blindly downscaled. Most source textures were already small (many 16×16 or similarly small sprites); preserving their pixel detail avoids unnecessary blur and keeps the current art style.
 
-- LowMine Lite contains 177 particle override JSON files whose emitter maximum is set to zero.
-- LowMine PvP contains 48 such files.
-- The nine settings are wired into particle definitions or the XP-orb render controller; all nine have at least one matching query reference.
-- These counts describe file overrides, not a measured count of all particle instances removed during gameplay.
+## Particles and settings
+
+- Active controls: 8 (one slider and seven toggles).
+- Particle amount default: 0%.
+- All seven optional toggles default to off.
+- The unused geyser toggle was removed because the former Lite profile's geyser particle definitions were already set to `max_particles: 0` and no emitter queried that setting.
+- The XP-orb control affects its render controller only; it does not change XP awarding or collection logic.
+
+A setting default of 0/off is an initial preference, not proof that every vanilla particle or entity in the entire game is disabled. Resource-pack overrides only cover the assets/effects included in this pack.
 
 ## Fog and biomes
 
-- Base `biomes_client.json`: 94 biome entries and 94 fog references.
-- Lite `biomes_client.json`: 94 biome entries and 94 fog references.
-- Base fog directory: 104 definitions.
-- Lite fog directory: 104 definitions.
-- Every custom `lowmine:fog_...` reference in the base and Lite biome lists resolves to a corresponding fog definition.
-- The remaining fog definitions include identifiers intended for vanilla fog behavior; their presence is not proof that they are unused in-game.
+- Root `biomes_client.json`: 94 biome entries.
+- Fog JSON files: 104 definitions.
+- Custom LowMine fog identifiers referenced by the biome map resolve to definitions.
+- The v0.3.0 build sets the `distance.air` fog start/end values to 32/48 in all 104 fog definitions where those fields exist.
 
-For the Plains example, the base profile uses a distant air fog range of 1032–1064, while Lite uses 60–88. Exact distances and colors vary by biome and medium. PvP has no separate fog override directory and uses the base fog set.
+This makes distant terrain visually disappear sooner. It is **not** a camera-direction culling system. The fog does not provide a resource-pack instruction to discard all blocks behind the fog, behind the camera or under the world. Do not interpret this as a confirmed CPU/GPU optimization.
 
-## Branding and texture footprint
+## Inventory/chest UI and hotbar
 
-- Main pack icon: 400×400 PNG.
-- In-pack icon: 400×400 PNG.
-- Title image: 2048×302 PNG, changed from the source's 4096×604.
-- The title image now has 75% fewer pixels. This is a menu/UI asset reduction only; it is not evidence of higher in-world FPS.
-- Existing entity, particle, HUD, chat, material and PBR-related assets were retained pending runtime testing rather than removed speculatively.
+New files:
+- `ui/inventory_screen.json`
+- `ui/chest_screen.json`
+- `ui/data_driven_container_screen.json`
 
-## Localization
+All three are registered in `ui/_ui_defs.json`. Inventory/crafting screens and desktop chest/container screens override the vanilla backdrop alpha to 0.08 while retaining the screen inheritance and pocket-screen branches from the current Mojang sample structure.
 
-- All 29 language files contain the manifest setting labels.
-- Brazilian Portuguese strings were added to `pt_BR.lang`.
-- English fallback strings were added to the remaining language files.
-- Original work is still named in the attribution/credit strings.
+Hotbar slot backgrounds, inventory slot fills and mobile touch-control PNG alpha are also reduced. The underlying click regions, slot geometry, item icons and screen layout are not intentionally resized.
 
-## Validation result
+These overrides use the classic JSON UI route. Some Bedrock builds or Ore UI modes may ignore or behave differently with resource-pack JSON UI files. Only in-game testing can verify whether the user's exact Bedrock version applies them.
 
-The v0.2.0 candidate passed the static validator:
-- ZIP integrity test passed.
-- 1,136 unique archive entries.
-- 487 JSON files parsed successfully; 0 invalid.
-- 9 configurable setting identifiers checked.
-- 29 language files checked; no missing setting labels.
-- Base and Lite fog references checked; no missing custom fog IDs.
-- Required icon, title and attribution files present.
-- Builder was run twice with identical inputs; the output bytes and SHA-256 matched.
+## Static validation
 
-The validation script is `tools/validate_pack.py`. The builder is `tools/build_pack.py`.
+The final v0.3.0 package passed:
+- ZIP integrity and unique-path checks.
+- 924 archive entries, with no unsafe relative paths.
+- 317/317 JSON files parsed.
+- Eight active setting IDs match all pack-setting query references.
+- All 29 language files include every manifest setting label.
+- 94 biome entries and 104 fog definitions; no unresolved custom fog IDs.
+- Inventory, chest and data-driven UI overrides are registered and contain the expected alpha/desktop/pocket branches.
+- No PvP folder or subpack declarations remain.
+- Two builds with identical source inputs produced byte-identical output.
+
+Tools: `tools/build_ultra_low.py` and `tools/validate_pack.py`.
+
+## v0.3.0 artifact identity
+
+- File: `LowMine-Ultra-Low-v0.3.0-TEST.mcpack`
+- Size: 662,876 bytes.
+- SHA-256: `143c508d67ae25046d7ff782cde36190cacabd0d74f4443071afaea4240003c6`
 
 ## Known limitations and next tests
 
-1. Import the pack into the exact Minecraft Bedrock version being used.
-2. Confirm manifest v3 pack settings appear and respond correctly.
-3. Test both profiles and all nine controls.
-4. Inspect water, Nether/End fog and multiple biomes for visual problems.
-5. Test world loading, multiplayer, HUD/chat and interactions with other packs.
-6. Benchmark vanilla, source and LowMine using the same scene, device and settings.
+1. Import v0.3.0 into the exact Minecraft Bedrock build in use.
+2. Confirm the pack and eight settings appear.
+3. Test inventory/crafting, all container screens, hotbar and touch controls.
+4. Inspect fog and cloud appearance in several dimensions and biomes.
+5. Check world load, gameplay feedback, multiplayer, and content-log messages.
+6. Compare vanilla and LowMine in the same world/scene, device, resolution, render distance and simulation distance; record FPS and frame-time stability.
 
-Manifest custom pack settings are documented by Microsoft for resource packs and are read through Molang, but the feature documentation notes that the capability may change. See the [official custom pack settings guide](https://github.com/MicrosoftDocs/minecraft-creator/blob/main/creator/Documents/AddOns/CustomPackSettings.md).
+## Original v0.2.0 audit (historical)
 
-No runtime test or FPS claim is included in this audit.
-
-## Final v0.2.0 artifact identity
-
-- File: `LowMine-Performance-v0.2.0.mcpack`
-- Size: 1,206,757 bytes.
-- SHA-256: `59af4cfb14f639e736f08d5d8d9a1e6557e31896c6d17ee6bdc7654c9aa8a035`
-- Supplied source size: 1,242,751 bytes (the package archive is 35,993 bytes / 2.90% smaller).
-- Two builds from identical source and branding inputs produced byte-identical output.
-
-The archive-size change is a packaging comparison only. It is not a benchmark or proof of improved frame rate.
+The v0.2.0 baseline had 1,136 files, 487 JSON files, 605 PNGs, 29 language files, nine active controls and two subpacks. It is superseded by v0.3.0.
