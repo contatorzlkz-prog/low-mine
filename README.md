@@ -52,7 +52,9 @@ python tools/build_pack.py "Boosted FPS v2.4.1.mcpack" "LowMine-Performance-v0.2
 python tools/validate_pack.py "LowMine-Performance-v0.2.0.mcpack"
 ```
 
-The builder uses stable UUIDs and fixed ZIP timestamps so identical inputs produce identical output bytes. The validator checks ZIP integrity, manifest IDs, JSON syntax, settings references, translations, subpack folders, fog references and required assets. These checks do not emulate Minecraft.
+Before rebuilding, create the two branding inputs in assets/: extract pack_icon.png from the v0.2.0 package as assets/lowmine-pack-icon.png, and textures/ui/title.png as assets/lowmine-title.png. The builder uses stable UUIDs and fixed ZIP timestamps so identical inputs produce identical output bytes. The validator checks ZIP integrity, manifest IDs, JSON syntax, settings references, translations, subpack folders, fog references and required assets. These checks do not emulate Minecraft.
+
+The v0.2.0 .mcpack binary is currently delivered as a test artifact outside this repository; it must be uploaded to releases/ manually before a GitHub release can be published.
 
 ## Compatibility note
 
