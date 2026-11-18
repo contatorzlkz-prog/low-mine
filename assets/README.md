@@ -1,12 +1,10 @@
-# Recursos e texturas do projeto
+# Texturas e recursos autorais LowMine
 
-As oito texturas de vegetação da versão 0.4.0 são geradas pelo script `tools/gerar_pacote.py`:
-- Grama curta.
-- Samambaia.
-- Parte superior e inferior da grama alta.
-- Parte superior e inferior da samambaia alta.
-- Grama seca curta e alta.
+A versão 0.5.0 gera 38 texturas de bloco 8×8 no construtor versionado:
+- Pedra, terra, pedregulho, areia, cascalho, tábuas e tronco.
+- Topo/lateral de grama, samambaia, grama alta e grama seca.
+- Folhas de carvalho, bétula, abeto, selva, acácia, carvalho escuro, mangue, cerejeira e azaleia, com variantes opacas necessárias ao mapeamento.
 
-Todas têm 16×16 pixels, fundo transparente e densidade visual reduzida. Os arquivos são inseridos no .mcpack nos caminhos vanilla correspondentes.
+As imagens são produzidas por paletas e padrões LowMine, não extraídas dos quatro pacotes usados como referência. Os nomes/caminhos foram verificados contra o mapeamento de texturas da Mojang.
 
-O projeto não redistribui o pacote vanilla completo. As substituições usam os nomes e caminhos de textura documentados nos arquivos de referência da Mojang.
+O pacote não redistribui texturas vanilla completas. As imagens substituem apenas os caminhos incluídos no .mcpack.
