@@ -1,11 +1,9 @@
-LowMine Equilibrado 8x v0.5.0 — créditos e licenças
+LowMine Equilibrado 8x v0.5.0 — créditos
 
-Este arquivo aponta para os créditos completos incluídos no pacote.
-Consulte CREDITOS.md no repositório ou CREDITOS.txt dentro do .mcpack.
+A identidade, o ícone, a interface e as 38 texturas de bloco 8×8 foram criados para o projeto LowMine.
 
-A identidade, as texturas 8×8, o ícone e a interface foram criados para o projeto LowMine.
-O pacote também inclui definições de partículas, água e sombras adaptadas do FPS Optimizer v2.9.2, de XiaoCraft, sob CC BY-NC 3.0. As alterações e condições não comerciais estão indicadas no arquivo de créditos.
+Foram adaptados 14 arquivos de partículas, water/water.json e shadows/global.json do FPS Optimizer v2.9.2, de XiaoCraft, sob Creative Commons Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0). As alterações estão documentadas em CREDITOS.md e no CREDITOS.txt dentro do pacote.
 
-PotatoCraft 8x v1.4, Embeddium Optimizer v1.6 e Vanilla × Optimizer v2.4.2 foram apenas estudados como referências. Nenhum arquivo desses três pacotes foi copiado para o LowMine.
+PotatoCraft 8x v1.4, Embeddium Optimizer v1.6 e Vanilla × Optimizer v2.4.2 foram usados somente como referência técnica. Nenhum arquivo desses três pacotes foi copiado.
 
-LowMine é uma composição independente, sem afiliação ou endosso da Mojang/Microsoft, XiaoCraft, LeviiCraft ou dos autores dos pacotes de referência.
+LowMine é um projeto independente, sem afiliação ou endosso da Mojang/Microsoft, XiaoCraft, LeviiCraft ou dos autores dos pacotes de referência.
