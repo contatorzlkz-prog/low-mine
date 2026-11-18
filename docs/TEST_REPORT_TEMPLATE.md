@@ -1,52 +1,56 @@
-# LowMine Ultra Low v0.3.2 — runtime test report
+# Relatório de teste — LowMine Equilibrado v0.4.0
 
-Fill this in after importing the fixed candidate. Screenshots of the import screen, UI and any content-log messages are useful.
+Preencha depois de importar o pacote. Prints da tela de importação, inventário e erros do Content Log ajudam a identificar problemas.
 
-## Environment
-- Minecraft Bedrock version:
-- Device / operating system:
-- Resolution:
-- Input mode (mouse/keyboard, controller or touch):
-- Render distance:
-- Simulation distance:
-- Other resource packs enabled:
+## Ambiente
+- Versão exata do Minecraft Bedrock:
+- Dispositivo e sistema:
+- Resolução:
+- Modo de entrada (teclado/mouse, controle ou toque):
+- Distância de renderização:
+- Distância de simulação:
+- Modo gráfico:
+- Outros pacotes ativos:
 
-## Import
-- [ ] Import succeeds.
-- [ ] Name reads LowMine Ultra Low v0.3.2.
-- [ ] UUID/version are not unknown or all-zero.
-- [ ] Only one LowMine profile is shown.
-- [ ] No settings screen is expected; included pack particles are hard-disabled in their definitions.
+## Importação
+- [ ] Importou sem erro.
+- [ ] O nome aparece como LowMine Equilibrado v0.4.0.
+- [ ] UUID e versão aparecem corretamente.
+- [ ] Só existe um perfil LowMine.
+- [ ] O mundo abre sem travar.
 
-Exact import message / logs:
+Mensagem exata da importação / Content Log:
 
-## Inventory and containers
-- [ ] Desktop inventory backdrop is translucent.
-- [ ] Crafting screen works.
-- [ ] Pocket/touch inventory works if using touch UI.
-- [ ] Small/large chest, Ender Chest, shulker and barrel open normally.
-- [ ] Item slots, selection outlines and item icons are clear.
-- [ ] Other dialogs remain readable enough.
+## Interface
+- [ ] Inventário está transparente o suficiente.
+- [ ] Crafting funciona.
+- [ ] Baú pequeno e grande abrem normalmente.
+- [ ] Ender Chest, shulker e barril funcionam.
+- [ ] Slots, contorno de seleção e itens continuam legíveis.
+- [ ] Hotbar continua visível.
+- [ ] Controles de toque continuam visíveis e clicáveis, se aplicável.
 
-Screenshots / notes:
+Prints / observações:
 
-## Hotbar and world
-- [ ] Hotbar remains readable.
-- [ ] Touch buttons remain visible and clickable when idle and pressed.
-- [ ] World loads and remains stable.
-- [ ] Fog/clouds look acceptable in Overworld, water, Nether and End.
-- [ ] Potion/status visuals behave as expected.
-- [ ] XP is still awarded and collected even though orb drawing is hidden.
-- [ ] HUD/chat/multiplayer still work.
-- [ ] No missing textures, black/purple squares or content-log errors.
+## Vegetação e mundo
+- [ ] Grama curta aparece corretamente.
+- [ ] Samambaia aparece corretamente.
+- [ ] Grama alta e samambaia alta aparecem corretamente.
+- [ ] Biomas continuam reconhecíveis.
+- [ ] Neblina não corta a visão de forma incômoda.
+- [ ] Água, Nether e End continuam aceitáveis.
+- [ ] Não há texturas rosas/pretas ou blocos invisíveis.
 
-## Performance comparison
-Use the same device, world, scene, resolution, render distance and simulation distance for each row.
+Prints / observações:
 
-- Vanilla average FPS:
-- LowMine average FPS:
-- Vanilla frame-time stability:
-- LowMine frame-time stability:
-- RAM/memory observation (if exposed):
+## Travamentos e desempenho
+- A travada ocorre ao entrar em terreno nunca visitado?
+- A travada ocorre também em terreno já carregado?
+- O FPS cai ao olhar para florestas ou áreas com muitos blocos?
+- O FPS cai perto de mobs, fazendas ou redstone?
+- FPS médio sem LowMine:
+- FPS médio com LowMine:
+- O frame time fica mais estável?
+- Há erro no Content Log? Cole a mensagem exata.
 
-Do not compare results from different scenes or devices as a controlled benchmark.
+Compare sempre o mesmo mundo, posição, resolução e distâncias.
