@@ -1,19 +1,19 @@
-name: Validate Bedrock packs
+name: Validar pacotes Bedrock
 
 on:
   push:
     paths:
       - "**.mcpack"
       - "releases/**"
-      - "tools/validate_pack.py"
-      - "tools/build_ultra_low.py"
+      - "tools/gerar_pacote.py"
+      - "tools/validar_pacote.py"
       - ".github/workflows/validate-pack.yml"
   pull_request:
     paths:
       - "**.mcpack"
       - "releases/**"
-      - "tools/validate_pack.py"
-      - "tools/build_ultra_low.py"
+      - "tools/gerar_pacote.py"
+      - "tools/validar_pacote.py"
       - ".github/workflows/validate-pack.yml"
   workflow_dispatch:
 
@@ -21,33 +21,33 @@ permissions:
   contents: read
 
 jobs:
-  validate:
+  validar:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Baixar repositório
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install image tooling
+      - name: Instalar ferramenta de imagens
         run: python -m pip install --disable-pip-version-check Pillow
 
-      - name: Check Python tooling syntax
-        run: python -m py_compile tools/build_ultra_low.py tools/validate_pack.py
+      - name: Verificar sintaxe dos scripts
+        run: python -m py_compile tools/gerar_pacote.py tools/validar_pacote.py
 
-      - name: Validate packaged resource packs
+      - name: Validar pacotes publicados na pasta releases
         shell: bash
         run: |
-          mapfile -d '' packs < <(find releases -type f -iname '*.mcpack' -print0)
-          if (( ${#packs[@]} == 0 )); then
-            echo "::notice::No .mcpack artifacts have been added to releases/ yet."
+          mapfile -d '' pacotes < <(find releases -type f -iname '*.mcpack' -print0)
+          if (( ${#pacotes[@]} == 0 )); then
+            echo "::notice::Nenhum arquivo .mcpack foi anexado à pasta releases."
             exit 0
           fi
 
-          for pack in "${packs[@]}"; do
-            echo "Validating: $pack"
-            python tools/validate_pack.py "$pack"
+          for pacote in "${pacotes[@]}"; do
+            echo "Validando: $pacote"
+            python tools/validar_pacote.py "$pacote"
           done
