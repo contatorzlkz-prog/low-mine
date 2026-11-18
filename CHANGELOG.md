@@ -1,17 +1,21 @@
-# Changelog
+# Histórico de versões
 
-## 0.3.2 — import fix and static low-particle profile
-- Fixed the import failure caused by using version arrays for manifest v3. Header and module versions are now SemVer strings.
-- Removed manifest custom pack settings; the ultra-low profile no longer depends on experimental settings queries or a settings screen.
-- Set all 188 included particle definitions to zero spawn count / maximum (177 max-particle caps and 11 instant-spawn counts).
-- Kept XP-orb rendering hidden without altering XP collection.
-- Preserved single flattened profile, inventory/chest UI transparency, hotbar/touch edits and short visual fog.
-- Static checks passed: 925 archive entries, 318 valid JSON files, 94 biome entries, 104 fog definitions and all UI overrides registered.
-- No in-game FPS result is claimed until benchmarked.
+## 0.4.0 — perfil equilibrado para PCs modestos
+- Mantido um único perfil, sem PvP.
+- Mantidos 177 campos `max_particles` em zero, conforme o perfil Lite original.
+- Reduzidas 11 contagens de partículas para valores pequenos, preservando alguns sinais visuais.
+- Criadas oito texturas 16×16 simplificadas de grama e samambaia.
+- Ajustada a transparência do inventário, crafting, baús, painéis, hotbar e controles.
+- Ajustadas 104 definições de neblina para 64–96 blocos.
+- Mantidos os UUIDs e atualizado o manifesto para a versão SemVer `0.4.0`.
+- Validação estática aprovada: 933 entradas, 318 JSON válidos, 94 biomas e 104 arquivos de neblina.
+- Nenhum ganho de FPS é declarado antes de uma comparação real no jogo.
 
-## 0.3.0 — failed import test candidate (superseded)
-- Removed PvP and added UI/texture changes.
-- Import failed because manifest v3 version values were emitted as arrays; do not use this package.
+## 0.3.2 — correção de importação
+- Corrigidos os tipos de versão do manifesto v3.
+- Removidas configurações experimentais do manifesto.
+- Desativadas as 188 definições de partículas incluídas.
+- Mantidos o perfil único e os overrides de interface.
 
-## 0.2.0 — rebrand baseline
-- Established LowMine branding, identifiers and tooling.
+## 0.3.0 — versão de teste com falha
+- Não utilizar. A versão foi rejeitada pelo Minecraft por causa dos tipos de versão incorretos no manifesto.
