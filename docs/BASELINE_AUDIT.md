@@ -49,7 +49,7 @@ Block/item textures were not blindly downscaled. Most source textures were alrea
 - The unused geyser toggle was removed because the former Lite profile's geyser particle definitions were already set to `max_particles: 0` and no emitter queried that setting.
 - The XP-orb control affects its render controller only; it does not change XP awarding or collection logic.
 
-A setting default of 0/off is an initial preference, not proof that every vanilla particle or entity in the entire game is disabled. Resource-pack overrides only cover the assets/effects included in this pack.
+The pack contains 188 particle JSON definitions: 177 use a static zero max-particle cap, and 11 use a LowMine slider expression for num_particles. With the slider at 0% and all optional toggles off, those pack-defined emitters are gated at their lowest setting. This does not disable every particle built into Minecraft; effects not overridden by this pack may still appear. Static inspection counts definitions, not live particles or CPU/GPU savings.
 
 ## Fog and biomes
 
@@ -78,6 +78,7 @@ These overrides use the classic JSON UI route. Some Bedrock builds or Ore UI mod
 
 The final v0.3.0 package passed:
 - ZIP integrity and unique-path checks.
+- 188 particle definitions audited (177 static max-particle caps at zero; 11 slider-gated definitions).
 - 925 archive entries, with no unsafe relative paths.
 - 318/318 JSON files parsed.
 - Eight active setting IDs match all pack-setting query references.
