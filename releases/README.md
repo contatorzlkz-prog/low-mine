@@ -1,22 +1,22 @@
 # Release artifacts
 
-Place distributable Bedrock packages in this directory before publishing GitHub releases.
+## v0.3.2 — import-fixed Ultra Low test candidate
 
-## 0.3.0 — Ultra Low test candidate
+Filename: `LowMine-Ultra-Low-v0.3.2-FIXED.mcpack`
 
-Expected filename: `LowMine-Ultra-Low-v0.3.0-TEST.mcpack`
+- Size: 655,459 bytes.
+- SHA-256: `89bd88e7351943abede9ea0f8a49fe1cc3ff224b7a005302cd60622b471905b2`
 
-- Size: 664,342 bytes.
-- SHA-256: `3689a23fc55104dbc86aa85f1604fc8e00ef870aed3d69011c5a190680f25a8d`
-
-The archive passed static validation: ZIP integrity, 318 JSON files, eight setting-query references, all 29 language files, 94 biome entries, 104 fog definitions, desktop and pocket inventory overrides, and registered chest/data-driven UI overrides. It has not yet been imported or FPS-tested in Minecraft. The binary is delivered separately for the user's test and has not yet been committed here.
+The package passed static validation: manifest v3 string versions, 318 JSON files, 188 disabled particle definitions, 94 biome entries, 104 fog files, four registered UI overrides, no PvP subpack and no experimental custom settings. Minecraft import and FPS are not yet verified.
 
 Before a public GitHub release:
 1. Upload the exact `.mcpack` under this directory.
-2. Verify the uploaded SHA-256.
-3. Test import, inventory/chest UI, hotbar, touch controls and the single profile in Minecraft.
-4. Update the changelog with runtime results and known issues.
+2. Verify the SHA-256 above.
+3. Test the import on the exact Bedrock version and check inventory/chest UI.
+4. Record FPS/frame-time comparisons using the same scene/device/settings.
 
-## 0.2.0 — Rebrand baseline
+The binary is supplied separately for the user's test; current GitHub connector actions cannot upload binary release assets directly.
 
-Superseded by the single-profile v0.3.0 test candidate.
+## v0.3.0 — failed import candidate
+
+Superseded. It used invalid manifest v3 version types and should not be used.
