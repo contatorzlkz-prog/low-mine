@@ -1,38 +1,37 @@
-# LowMine Equilibrado 8x v0.6.4
+# LowMine Batata 8x v0.6.5
 
 <p align="center">
-  <a href="https://github.com/contatorzlkz-prog/low-mine/releases/download/lowmine-v0.6.4/LowMine-Equilibrado-8x-v0.6.4.mcpack">
-    <img src="https://img.shields.io/badge/⬇%20BAIXAR%20LOWMINE-.MCPACK-2ea44f?style=for-the-badge" alt="Baixar LowMine Equilibrado 8x">
+  <a href="https://github.com/contatorzlkz-prog/low-mine/releases/download/lowmine-v0.6.5/LowMine-Batata-8x-v0.6.5.mcpack">
+    <img src="https://img.shields.io/badge/BAIXAR%20LOWMINE%20BATATA-.MCPACK-2ea44f?style=for-the-badge" alt="Baixar LowMine Batata 8x">
   </a>
 </p>
 
-Resource Pack leve para Minecraft Bedrock, com identidade pixel art LowMine e texturas de bloco em 8×8.
+Resource Pack minimalista para Minecraft Bedrock, com texturas 8×8 e foco em reduzir elementos visuais extras.
 
-## O que mudou na 0.6.4
+## Perfil LOW BATATA
 
-- Manifesto convertido para o formato estável 2 do Bedrock, com versões numéricas e versão mínima do motor em vetor.
-- Removida a seção de configurações personalizadas que dependia do formato 3 Preview.
-- Fundos de inventário, menus, telas de contêineres, barras e molduras de slots passam a ter alfa zero.
-- Bordas e preenchimentos das texturas de painel, slots, toolbar e hotbar ficam totalmente invisíveis.
-- Variáveis de fundo das telas desktop, mobile e baús passam para 0.0.
-- Mantidas as texturas de blocos em 8×8, os sete conjuntos de armaduras e os visuais de itens já existentes.
-- O conteúdo dos slots, ícones e textos permanece visível; a transparência remove somente as superfícies de fundo.
+- Solo, grama, pedra, areia, cascalho, tábuas e troncos com padrões maiores e paletas curtas.
+- Troncos com veios largos e quebrados, sem ruído de pixels repetidos.
+- Folhagens mais limpas e plantas altas redesenhadas em 8×8, incluindo lilás, capim alto e samambaia.
+- Sete conjuntos de armaduras simplificados, com dois tons por material e mapas UV 64×32.
+- Fundos, bordas, slots, painéis de abas, tela do personagem e barra de itens recebem superfícies transparentes.
+- O mesmo tratamento é aplicado às telas mobile e aos contêineres compatíveis.
+- Emissores de partículas do pack são desativados, assim como poeira de destruição e deslizamento de blocos.
+- Sem shaders PBR, scripts do lado do jogo ou partículas adicionais.
 
 ## Instalação
 
-1. Baixe LowMine-Equilibrado-8x-v0.6.4.mcpack pela seção Releases.
-2. Abra o arquivo com Minecraft Bedrock.
-3. Ative o LowMine em Pacotes de Recursos.
-4. Confira inventário, barra de itens, baús, baú do End, shulker e barril.
+1. Baixe LowMine-Batata-8x-v0.6.5.mcpack pela seção Releases.
+2. Remova a versão antiga do LowMine da lista de pacotes ativos.
+3. Abra o novo arquivo com Minecraft Bedrock e ative o pack.
+4. Confira inventário, barra inferior, abas, baús, troncos, solo e plantas altas.
 
 ## Limites
 
-A validação automatizada confere o manifesto, o ZIP, os arquivos de interface e o canal alfa das imagens. A importação e a aparência final ainda precisam ser confirmadas no Minecraft instalado no dispositivo.
+O pack reduz a complexidade das imagens e remove os emissores de partículas que ele substitui. Um Resource Pack não controla geração de chunks, simulação, distância de renderização nem todas as partículas internas do motor. O efeito em FPS depende do aparelho e precisa ser medido no jogo.
 
-As imagens em 8×8 reduzem a área das texturas substituídas, mas não alteram geometria, geração de chunks ou simulação; não há promessa de FPS sem medição no Bedrock.
+## Créditos e licenças
 
-## Autoria e licenças
-
-As texturas novas de troncos, blocos selecionados e armaduras são criações LowMine. Permanecem os créditos e a licença CC BY-NC 3.0 do material adaptado já presente na base; consulte CREDITOS.md e CREDITOS.txt.
+As texturas novas de solo, madeira, plantas e armaduras desta versão são criações LowMine. Permanecem os créditos e a licença CC BY-NC 3.0 dos recursos adaptados que continuam no pacote; consulte CREDITOS.md e CREDITOS.txt.
 
 Minecraft é marca da Mojang/Microsoft; LowMine não é afiliado nem endossado por elas.

@@ -1,4 +1,4 @@
-name: Validar e compilar LowMine 8x
+name: Compilar LowMine Batata 8x
 
 on:
   push:
@@ -25,45 +25,43 @@ permissions:
   contents: write
 
 jobs:
-  validar:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Baixar repositório
-        uses: actions/checkout@v4
-      - name: Configurar Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Instalar Pillow
-        run: python -m pip install --disable-pip-version-check Pillow
-      - name: Verificar sintaxe das ferramentas
-        run: python -m py_compile tools/gerar_pacote.py tools/validar_pacote.py tools/redesenhar_v061.py tools/validar_pacote_v061.py tools/redesenhar_v063.py tools/validar_pacote_v063.py tools/finalizar_pacote_v064.py tools/validar_pacote_v064.py
-      - name: Construir base estável 0.5.0
+      - run: python -m pip install --disable-pip-version-check Pillow
+      - name: Verificar sintaxe
+        run: python -m py_compile tools/gerar_pacote.py tools/redesenhar_v061.py tools/redesenhar_v063.py tools/finalizar_pacote_v064.py tools/lowmine_batata_v065.py tools/validar_pacote_v065.py
+      - name: Construir base
         run: python tools/gerar_pacote.py
-      - name: Preparar versão anterior 0.6.2
+      - name: Preparar versão anterior
         run: python tools/redesenhar_v061.py
-      - name: Redesenhar LowMine 0.6.3
+      - name: Redesenhar troncos e armaduras
         run: python tools/redesenhar_v063.py
-      - name: Corrigir manifesto e transparência total 0.6.4
+      - name: Preparar manifesto estável
         run: python tools/finalizar_pacote_v064.py
-      - name: Validar pacote v0.6.4
-        run: python tools/validar_pacote_v064.py build/LowMine-Equilibrado-8x-v0.6.4.mcpack
-      - name: Publicar artefatos para teste
-        uses: actions/upload-artifact@v4
+      - name: Aplicar LOW BATATA
+        run: python tools/lowmine_batata_v065.py
+      - name: Validar
+        run: python tools/validar_pacote_v065.py build/LowMine-Batata-8x-v0.6.5.mcpack
+      - uses: actions/upload-artifact@v4
         with:
-          name: LowMine-Equilibrado-8x-v0.6.4
-          path: build/LowMine-Equilibrado-8x-v0.6.4.mcpack
+          name: LowMine-Batata-8x-v0.6.5
+          path: build/LowMine-Batata-8x-v0.6.5.mcpack
           if-no-files-found: error
           retention-days: 14
-      - name: Criar Release com download permanente
+      - name: Publicar Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: lowmine-v0.6.4
-          name: LowMine Equilibrado 8x v0.6.4
+          tag_name: lowmine-v0.6.5
+          name: LowMine Batata 8x v0.6.5
           target_commitish: main
           prerelease: false
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: |
-            build/LowMine-Equilibrado-8x-v0.6.4.mcpack
+            build/LowMine-Batata-8x-v0.6.5.mcpack
