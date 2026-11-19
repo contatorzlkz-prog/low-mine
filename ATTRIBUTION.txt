@@ -1,9 +1,0 @@
-LowMine Equilibrado 8x v0.5.0 — créditos
-
-A identidade, o ícone, a interface e as 38 texturas de bloco 8×8 foram criados para o projeto LowMine.
-
-Foram adaptados 14 arquivos de partículas, water/water.json e shadows/global.json do FPS Optimizer v2.9.2, de XiaoCraft, sob Creative Commons Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0). As alterações estão documentadas em CREDITOS.md e no CREDITOS.txt dentro do pacote.
-
-PotatoCraft 8x v1.4, Embeddium Optimizer v1.6 e Vanilla × Optimizer v2.4.2 foram usados somente como referência técnica. Nenhum arquivo desses três pacotes foi copiado.
-
-LowMine é um projeto independente, sem afiliação ou endosso da Mojang/Microsoft, XiaoCraft, LeviiCraft ou dos autores dos pacotes de referência.
