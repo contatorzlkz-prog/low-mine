@@ -1,0 +1,29 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "LowMine Prime — UI Transparente",
+    "description": "Interface transparente para inventário, baús e slots. Sem scripts em execução.",
+    "uuid": "0ce30f9a-11c8-4c2f-9d41-01e5a0a80110",
+    "version": [
+      0,
+      1,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      20,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "7b35ab20-7891-41c3-8a3f-fb8d3080d821",
+      "version": [
+        0,
+        1,
+        0
+      ]
+    }
+  ]
+}
