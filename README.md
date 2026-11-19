@@ -1,37 +1,34 @@
-# LowMine Batata 8x v0.6.5
+# LowMine Equilibrado 8x v0.6.6
 
 <p align="center">
-  <a href="https://github.com/contatorzlkz-prog/low-mine/releases/download/lowmine-v0.6.5/LowMine-Batata-8x-v0.6.5.mcpack">
-    <img src="https://img.shields.io/badge/BAIXAR%20LOWMINE%20BATATA-.MCPACK-2ea44f?style=for-the-badge" alt="Baixar LowMine Batata 8x">
+  <a href="https://github.com/contatorzlkz-prog/low-mine/releases/download/lowmine-v0.6.6/LowMine-Equilibrado-8x-v0.6.6.mcpack">
+    <img src="https://img.shields.io/badge/BAIXAR%20LOWMINE-.MCPACK-2ea44f?style=for-the-badge" alt="Baixar LowMine 8x">
   </a>
 </p>
 
-Resource Pack minimalista para Minecraft Bedrock, com texturas 8×8 e foco em reduzir elementos visuais extras.
+Versão de recuperação para Minecraft Bedrock. O pacote reaproveita os assets da versão 0.6.4 e atualiza somente os números de versão do manifesto.
 
-## Perfil LOW BATATA
+## Recuperação 0.6.6
 
-- Solo, grama, pedra, areia, cascalho, tábuas e troncos com padrões maiores e paletas curtas.
-- Troncos com veios largos e quebrados, sem ruído de pixels repetidos.
-- Folhagens mais limpas e plantas altas redesenhadas em 8×8, incluindo lilás, capim alto e samambaia.
-- Sete conjuntos de armaduras simplificados, com dois tons por material e mapas UV 64×32.
-- Fundos, bordas, slots, painéis de abas, tela do personagem e barra de itens recebem superfícies transparentes.
-- O mesmo tratamento é aplicado às telas mobile e aos contêineres compatíveis.
-- Emissores de partículas do pack são desativados, assim como poeira de destruição e deslizamento de blocos.
-- Sem shaders PBR, scripts do lado do jogo ou partículas adicionais.
+- Preserva todas as texturas, arquivos de UI, partículas, mapas de armadura e demais recursos da 0.6.4.
+- Não inclui os overrides adicionais da 0.6.5.
+- Não substitui nem desativa arquivos de partículas.
+- Não remove arquivos PBR.
+- O CI compara os arquivos internos do MCpack e exige zero diferenças fora do manifesto.
 
 ## Instalação
 
-1. Baixe LowMine-Batata-8x-v0.6.5.mcpack pela seção Releases.
-2. Remova a versão antiga do LowMine da lista de pacotes ativos.
-3. Abra o novo arquivo com Minecraft Bedrock e ative o pack.
-4. Confira inventário, barra inferior, abas, baús, troncos, solo e plantas altas.
+1. Remova a versão 0.6.5 dos pacotes de recursos ativos.
+2. Feche o Minecraft.
+3. Importe LowMine-Equilibrado-8x-v0.6.6.mcpack.
+4. Ative somente essa versão do LowMine.
 
-## Limites
+## Observação
 
-O pack reduz a complexidade das imagens e remove os emissores de partículas que ele substitui. Um Resource Pack não controla geração de chunks, simulação, distância de renderização nem todas as partículas internas do motor. O efeito em FPS depende do aparelho e precisa ser medido no jogo.
+A validação confirma que os assets são idênticos à 0.6.4; ela não substitui um teste de execução e estabilidade no Minecraft instalado no dispositivo.
 
 ## Créditos e licenças
 
-As texturas novas de solo, madeira, plantas e armaduras desta versão são criações LowMine. Permanecem os créditos e a licença CC BY-NC 3.0 dos recursos adaptados que continuam no pacote; consulte CREDITOS.md e CREDITOS.txt.
+Consulte CREDITOS.md e CREDITOS.txt. Os créditos e licenças dos recursos adaptados permanecem no pacote.
 
 Minecraft é marca da Mojang/Microsoft; LowMine não é afiliado nem endossado por elas.

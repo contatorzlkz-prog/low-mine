@@ -1,5 +1,4 @@
-name: Compilar LowMine Batata 8x
-
+name: LowMine — compilação de recuperação
 on:
   push:
     paths:
@@ -20,48 +19,52 @@ on:
       - "docs/**"
       - ".github/workflows/validate-pack.yml"
   workflow_dispatch:
-
 permissions:
   contents: write
-
 jobs:
-  build:
+  safe_rebuild:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python -m pip install --disable-pip-version-check Pillow
-      - name: Verificar sintaxe
-        run: python -m py_compile tools/gerar_pacote.py tools/redesenhar_v061.py tools/redesenhar_v063.py tools/finalizar_pacote_v064.py tools/lowmine_batata_v065.py tools/validar_pacote_v065.py
-      - name: Construir base
+      - name: Instalar Pillow
+        run: python -m pip install --disable-pip-version-check Pillow
+      - name: Validar sintaxe
+        run: python -m py_compile tools/gerar_pacote.py tools/redesenhar_v061.py tools/redesenhar_v063.py tools/finalizar_pacote_v064.py tools/restaurar_base_v066.py tools/validar_restauracao_v066.py
+      - name: Construir base conhecida
         run: python tools/gerar_pacote.py
       - name: Preparar versão anterior
         run: python tools/redesenhar_v061.py
-      - name: Redesenhar troncos e armaduras
+      - name: Compilar assets 0.6.4
         run: python tools/redesenhar_v063.py
-      - name: Preparar manifesto estável
+      - name: Aplicar manifesto Bedrock estável
         run: python tools/finalizar_pacote_v064.py
-      - name: Aplicar LOW BATATA
-        run: python tools/lowmine_batata_v065.py
-      - name: Validar
-        run: python tools/validar_pacote_v065.py build/LowMine-Batata-8x-v0.6.5.mcpack
+      - name: Criar pacote de recuperação
+        run: python tools/restaurar_base_v066.py
+      - name: Comparar todos os assets com a base
+        run: python tools/validar_restauracao_v066.py build/LowMine-Equilibrado-8x-v0.6.4.mcpack build/LowMine-Equilibrado-8x-v0.6.6.mcpack
       - uses: actions/upload-artifact@v4
         with:
-          name: LowMine-Batata-8x-v0.6.5
-          path: build/LowMine-Batata-8x-v0.6.5.mcpack
+          name: LowMine-Equilibrado-8x-v0.6.6
+          path: build/LowMine-Equilibrado-8x-v0.6.6.mcpack
           if-no-files-found: error
           retention-days: 14
-      - name: Publicar Release
+      - name: Publicar versão de recuperação
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: lowmine-v0.6.5
-          name: LowMine Batata 8x v0.6.5
+          tag_name: lowmine-v0.6.6
+          name: LowMine 8x v0.6.6 — recuperação
           target_commitish: main
           prerelease: false
           generate_release_notes: true
           fail_on_unmatched_files: true
+          body: |
+            Versão de recuperação baseada nos arquivos da 0.6.4.
+            Somente o manifesto foi atualizado para a versão 0.6.6.
+            Não inclui as alterações de UI, partículas ou PBR introduzidas na 0.6.5.
+            O CI compara todos os assets e exige zero diferenças fora do manifesto.
           files: |
-            build/LowMine-Batata-8x-v0.6.5.mcpack
+            build/LowMine-Equilibrado-8x-v0.6.6.mcpack
