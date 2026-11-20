@@ -1,18 +1,25 @@
-# LowMine Prime — UI Transparente
+# LowMine Prime
 
-Primeira base visual do LowMine Prime para Minecraft Bedrock.
+**Minecraft Bedrock Resource Pack** · versão **0.3.0**
 
-## Esta versão
-- Painel de inventário/containers com área central em transparência real.
-- Slots de inventário e variações de estado.
-- Destaque violeta discreto para o slot selecionado.
-- Sem preenchimento cinza, sem glow neon e sem animações.
+## Base visual
 
-## Otimização
-Este projeto é somente um **Resource Pack**. Não inclui Behavior Pack, scripts JavaScript, funções, entidades, partículas ou tarefas em segundo plano. O Minecraft carrega apenas os arquivos visuais do pacote. Texturas menores e estáticas evitam adicionar lógica de execução; isso não garante um aumento específico de FPS.
+- Mantém a interface transparente e estilizada já presente em `textures/ui/`.
+- Mantém a identidade visual e os UUIDs do LowMine Prime.
+- Usa o pacote 8×8 enviado como base; não restaura versões antigas.
 
-## Instalação
-Abra `LowMine-Prime-UI-0.1.0.mcpack` no Minecraft Bedrock e ative o pacote em Recursos Globais ou nas configurações do mundo.
+## Vegetação
 
-## Observação
-Esta é a primeira base de texturas UI. A aparência pode variar conforme a versão do Bedrock e precisa ser conferida dentro do jogo. Ainda não foi realizado teste de execução no Minecraft.
+Revisão dos sprites de `tallgrass`, `fern`, grama dupla e grama seca. As alterações ficam nas plantas decorativas; as texturas de terreno, grama em bloco e folhas de árvores permanecem intactas.
+
+## Partículas
+
+- Atlas comum: redução visual leve de 8%.
+- Fumaça de fogueira: redução visual leve de 10%.
+- Demais texturas de partículas: originais.
+
+**Nota técnica:** um Resource Pack altera a aparência das partículas, não a quantidade nem a frequência com que o jogo as emite.
+
+## Estrutura
+
+O pacote é um Resource Pack, sem scripts ou tarefas em segundo plano. A versão do manifesto é incrementada para `0.3.0`.
