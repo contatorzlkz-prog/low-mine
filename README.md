@@ -1,25 +1,23 @@
 # LowMine Prime
 
-**Minecraft Bedrock Resource Pack** · versão **0.3.0**
+**Minecraft Bedrock Resource Pack · v0.4.0**
 
-## Base visual
+## Interface
+- Slots cinza neutros com contorno fino de 1 px.
+- Interior dos slots transparente.
+- Fundo de diálogo cinza escuro com transparência.
+- Sem acentos violetas na interface.
 
-- Mantém a interface transparente e estilizada já presente em `textures/ui/`.
-- Mantém a identidade visual e os UUIDs do LowMine Prime.
-- Usa o pacote 8×8 enviado como base; não restaura versões antigas.
+## Texturas e vegetação
+- Pacote-base 8x8 integrado na distribuição MCpack.
+- Vegetação decorativa refinada: grama alta, samambaia, grama dupla e grama seca.
+- Texturas de terreno, blocos e folhas de árvores mantidas da base 8x8.
+- Ícones carregados de vegetação mantidos nas cores da base.
 
-## Vegetação
+## Removedor de partículas opcional
+O addon está em addons/particle-remover/. Instale-o separadamente e coloque-o acima do LowMine Prime na ordem de recursos para ocultar as texturas das partículas.
 
-Revisão dos sprites de `tallgrass`, `fern`, grama dupla e grama seca. As alterações ficam nas plantas decorativas; as texturas de terreno, grama em bloco e folhas de árvores permanecem intactas.
+O addon torna transparentes 23 atlas/texturas de partículas. É uma remoção visual: o jogo ainda pode criar as partículas internamente, então isso não garante ganho específico de FPS.
 
-## Partículas
-
-- Atlas comum: redução visual leve de 8%.
-- Fumaça de fogueira: redução visual leve de 10%.
-- Demais texturas de partículas: originais.
-
-**Nota técnica:** um Resource Pack altera a aparência das partículas, não a quantidade nem a frequência com que o jogo as emite.
-
-## Estrutura
-
-O pacote é um Resource Pack, sem scripts ou tarefas em segundo plano. A versão do manifesto é incrementada para `0.3.0`.
+## Instalação
+Importe o arquivo MCpack no Minecraft Bedrock. Para remover partículas, ative também o addon opcional acima do pacote principal.

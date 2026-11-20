@@ -1,0 +1,29 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "LowMine - Removedor de Particulas",
+    "description": "Addon opcional com texturas de particulas transparentes.",
+    "uuid": "b2a7f4e8-5c31-4a10-9d73-1f6b8c2e4a90",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      20,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "c3b8a5f9-6d42-4b21-ae84-2a7c9d3f5b10",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}
